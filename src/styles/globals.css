@@ -883,6 +883,10 @@ h6 {
   color: #fff;
 }
 
+.home-section--yoga .home-split-content h4 {
+  color: #f8d4e4;
+}
+
 /* Home page */
 .home-section {
   padding: 0;
