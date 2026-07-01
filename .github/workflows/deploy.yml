@@ -28,6 +28,8 @@ jobs:
       - run: npm ci
 
       - run: npm run build
+        env:
+          NEXT_PUBLIC_BOOKING_API_URL: ${{ secrets.NEXT_PUBLIC_BOOKING_API_URL }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

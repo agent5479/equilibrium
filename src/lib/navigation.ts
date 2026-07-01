@@ -49,5 +49,6 @@ export const navigation: NavItem[] = [
   },
   { label: "Gallery", href: "/gallery/" },
   { label: "Testimonials", href: "/testimonials/" },
+  { label: "Book a Session", href: "/bookings/" },
   { label: "Contact", href: "/contact/" },
 ];

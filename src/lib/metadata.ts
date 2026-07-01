@@ -52,7 +52,7 @@ export function localBusinessJsonLd() {
     name: SITE_NAME,
     description: DEFAULT_DESCRIPTION,
     url: SITE_URL,
-    email: "patricia@equilibrium.kiwi.nz",
+    email: "goldenbayorganicstakaka@gmail.com",
     telephone: "+6421991989",
     image: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
     address: {

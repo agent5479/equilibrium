@@ -1,43 +1,61 @@
 # Phase 2: Booking Platform
 
-## Overview
+## Status: Implemented
 
-The booking system will integrate the static React site with Patricia's Google account:
+The booking system connects the static React site to Patricia's Google account.
 
-1. **Google Calendar** — availability and event creation
-2. **Google Sheets** — booking log and audit trail
-3. **Google Apps Script** — serverless API endpoint (no backend hosting required)
-4. **Gmail** — confirmation emails to client and Patricia
+## Components
+
+| Piece | Location |
+|-------|----------|
+| Booking form (React) | `src/components/BookingForm.tsx` |
+| Booking page | `src/app/bookings/` |
+| API client | `src/lib/booking/index.ts` |
+| Google Apps Script | `google-apps-script/Code.gs` |
+| Sheets setup guide | `docs/google-sheets-setup.md` |
 
 ## Architecture
 
 ```
-React Site (bookings page)
-    → POST to Apps Script Web App URL (GitHub Secret)
+React Site (/bookings/)
+    → GET  Apps Script ?action=availability&date=&duration=
+    → POST Apps Script { action: "book", ... }
         → Check Calendar availability
-        → Create Calendar event
-        → Append row to Sheets
-        → Send confirmation emails via Gmail
-    → Return success/error to client
+        → Create Calendar event (+ guest invite)
+        → Append row to Bookings sheet
+        → Email client + Patricia
+    → Return bookingId + confirmation
 ```
 
-## GitHub Secrets (phase 2)
+## GitHub Secret (required for live booking)
 
-| Secret | Purpose |
-|--------|---------|
-| `GOOGLE_APPS_SCRIPT_URL` | Deployed Apps Script web app endpoint |
-| `RECAPTCHA_SITE_KEY` | Optional bot protection (public, can be in env) |
-| `RECAPTCHA_SECRET_KEY` | Server-side verification in Apps Script |
+In [agent5479/equilibrium → Settings → Secrets and variables → Actions](https://github.com/agent5479/equilibrium/settings/secrets/actions):
 
-## Implementation steps
+| Name | Value |
+|------|-------|
+| `NEXT_PUBLIC_BOOKING_API_URL` | Your Apps Script web app URL ending in `/exec` |
 
-1. Create Google Sheet with columns: timestamp, name, email, phone, service, date, time, status
-2. Create Apps Script project bound to the Sheet
-3. Implement `doPost(e)` handler: validate input, check calendar, create event, log row, send emails
-4. Deploy as web app (execute as Patricia, accessible to anyone)
-5. Wire `src/app/bookings/page.tsx` with date/time picker and form
-6. Store `GOOGLE_APPS_SCRIPT_URL` in GitHub Secrets and inject at build time via env
+The deploy workflow (`.github/workflows/deploy.yml`) injects this at build time. **Push to `main` after adding the secret** to redeploy with booking enabled.
 
-## Contact form (phase 2 alternative)
+Example URL format:
+```
+https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+```
 
-Contact form can use the same Apps Script endpoint or a separate Mailchimp/reCAPTCHA integration.
+## Google Sheets columns
+
+See [google-sheets-setup.md](./google-sheets-setup.md) for the full column list. Run `setupSheet()` in Apps Script to create headers automatically.
+
+## Local development
+
+```bash
+cp .env.example .env.local
+# Edit NEXT_PUBLIC_BOOKING_API_URL with your Apps Script URL
+npm run dev
+```
+
+Open http://localhost:3000/equilibrium/bookings/
+
+## Contact form (future)
+
+The contact form on `/contact/` can be wired to the same Apps Script endpoint with `action: "contact"` — not yet implemented.

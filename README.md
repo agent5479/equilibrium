@@ -51,9 +51,18 @@ Enable Pages in repo settings: **Source → GitHub Actions**.
 - SEO: robots.txt, sitemap.xml, Open Graph metadata, JSON-LD
 - Contact/newsletter forms (visual only)
 
+## Phase 2 — Booking
+
+Online booking is live at `/bookings/`. Setup instructions:
+
+1. Paste [`google-apps-script/Code.gs`](google-apps-script/Code.gs) into a Google Apps Script project bound to a new Sheet
+2. Run `setupSheet()` once to create column headers
+3. Deploy as web app (Execute as: Me, Access: Anyone)
+4. Add the web app URL as GitHub Secret `NEXT_PUBLIC_BOOKING_API_URL`
+5. See [docs/google-sheets-setup.md](docs/google-sheets-setup.md) for column labels and Script Properties
+
 ## Phase 2 (planned)
 
-- Google Calendar booking integration via Apps Script
 - Functional contact form and newsletter signup
 
 ## License
