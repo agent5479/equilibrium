@@ -57,6 +57,12 @@ export interface RecipeIndexEntry {
   date?: string;
 }
 
+export interface TestimonialEntry {
+  quote: string;
+  name: string;
+  category: string;
+}
+
 export interface SiteManifest {
   pages: string[];
   recipes: string[];

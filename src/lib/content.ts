@@ -6,6 +6,7 @@ import type {
   RecipeData,
   RecipeIndexEntry,
   SiteManifest,
+  TestimonialEntry,
 } from "./types";
 import { pathToSlug, slugToPath } from "./paths";
 import { enrichRecipeEntry } from "./recipe-meta";
@@ -48,6 +49,10 @@ export function getRecipeCategory(slug: string): RecipeCategoryData | null {
   return readJson<RecipeCategoryData>(
     path.join(CONTENT_ROOT, "recipe-categories", `${slug}.json`)
   );
+}
+
+export function getTestimonials(): TestimonialEntry[] {
+  return readJson<TestimonialEntry[]>(path.join(CONTENT_ROOT, "testimonials.json")) || [];
 }
 
 export function getRecipeIndex(): RecipeIndexEntry[] {

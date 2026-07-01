@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import {
   getManifest,
   getRecipeIndex,
+  getTestimonials,
   resolveContentByPath,
 } from "@/lib/content";
 import { slugToPath } from "@/lib/paths";
@@ -137,7 +138,9 @@ export default async function CatchAllPage({ params }: PageProps) {
 
       {showTitleBar && !hideTitleBar && <PageTitle title={content.title} />}
 
-      {pagePath === "/testimonials/" && isPage && <TestimonialsPage page={page} />}
+      {pagePath === "/testimonials/" && isPage && (
+        <TestimonialsPage testimonials={getTestimonials()} />
+      )}
       {pagePath === "/gallery/" && <GalleryPage />}
       {pagePath === "/patricias-story/" && isPage && <StoryPage page={page} />}
       {pagePath === "/contact/" && isPage && <ContactPage />}

@@ -1,34 +1,38 @@
-import Link from "next/link";
-import type { PageData } from "@/lib/types";
-import { parseTestimonials } from "@/lib/parse-content";
-import { routePath } from "@/lib/paths";
+import type { TestimonialEntry } from "@/lib/types";
 
-export default function TestimonialsPage({ page }: { page: PageData }) {
-  const testimonials = parseTestimonials(page.blocks);
+function quoteParagraphs(quote: string): string[] {
+  return quote
+    .split(/\n\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
 
+export default function TestimonialsPage({
+  testimonials,
+}: {
+  testimonials: TestimonialEntry[];
+}) {
   return (
     <div className="testimonials-page">
-      <div className="testimonials-grid">
-        {testimonials.map((t, i) => (
-          <article key={i} className="testimonial-card">
-            <span className="testimonial-quote-mark">&ldquo;</span>
-            {t.category && <span className="testimonial-category">{t.category}</span>}
-            <p className="testimonial-text">{t.quote}</p>
-            {t.attribution && (
-              <footer className="testimonial-attribution">— {t.attribution}</footer>
-            )}
-          </article>
-        ))}
-      </div>
-
-      <section className="cta-band">
-        <div className="container">
-          <h2>Ready to start your own journey?</h2>
-          <Link href={routePath("/bookings/")} className="btn-primary">
-            Book a Session
-          </Link>
+      <div className="container">
+        <div className="testimonials-grid">
+          {testimonials.map((t) => (
+            <article key={t.name} className="testimonial-card">
+              <div className="testimonial-content">
+                {quoteParagraphs(t.quote).map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
+                ))}
+              </div>
+              <footer className="testimonial-meta">
+                <strong className="testimonial-name">{t.name}</strong>
+                {t.category && (
+                  <span className="testimonial-category">{t.category}</span>
+                )}
+              </footer>
+            </article>
+          ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 }
