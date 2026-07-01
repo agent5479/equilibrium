@@ -1,0 +1,37 @@
+{
+  "slug": "yoga__timetable-and-prices",
+  "path": "/yoga/timetable-and-prices/",
+  "title": "Timetable and Prices",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "NO COMMUNITY YOGA CLASSES AT THE MOMENT – STILL AVAILABLE FOR PRIVATE SESSIONS"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Time table"
+    },
+    {
+      "type": "html",
+      "html": "<table class=\"avia-table avia-data-table avia_pricing_default  avia-builder-el-5  el_after_av_heading  avia-builder-el-last \" itemscope=\"itemscope\" itemtype=\"https://schema.org/Table\"><tbody><tr class=\"\"><td class=\"\"></td><td class=\"\"></td></tr></tbody></table>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Prices"
+    },
+    {
+      "type": "html",
+      "html": "<table class=\"avia-table avia-data-table avia_pricing_default  avia-builder-el-8  el_after_av_heading  avia-builder-el-last \" itemscope=\"itemscope\" itemtype=\"https://schema.org/Table\"><tbody><tr class=\"\"><td class=\"\">PRIVATE YOGA CLASS – ONE STUDENT – 90 MINUTES</td><td class=\"\">$100 </td></tr><tr class=\"\"><td class=\"\">10 x CONCESSION CARD FOR PRIVATE CLASSES, VALID FOR 6 MONTHS</td><td class=\"\">10 % DISCOUNT OF TOTAL PRICE</td></tr></tbody></table>"
+    },
+    {
+      "type": "button",
+      "text": "TO DONATE OR PAY CLICK HERE",
+      "href": "/product/yoga-class-donation/"
+    }
+  ]
+}

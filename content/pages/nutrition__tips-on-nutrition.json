@@ -1,0 +1,30 @@
+{
+  "slug": "nutrition__tips-on-nutrition",
+  "path": "/nutrition/tips-on-nutrition/",
+  "title": "Tips on Nutrition",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "All sorts of tips and ideas around Nutrition"
+    },
+    {
+      "type": "paragraph",
+      "html": "These are just short snippets of information to get you going. Over time I’ll dive deeper into those points in my blog with more information and background. Look out for regular updates and feel free to sign up to receive them."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Fats and oils Enjoy good fats! Replace all your polyunsaturated fats like canola, soy, corn, rice bran, sunflower seed oil with Olive, Avocado, Coconut and Nut oils.",
+        "Sugary Drinks Replace sweet and sugary drinks with drinks sweetened with Stevia, with herbal teas or soda water with lemon juice. Get your taste buds used to less sweet tasting drinks and to the beautiful fresh taste of rain juice.",
+        "Food journal To get a clear picture of what you’re really eating write a food journal for at least three days. This gives you a very clear picture of your “trouble times” around food.",
+        "Seaweed for Iodine Iodine is an essential mineral and the NZ soil is very poor in Iodine. It’s estimated that 95% of people are low in Iodine! This important mineral plays a role in Cancer prevention and also in the health of your Thyroid. Include Seaweed in your diet, in soups or as a snack. Best to use seaweed from NZ and not from Japan, due to the Fukushima accident and the radioactive pollution.",
+        "Magnesium Magnesium is another very important mineral and most people are low in it, due to various reasons. Include lots of greens, the darker the better. That’s green leafy vegetables like spinach, kale, silverbeet, the leaves of beet root, but also weeds like dandelion, plantain, yellow dock … Ask me how to prepare great tasting green smoothies to get as much raw green leaves in your diet as possible. And yes, dark chocolate has Magnesium! If you crave chocolate you might be low in Magnesium.",
+        "Fermented drinks and foods To provide some living probiotics, help with digestion of food and absorption of minerals add some fermented drinks and foods to your diet, best with every main meal. Start with very small amounts and increase every few days, otherwise you’ll have an explosion in your tummy … Think coconut water kefir, coconut milk/cream kefir, dairy kefir, sauerkraut (make sure it’s raw) and also apple cider vinegar. Regular consumption will help you to be regular and also will reduce your cravings for sweet foods."
+      ]
+    }
+  ]
+}

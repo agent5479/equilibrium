@@ -1,0 +1,29 @@
+{
+  "slug": "nutrition__services-and-fees",
+  "path": "/nutrition/services-and-fees/",
+  "title": "Sessions and cost",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "30 Minutes session$80",
+        "60 Minutes session$120",
+        "90 minutes $160",
+        "120 minutes$195",
+        "TOTAL WELLNESS PACKAGE $975"
+      ]
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Prices are for individual sessions and are the same for Nutritional and for Kinesiology consultations.",
+        "Both modalities of Nutrition and Kinesiology can and will be combined as needed in each session.",
+        "To enquire or book visit https://www.equilibrium.kiwi.nz/contact/"
+      ]
+    }
+  ]
+}

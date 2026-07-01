@@ -1,0 +1,160 @@
+{
+  "slug": "creamy-green-leafy-vegetables",
+  "path": "/recipes/creamy-green-leafy-vegetables/",
+  "title": "Green leafy vegetables",
+  "metaDescription": "",
+  "type": "recipe",
+  "ogImage": "/assets/wp-content/uploads/2016/03/creamy-spinach.jpeg",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2016/03/creamy-spinach.jpeg",
+      "alt": ""
+    },
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2016/03/creamy-spinach.jpeg",
+      "alt": ""
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Green leafy vegetables"
+    },
+    {
+      "type": "paragraph",
+      "html": "<span><i class=\"fa fa-book\"></i>&nbsp;&nbsp;<a href=\"/recipe-category/sides/\" rel=\"tag\">Sides</a></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "March 25, 2016<span class=\"value-title\" title=\"2016-03-25\"></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "If you already have your greens prepared ahead of time from the \"Green leafy vegetables to use in other recipes\" then this is a quick and easy side dish of leafy greens. Tastes great with \"Pesto chicken\". Also a great filling for omelettes or just as a side to some scrambled eggs or fried eggs."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Prep: 10 min",
+        "Cook: 5 min",
+        "10 min 5 min 15 min"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Ingredients"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"name\">Use any amount of the \"Green leafy vegetables to use in other recipes\" recipe. Depending on how many people you want to feed, use about 1/3 of a cup per person.\n</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"name\">Olive oil\n</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"name\">Cream (optional, tastes also great without) either dairy milk cream or coconut cream - around 25 - 50 ml per person\n</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"name\">Garlic - around 1 glove per two people\n</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"name\">Salt to taste\n</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"name\">Nutmeg, grated to taste\n</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"name\">Pesto and/or Parmesan (optional)</span>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Directions"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Heat some olive oil in a shallow frying pan, add chopped garlic and stir frequently for a very short time. Be careful as garlic burns quickly. Add spinach and cream (if using) and let simmer for 2-5 minutes, add salt and nutmeg to taste. You really can use as little or as much cream as you like. Tastes also great with a bit of pesto or sprinkled with some Parmesan when serving."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "No Blog Posts found"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Available Pages"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "About",
+        "Benefits of Yoga",
+        "Bookings",
+        "Cart",
+        "Checkout",
+        "Contact",
+        "Corporate Yoga",
+        "Friendly Do’s for Yoga",
+        "Gallery",
+        "My account",
+        "Nutrition",
+        "Patricia’s Story",
+        "Patricia’s Yoga background",
+        "Recipe Badges",
+        "Recipe Cooking Methods",
+        "Recipe Courses",
+        "Recipe Cuisines",
+        "Recipe Dashboard",
+        "Recipe Keys",
+        "Recipe Search",
+        "Recipe Tags",
+        "Recipes – great tasting and full of goodness!",
+        "Sessions and cost",
+        "Testimonials",
+        "Timetable and Prices",
+        "Tips on Nutrition",
+        "TOTAL WELLNESS PACKAGE. 8 SESSIONS + MUCH MORE",
+        "Touch for Health Kinesiology – online or in person.",
+        "Touch For Health Kinesiology Course",
+        "Visionboard Workshops",
+        "Welcome",
+        "Yoga",
+        "Yoga in Schools"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Subject:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "No categories"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Month:"
+    }
+  ],
+  "description": "",
+  "categories": [],
+  "categoryNames": [],
+  "ingredients": "",
+  "directions": "",
+  "heroImage": "/assets/wp-content/uploads/2016/03/creamy-spinach.jpeg"
+}

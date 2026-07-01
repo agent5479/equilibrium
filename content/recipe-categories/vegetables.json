@@ -1,0 +1,17 @@
+{
+  "slug": "recipe-category__vegetables",
+  "path": "/recipe-category/vegetables/",
+  "title": "Vegetables",
+  "metaDescription": "",
+  "type": "recipe-category",
+  "categorySlug": "vegetables",
+  "recipeSlugs": [
+    "frittata-with-greens"
+  ],
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<div class=\"category-term-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\" grid-sort-container isotope   no_margin-container with-title-container grid-total-odd grid-col-3 grid-links-\" data-portfolio-id=\"1\"><div data-ajax-id=\"1347\" class=\" grid-entry flex_column isotope-item all_sort no_margin post-entry post-entry-1347 grid-entry-overview grid-loop-1 grid-parity-odd  post-entry-last   av_one_third first default_av_fullwidth \"><article class=\"main_color inner-entry\" itemscope=\"itemscope\" itemtype=\"https://schema.org/CreativeWork\"><a href=\"/recipes/frittata-with-greens/\" title=\"Frittata with greens\" data-rel=\"grid-1\" class=\"grid-image avia-hover-fx\"> <img fetchpriority=\"high\" width=\"495\" height=\"333\" src=\"/wp-content/uploads/2016/03/spinach-frittata-goat-cheese-495x333.jpg\" class=\"wp-image-1419 avia-img-lazy-loading-not-1419 attachment-portfolio size-portfolio wp-post-image\" alt=\"\" decoding=\"async\"></a><div class=\"grid-content\"><div class=\"avia-arrow\"></div><header class=\"entry-content-header\" aria-label=\"Portfolio: Frittata with greens\"><h3 class=\"grid-entry-title entry-title \" itemprop=\"headline\"><a href=\"/recipes/frittata-with-greens/\" title=\"Frittata with greens\">Frittata with greens</a></h3></header></div><footer class=\"entry-footer\"></footer></article></div></div>"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "slug": "recipe-category__sweets-and-cakes",
+  "path": "/recipe-category/sweets-and-cakes/",
+  "title": "Sweets and Cakes",
+  "metaDescription": "",
+  "type": "recipe-category",
+  "categorySlug": "sweets-and-cakes",
+  "recipeSlugs": [
+    "raw-energy-balls",
+    "anytime-cookies"
+  ],
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<div class=\"category-term-description\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\" grid-sort-container isotope   no_margin-container with-title-container grid-total-even grid-col-3 grid-links-\" data-portfolio-id=\"1\"><div data-ajax-id=\"566\" class=\" grid-entry flex_column isotope-item all_sort no_margin post-entry post-entry-566 grid-entry-overview grid-loop-1 grid-parity-odd   av_one_third first default_av_fullwidth \"><article class=\"main_color inner-entry\" itemscope=\"itemscope\" itemtype=\"https://schema.org/CreativeWork\"><a href=\"/recipes/raw-energy-balls/\" title=\"Raw Energy balls\" data-rel=\"grid-1\" class=\"grid-image avia-hover-fx\"> <img fetchpriority=\"high\" width=\"495\" height=\"400\" src=\"/wp-content/uploads/2015/05/bliss-balls-495x400.jpg\" class=\"wp-image-1426 avia-img-lazy-loading-not-1426 attachment-portfolio size-portfolio wp-post-image\" alt=\"\" decoding=\"async\" srcset=\"/wp-content/uploads/2015/05/bliss-balls-495x400.jpg 495w, /wp-content/uploads/2015/05/bliss-balls-845x684.jpg 845w\" sizes=\"(max-width: 495px) 100vw, 495px\"></a><div class=\"grid-content\"><div class=\"avia-arrow\"></div><header class=\"entry-content-header\" aria-label=\"Portfolio: Raw Energy balls\"><h3 class=\"grid-entry-title entry-title \" itemprop=\"headline\"><a href=\"/recipes/raw-energy-balls/\" title=\"Raw Energy balls\">Raw Energy balls</a></h3></header></div><footer class=\"entry-footer\"></footer></article></div><div data-ajax-id=\"546\" class=\" grid-entry flex_column isotope-item all_sort no_margin post-entry post-entry-546 grid-entry-overview grid-loop-2 grid-parity-even  post-entry-last   av_one_third  default_av_fullwidth \"><article class=\"main_color inner-entry\" itemscope=\"itemscope\" itemtype=\"https://schema.org/CreativeWork\"><a href=\"/recipes/anytime-cookies/\" title=\"Anytime Cookies\" data-rel=\"grid-1\" class=\"grid-image avia-hover-fx\"> <img fetchpriority=\"high\" width=\"300\" height=\"200\" src=\"/wp-content/uploads/2015/04/Anytime-cookies.jpg\" class=\"wp-image-1430 avia-img-lazy-loading-not-1430 attachment-portfolio size-portfolio wp-post-image\" alt=\"\" decoding=\"async\"></a><div class=\"grid-content\"><div class=\"avia-arrow\"></div><header class=\"entry-content-header\" aria-label=\"Portfolio: Anytime Cookies\"><h3 class=\"grid-entry-title entry-title \" itemprop=\"headline\"><a href=\"/recipes/anytime-cookies/\" title=\"Anytime Cookies\">Anytime Cookies</a></h3></header></div><footer class=\"entry-footer\"></footer></article></div></div>"
+    }
+  ]
+}

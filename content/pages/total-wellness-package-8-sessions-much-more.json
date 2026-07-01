@@ -1,0 +1,43 @@
+{
+  "slug": "total-wellness-package-8-sessions-much-more",
+  "path": "/total-wellness-package-8-sessions-much-more/",
+  "title": "TOTAL WELLNESS PACKAGE. 8 SESSIONS + MUCH MORE",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 4,
+      "text": "Ready to commit to total health? This is for you! What will we uncover and work on in those 8 sessions?"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "The most individually tailored plan for your personal wellbeing",
+        "5 sessions between 90 and 120 minutes each. Those sessions are around 3 weeks apart",
+        "3 sessions for around 30 minutes each. Those sessions will be in between the other sessions",
+        "Finding and correcting all of your nutrient deficiencies (vitamins, minerals, enzymes, protein)",
+        "Finding allergies and correcting what we can correct (airborne like pollen, mould, etc., food, animal hair)",
+        "Individual testing and advice on how to eat for your personal best health",
+        "Testing and balancing of 53 different organs and tissues in your body and working out what they need for optimal functioning"
+      ]
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Supplement recommendations that are tailored to your needs",
+        "Testing of all your own supplements",
+        "Emotional balancing with TFH",
+        "Full session summary after each session with findings, healing done and recommendations to move forward",
+        "At least 2 food journal evaluations",
+        "Support throughout the time that we work together. Phone, email, whatever and whenever needed"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "html": "Please visit our <a href=\"/nutrition/services-and-fees/\">Services &amp; Fees</a> page for pricing info."
+    }
+  ]
+}

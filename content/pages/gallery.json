@@ -1,0 +1,14 @@
+{
+  "slug": "gallery",
+  "path": "/gallery/",
+  "title": "Gallery",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "/assets/wp-content/themes/enfold/config-templatebuilder/avia-template-builder/images/placeholder.jpg",
+      "alt": ""
+    }
+  ]
+}

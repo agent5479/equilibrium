@@ -1,0 +1,45 @@
+{
+  "slug": "home",
+  "path": "/",
+  "title": "Equilibrium Kinesiology & Nutrition",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2021/06/Patricia-Smith-photo-1.jpg",
+      "alt": ""
+    },
+    {
+      "type": "heading",
+      "level": 1,
+      "text": "Welcome to Equilibrium"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Live Like You Love YourSelf"
+    },
+    {
+      "type": "paragraph",
+      "html": "MY OFFER FOR NEW CLIENTS: I’m offering free 15-minute online sessions to support you in those challenging times. 15 minutes to find out if you would like to book a longer session."
+    },
+    {
+      "type": "paragraph",
+      "html": "My mission is to help you to bring your whole being back into balance – and with that experience vibrant health and happiness!"
+    },
+    {
+      "type": "paragraph",
+      "html": "Using Touch for Health Kinesiology, Nutrition, and Yoga to help you to find your own true Equilibrium."
+    },
+    {
+      "type": "paragraph",
+      "html": "Patricia is a qualified Nutritionist (B.Sc.), a registered Touch for Health Kinesiology Practitioner, and a Yoga Teacher."
+    },
+    {
+      "type": "button",
+      "text": "Email for more info or for an appointment",
+      "href": "/contact/"
+    }
+  ]
+}

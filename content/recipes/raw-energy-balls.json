@@ -1,0 +1,167 @@
+{
+  "slug": "raw-energy-balls",
+  "path": "/recipes/raw-energy-balls/",
+  "title": "Raw Energy balls",
+  "metaDescription": "",
+  "type": "recipe",
+  "ogImage": "/assets/wp-content/uploads/2015/05/bliss-balls-862x778.jpg",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2015/05/bliss-balls.jpg",
+      "alt": ""
+    },
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2015/05/bliss-balls.jpg",
+      "alt": ""
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Raw Energy balls"
+    },
+    {
+      "type": "paragraph",
+      "html": "<span><i class=\"fa fa-book\"></i>&nbsp;&nbsp;<a href=\"/recipe-category/sweets-and-cakes/\" rel=\"tag\">Sweets and Cakes</a></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "May 1, 2015<span class=\"value-title\" title=\"2015-05-01\"></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "Melt in your mouth sweetness from the dates and creaminess from the nuts and the almond butter. Great sustaining energy with a cacao kick!"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Prep: 20 min",
+        "20 min 20 min"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Ingredients"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1 cup</span> <span class=\"name\">almonds or walnuts, activated and dehydrated if possible</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1 cup</span> <span class=\"name\">medjool dates, pitted</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1/4 cup</span> <span class=\"name\">desiccated coconut</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1 tbsp</span> <span class=\"name\">raw cacao</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\"> tsp</span> <span class=\"name\">cinnamon</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1/4 cup</span> <span class=\"name\">almond butter</span>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Directions"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>In a food processor or strong blender grind the almonds or walnuts until finely ground."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Add the dates, coconut shreds and spices and grind into a fine meal."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Add the almond butter and process again until thoroughly mixed. If too dry add either a few drops of water or some melted coconut oil."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Form into small balls and roll in shredded coconut. Store in a sealed container on the counter for up to 3 days, or refrigerate for up to a few weeks."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "No Blog Posts found"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Available Pages"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "About",
+        "Benefits of Yoga",
+        "Bookings",
+        "Cart",
+        "Checkout",
+        "Contact",
+        "Corporate Yoga",
+        "Friendly Do’s for Yoga",
+        "Gallery",
+        "My account",
+        "Nutrition",
+        "Patricia’s Story",
+        "Patricia’s Yoga background",
+        "Recipe Badges",
+        "Recipe Cooking Methods",
+        "Recipe Courses",
+        "Recipe Cuisines",
+        "Recipe Dashboard",
+        "Recipe Keys",
+        "Recipe Search",
+        "Recipe Tags",
+        "Recipes – great tasting and full of goodness!",
+        "Sessions and cost",
+        "Testimonials",
+        "Timetable and Prices",
+        "Tips on Nutrition",
+        "TOTAL WELLNESS PACKAGE. 8 SESSIONS + MUCH MORE",
+        "Touch for Health Kinesiology – online or in person.",
+        "Touch For Health Kinesiology Course",
+        "Visionboard Workshops",
+        "Welcome",
+        "Yoga",
+        "Yoga in Schools"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Subject:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "No categories"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Month:"
+    }
+  ],
+  "description": "",
+  "categories": [],
+  "categoryNames": [],
+  "ingredients": "",
+  "directions": "",
+  "heroImage": "/assets/wp-content/uploads/2015/05/bliss-balls-862x778.jpg"
+}

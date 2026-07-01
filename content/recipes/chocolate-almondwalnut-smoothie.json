@@ -1,0 +1,164 @@
+{
+  "slug": "chocolate-almondwalnut-smoothie",
+  "path": "/recipes/chocolate-almondwalnut-smoothie/",
+  "title": "Chocolate Almond/Walnut Smoothie",
+  "metaDescription": "",
+  "type": "recipe",
+  "ogImage": "/assets/wp-content/uploads/2016/04/the-mudslide-shake.jpg",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2016/04/the-mudslide-shake.jpg",
+      "alt": ""
+    },
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2016/04/the-mudslide-shake.jpg",
+      "alt": ""
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Chocolate Almond/Walnut Smoothie"
+    },
+    {
+      "type": "paragraph",
+      "html": "<span><i class=\"fa fa-book\"></i>&nbsp;&nbsp;<a href=\"/recipe-category/smoothies-and-drinks/\" rel=\"tag\">Smoothies and drinks</a></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "April 9, 2016<span class=\"value-title\" title=\"2016-04-09\"></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "Delicious! Great tasting chocolate smoothie, make it with some ice cubes and it’s almost like a soft serve ice cream, only much better tasting."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Prep: 5 min",
+        "5 min 5 min",
+        "Yields: 2 servings"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Ingredients"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1 </span> <span class=\"name\">Banana</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">or 3-4 </span> <span class=\"name\">medjool dates, pitted</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1 tbsp</span> <span class=\"name\">Cacao powder, raw</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1/3 cup</span> <span class=\"name\">almonds or walnuts, activated and dehydrated if possible</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1/2 tsp</span> <span class=\"name\">Vanilla essence</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1/2 tsp</span> <span class=\"name\">Cinnamon, or to taste</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1 cup</span> <span class=\"name\">Water (or less and add some ice cubes)</span>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Directions"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Put all ingredients in a blender and blend until smooth and creamy,"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Pour into 2 glasses and serve immediately, but also keeps well in fridge for later."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "No Blog Posts found"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Available Pages"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "About",
+        "Benefits of Yoga",
+        "Bookings",
+        "Cart",
+        "Checkout",
+        "Contact",
+        "Corporate Yoga",
+        "Friendly Do’s for Yoga",
+        "Gallery",
+        "My account",
+        "Nutrition",
+        "Patricia’s Story",
+        "Patricia’s Yoga background",
+        "Recipe Badges",
+        "Recipe Cooking Methods",
+        "Recipe Courses",
+        "Recipe Cuisines",
+        "Recipe Dashboard",
+        "Recipe Keys",
+        "Recipe Search",
+        "Recipe Tags",
+        "Recipes – great tasting and full of goodness!",
+        "Sessions and cost",
+        "Testimonials",
+        "Timetable and Prices",
+        "Tips on Nutrition",
+        "TOTAL WELLNESS PACKAGE. 8 SESSIONS + MUCH MORE",
+        "Touch for Health Kinesiology – online or in person.",
+        "Touch For Health Kinesiology Course",
+        "Visionboard Workshops",
+        "Welcome",
+        "Yoga",
+        "Yoga in Schools"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Subject:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "No categories"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Month:"
+    }
+  ],
+  "description": "",
+  "categories": [],
+  "categoryNames": [],
+  "ingredients": "",
+  "directions": "",
+  "heroImage": "/assets/wp-content/uploads/2016/04/the-mudslide-shake.jpg"
+}

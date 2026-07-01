@@ -1,0 +1,87 @@
+{
+  "slug": "almond-and-coconut-flour-bread",
+  "path": "/recipes/almond-and-coconut-flour-bread/",
+  "title": "Almond and Coconut flour bread",
+  "metaDescription": "",
+  "type": "recipe",
+  "ogImage": "/assets/wp-content/uploads/2015/05/Almond-coconut-flour-bread.jpg",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2015/05/Almond-coconut-flour-bread.jpg",
+      "alt": ""
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "No Blog Posts found"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Available Pages"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "About",
+        "Benefits of Yoga",
+        "Bookings",
+        "Cart",
+        "Checkout",
+        "Contact",
+        "Corporate Yoga",
+        "Friendly Do’s for Yoga",
+        "Gallery",
+        "My account",
+        "Nutrition",
+        "Patricia’s Story",
+        "Patricia’s Yoga background",
+        "Recipe Badges",
+        "Recipe Cooking Methods",
+        "Recipe Courses",
+        "Recipe Cuisines",
+        "Recipe Dashboard",
+        "Recipe Keys",
+        "Recipe Search",
+        "Recipe Tags",
+        "Recipes – great tasting and full of goodness!",
+        "Sessions and cost",
+        "Testimonials",
+        "Timetable and Prices",
+        "Tips on Nutrition",
+        "TOTAL WELLNESS PACKAGE. 8 SESSIONS + MUCH MORE",
+        "Touch for Health Kinesiology – online or in person.",
+        "Touch For Health Kinesiology Course",
+        "Visionboard Workshops",
+        "Welcome",
+        "Yoga",
+        "Yoga in Schools"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Subject:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "No categories"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Month:"
+    }
+  ],
+  "description": "",
+  "categories": [],
+  "categoryNames": [],
+  "ingredients": "",
+  "directions": "",
+  "heroImage": "/assets/wp-content/uploads/2015/05/Almond-coconut-flour-bread.jpg"
+}

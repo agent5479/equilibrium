@@ -1,0 +1,46 @@
+{
+  "slug": "yoga__benefits-of-yoga",
+  "path": "/yoga/benefits-of-yoga/",
+  "title": "Benefits of Yoga",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Yoga and benefits"
+    },
+    {
+      "type": "heading",
+      "level": 4,
+      "text": "With Equilibrium Yoga Patricia Smith is offering you the opportunity to learn and practise YOGA in a local, friendly and supportive environment."
+    },
+    {
+      "type": "paragraph",
+      "html": "Yoga is achievable and beneficial at any age or fitness levels, whether you’re big or small, flexible or inflexible, male or female, old or young, overweight or skinny, new to Yoga or an old timer! Every Body and everyone is welcome to be part of Equilibrium Yoga!"
+    },
+    {
+      "type": "paragraph",
+      "html": "Yoga has the power to transform our lives on all levels, as it works on your physical, mental and emotional wellbeing."
+    },
+    {
+      "type": "heading",
+      "level": 4,
+      "text": "Some of the benefits of practising Yoga:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Increases flexibility, strength and body awareness",
+        "Decreases aches and pains",
+        "Aids relaxation and promotes deep sleep",
+        "Reduces stress levels",
+        "Weight reduction",
+        "Improved digestion and metabolism",
+        "helps with minor and major health issues",
+        "… and many more"
+      ]
+    }
+  ]
+}

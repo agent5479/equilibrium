@@ -1,0 +1,212 @@
+{
+  "slug": "chicken-broth",
+  "path": "/recipes/chicken-broth/",
+  "title": "Broth – with or without Chicken bones",
+  "metaDescription": "",
+  "type": "recipe",
+  "ogImage": "/assets/wp-content/uploads/2016/03/Chicken-Bone-Broth-862x768.jpg",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2016/03/Chicken-Bone-Broth.jpg",
+      "alt": ""
+    },
+    {
+      "type": "image",
+      "src": "/assets/wp-content/uploads/2016/03/Chicken-Bone-Broth.jpg",
+      "alt": ""
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Broth – with or without Chicken bones"
+    },
+    {
+      "type": "paragraph",
+      "html": "<span><i class=\"fa fa-book\"></i>&nbsp;&nbsp;<a href=\"/recipe-category/easy-to-prepare-ahead/\" rel=\"tag\">Easy to prepare ahead</a>, <a href=\"/recipe-category/staples/\" rel=\"tag\">Pantry and fridge staples</a></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "March 25, 2016<span class=\"value-title\" title=\"2016-03-25\"></span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "Great to drink just as a cup of hot stock or use as a basis for soups, add to stews or any other recipe that asks for water or stock. Full of good minerals and great for your gut health. Best remedy for leaky guts!"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Prep: 20 min",
+        "Cook: 12 hrs",
+        "20 min 12 hrs 12 hrs 20 min"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Ingredients"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1-3 </span> <span class=\"name\">Chicken carcasses or 1.5 to 2.5 kg of bony chicken parts or 1 - 2 whole chickens. Either raw or from roasted chicken.</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">2-4 </span> <span class=\"name\">Chicken feet (optional)</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">3 - 6 liters</span> <span class=\"name\">Water</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">2 </span> <span class=\"name\">Onions, large, chopped</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">2 </span> <span class=\"name\">Carrots, coarsely chopped</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">2-4 </span> <span class=\"name\">Celery sticks, chopped</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">5-10 </span> <span class=\"name\">Gloves of garlic</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">2 - 3 tbsp</span> <span class=\"name\">Ginger, sliced </span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">2 - 3 tbsp</span> <span class=\"name\">Turmeric, fresh, sliced </span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">5-10 </span> <span class=\"name\">Bay leaves</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">one bunch </span> <span class=\"name\">Thyme</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">a few stalks </span> <span class=\"name\">Rosemary</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1  tbsp</span> <span class=\"name\">Black pepper corns, lightly crushed</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1 big bunch </span> <span class=\"name\">Parsley</span>"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a><span class=\"amount\">1-2 tsp</span> <span class=\"name\">Salt</span>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Directions"
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Place chicken carcasses/pieces and feet (if using) in a stockpot or large saucepan and cover with cold water. You can use more water or less, depending on the size of your pot. Bring to boil and turn immediately down to a gentle simmer. Try to watch your stock and don't allow it to boil heavily. Remove scum that rises to the surface. You only need to remove the scum if making the stock from raw carcasses/bones. If using the carcasses from roasted chicken then there won't be any scum and you can add all ingredients (except the parsley) straight away into the pot. You could also use a slow cooker for making the broth."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Once there's no more scum coming up add all the other ingredients, except the parsley."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Keep lid on top and simmer for at least 1.5 hours or even longer, up to 8-24 hours. It's okay to turn it off overnight, keep it on your stove and turn it on the next day again. \nIf cooking whole chicken, then take the chicken out after 1.5 hours, let cool down a bit and then take all the meat off for eating and using in other recipes. Put all the bones back in your stock and continue to cook."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>20 minutes before you've finished cooking the stock add the parsley."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>Strain the stock through a fine sieve into a large pot or container and place in the fridge until the fat rises to the top. You don't have to, but this is the time that you can take the fat off and discard. If you don't take it off, your stock will be richer and fattier tasting. The healthier option is to take the fat off. The stock will keep in the fridge for 5-6 days or in the freezer for around 3 months."
+    },
+    {
+      "type": "paragraph",
+      "html": "<a href=\"#\" class=\"hint-check\"><i class=\"fa fa-check\"></i></a>It's a good idea to freeze some, so that you always have some handy. Also freeze in different sized containers, in case you need just a little bit for a recipe or a bigger amount."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "No Blog Posts found"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Available Pages"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "About",
+        "Benefits of Yoga",
+        "Bookings",
+        "Cart",
+        "Checkout",
+        "Contact",
+        "Corporate Yoga",
+        "Friendly Do’s for Yoga",
+        "Gallery",
+        "My account",
+        "Nutrition",
+        "Patricia’s Story",
+        "Patricia’s Yoga background",
+        "Recipe Badges",
+        "Recipe Cooking Methods",
+        "Recipe Courses",
+        "Recipe Cuisines",
+        "Recipe Dashboard",
+        "Recipe Keys",
+        "Recipe Search",
+        "Recipe Tags",
+        "Recipes – great tasting and full of goodness!",
+        "Sessions and cost",
+        "Testimonials",
+        "Timetable and Prices",
+        "Tips on Nutrition",
+        "TOTAL WELLNESS PACKAGE. 8 SESSIONS + MUCH MORE",
+        "Touch for Health Kinesiology – online or in person.",
+        "Touch For Health Kinesiology Course",
+        "Visionboard Workshops",
+        "Welcome",
+        "Yoga",
+        "Yoga in Schools"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Subject:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "No categories"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Archives by Month:"
+    }
+  ],
+  "description": "",
+  "categories": [],
+  "categoryNames": [],
+  "ingredients": "",
+  "directions": "",
+  "heroImage": "/assets/wp-content/uploads/2016/03/Chicken-Bone-Broth-862x768.jpg"
+}

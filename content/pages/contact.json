@@ -1,0 +1,27 @@
+{
+  "slug": "contact",
+  "path": "/contact/",
+  "title": "Contact",
+  "metaDescription": "",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Patricia:"
+    },
+    {
+      "type": "paragraph",
+      "html": "Phone: 021 991 989"
+    },
+    {
+      "type": "paragraph",
+      "html": "Email: <a href=\"mailto:patricia@equilibrium.kiwi.nz\">patricia@equilibrium.kiwi.nz</a>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Sign up for my newsletter"
+    }
+  ]
+}
