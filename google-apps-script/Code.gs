@@ -1,45 +1,20 @@
 /**
- * Equilibrium Booking API — Google Apps Script
+ * Equilibrium Booking API — Google Apps Script (calendar-only)
  *
  * SETUP:
- * 1. Create a new Google Sheet (e.g. "Equilibrium Bookings")
- * 2. Extensions → Apps Script → paste this file
- * 3. Run setupSheet() once from the editor (authorize when prompted)
- * 4. Set Script Properties (Project Settings → Script Properties):
- *    - CALENDAR_ID     = primary  (or your calendar ID)
+ * 1. script.google.com → New project → paste this file
+ * 2. Set Script Properties (Project Settings → Script Properties):
+ *    - CALENDAR_ID     = primary
  *    - OWNER_EMAIL     = goldenbayorganicstakaka@gmail.com
+ *    - SITE_URL        = https://agent5479.github.io/equilibrium/
  *    - TIMEZONE        = Pacific/Auckland
  *    - BUSINESS_START  = 09:00
  *    - BUSINESS_END    = 17:00
- *    - SLOT_INTERVAL   = 30       (minutes between slot starts)
- *    - BOOKING_DAYS    = 1,2,3,4,5  (Mon=1 … Sun=7, comma-separated)
- * 5. Deploy → New deployment → Web app
- *    - Execute as: Me
- *    - Who has access: Anyone
- * 6. Copy the Web App URL → GitHub Secret NEXT_PUBLIC_BOOKING_API_URL
+ *    - SLOT_INTERVAL   = 30
+ *    - BOOKING_DAYS    = 1,2,3,4,5
+ * 3. Deploy → Web app → Execute as: Me → Anyone
+ * 4. Copy Web App URL → GitHub Secret NEXT_PUBLIC_BOOKING_API_URL
  */
-
-var SHEET_NAME = 'Bookings';
-
-var HEADERS = [
-  'Booking ID',
-  'Created At',
-  'Status',
-  'Client Name',
-  'Client Email',
-  'Client Phone',
-  'Service',
-  'Duration (minutes)',
-  'Price',
-  'Appointment Date',
-  'Appointment Start',
-  'Appointment End',
-  'Calendar Event ID',
-  'Client Message',
-  'Source URL',
-  'Confirmed At',
-  'Owner Notes'
-];
 
 // ─── HTTP handlers ───────────────────────────────────────────────────────────
 
@@ -50,14 +25,13 @@ function doGet(e) {
     if (action === 'availability') {
       var date = e.parameter.date;
       var duration = parseInt(e.parameter.duration, 10) || 60;
-      var result = getAvailability(date, duration);
-      return jsonResponse(result);
+      return jsonResponse(getAvailability(date, duration));
     }
 
     return jsonResponse({
       success: true,
       message: 'Equilibrium Booking API is running.',
-      version: '1.0'
+      version: '2.0'
     });
   } catch (err) {
     return jsonResponse({ success: false, message: String(err) });
@@ -72,44 +46,13 @@ function doPost(e) {
     }
 
     if (body.action === 'book') {
-      var result = createBooking(body);
-      return jsonResponse(result);
+      return jsonResponse(createBooking(body));
     }
 
     return jsonResponse({ success: false, message: 'Unknown action.' });
   } catch (err) {
     return jsonResponse({ success: false, message: String(err) });
   }
-}
-
-// ─── Setup ───────────────────────────────────────────────────────────────────
-
-/**
- * Run once from the Apps Script editor to create the Bookings sheet with headers.
- */
-function setupSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME);
-
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-  }
-
-  sheet.clear();
-  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
-  sheet.getRange(1, 1, 1, HEADERS.length)
-    .setFontWeight('bold')
-    .setBackground('#b8517f')
-    .setFontColor('#ffffff');
-  sheet.setFrozenRows(1);
-
-  // Set column widths for readability
-  var widths = [140, 160, 100, 150, 200, 120, 220, 80, 70, 120, 100, 100, 200, 250, 200, 160, 200];
-  for (var i = 0; i < widths.length; i++) {
-    sheet.setColumnWidth(i + 1, widths[i]);
-  }
-
-  Logger.log('Sheet "' + SHEET_NAME + '" is ready with ' + HEADERS.length + ' columns.');
 }
 
 // ─── Availability ────────────────────────────────────────────────────────────
@@ -122,7 +65,6 @@ function getAvailability(dateStr, durationMinutes) {
   var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
   var bookingDays = getConfig('BOOKING_DAYS', '1,2,3,4,5').split(',').map(Number);
   var dayOfWeek = parseDateInTz(dateStr, tz).getDay();
-  // JS getDay(): Sun=0 … Sat=6 → convert to ISO Mon=1 … Sun=7
   var isoDay = dayOfWeek === 0 ? 7 : dayOfWeek;
 
   if (bookingDays.indexOf(isoDay) === -1) {
@@ -143,11 +85,7 @@ function getAvailability(dateStr, durationMinutes) {
     return !isOverlapping(slotStart, slotEnd, busyPeriods) && slotStart > new Date();
   });
 
-  return {
-    success: true,
-    date: dateStr,
-    slots: available.map(function (s) { return s; })
-  };
+  return { success: true, date: dateStr, slots: available };
 }
 
 function generateTimeSlots(startTime, endTime, intervalMinutes, durationMinutes) {
@@ -179,20 +117,17 @@ function getBusyPeriods(calendarId, dateStr, tz) {
   var dayStart = combineDateTime(dateStr, '00:00', tz);
   var dayEnd = combineDateTime(dateStr, '23:59', tz);
 
-  var events = CalendarApp.getCalendarById(calendarId)
-    .getEvents(dayStart, dayEnd);
-
-  return events.map(function (ev) {
-    return { start: ev.getStartTime(), end: ev.getEndTime() };
-  });
+  return CalendarApp.getCalendarById(calendarId)
+    .getEvents(dayStart, dayEnd)
+    .map(function (ev) {
+      return { start: ev.getStartTime(), end: ev.getEndTime() };
+    });
 }
 
 function isOverlapping(start, end, busyPeriods) {
   for (var i = 0; i < busyPeriods.length; i++) {
     var b = busyPeriods[i];
-    if (start < b.end && end > b.start) {
-      return true;
-    }
+    if (start < b.end && end > b.start) return true;
   }
   return false;
 }
@@ -200,7 +135,6 @@ function isOverlapping(start, end, busyPeriods) {
 // ─── Create booking ──────────────────────────────────────────────────────────
 
 function createBooking(data) {
-  // Validate required fields
   var required = ['name', 'email', 'serviceLabel', 'durationMinutes', 'preferredDate', 'preferredTime'];
   for (var i = 0; i < required.length; i++) {
     if (!data[required[i]]) {
@@ -213,11 +147,11 @@ function createBooking(data) {
   }
 
   var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
+  var siteUrl = getConfig('SITE_URL', 'https://agent5479.github.io/equilibrium/');
   var duration = parseInt(data.durationMinutes, 10);
   var dateStr = data.preferredDate;
   var timeStr = data.preferredTime;
 
-  // Re-check availability (prevent double-booking)
   var availability = getAvailability(dateStr, duration);
   if (availability.slots.indexOf(timeStr) === -1) {
     return { success: false, message: 'That time slot is no longer available. Please choose another.' };
@@ -226,11 +160,9 @@ function createBooking(data) {
   var startTime = combineDateTime(dateStr, timeStr, tz);
   var endTime = new Date(startTime.getTime() + duration * 60000);
   var bookingId = 'EQ-' + Utilities.formatDate(new Date(), tz, 'yyyyMMdd') + '-' + randomId(4);
-  var now = new Date();
   var calendarId = getConfig('CALENDAR_ID', 'primary');
   var ownerEmail = getConfig('OWNER_EMAIL', 'goldenbayorganicstakaka@gmail.com');
 
-  // Create calendar event
   var calendar = CalendarApp.getCalendarById(calendarId);
   var eventTitle = data.serviceLabel + ' — ' + data.name;
   var eventDescription = [
@@ -244,52 +176,32 @@ function createBooking(data) {
     'Message:',
     data.message || '(none)',
     '',
-    'Booked via equilibrium.kiwi.nz'
+    'Booked via ' + siteUrl
   ].join('\n');
+
+  var guests = data.email;
+  if (ownerEmail && ownerEmail !== data.email) {
+    guests = data.email + ',' + ownerEmail;
+  }
 
   var event = calendar.createEvent(eventTitle, startTime, endTime, {
     description: eventDescription,
-    guests: data.email,
+    location: 'Online or in person — Equilibrium Kinesiology & Nutrition',
+    guests: guests,
     sendInvites: true
   });
 
-  var eventId = event.getId();
-
-  // Log to sheet
-  var sheet = getOrCreateSheet();
-  var price = getServicePrice(data.serviceId);
-  var row = [
-    bookingId,
-    Utilities.formatDate(now, tz, "yyyy-MM-dd HH:mm:ss"),
-    'Confirmed',
-    data.name,
-    data.email,
-    data.phone || '',
-    data.serviceLabel,
-    duration,
-    price,
-    dateStr,
-    timeStr,
-    Utilities.formatDate(endTime, tz, 'HH:mm'),
-    eventId,
-    data.message || '',
-    data.sourceUrl || '',
-    Utilities.formatDate(now, tz, "yyyy-MM-dd HH:mm:ss"),
-    ''
-  ];
-  sheet.appendRow(row);
-
-  // Send confirmation emails
-  sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail);
+  sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail, siteUrl);
 
   return {
     success: true,
-    message: 'Your booking is confirmed! A confirmation email has been sent to ' + data.email + '.',
-    bookingId: bookingId
+    message: 'Your booking is confirmed! Check your email for a calendar invitation to add this to your calendar.',
+    bookingId: bookingId,
+    eventId: event.getId()
   };
 }
 
-function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail) {
+function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail, siteUrl) {
   var endTimeStr = Utilities.formatDate(endTime, tz, 'HH:mm');
   var formattedDate = Utilities.formatDate(parseDateInTz(dateStr, tz), tz, 'EEEE, d MMMM yyyy');
 
@@ -299,14 +211,15 @@ function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, 
     '',
     'Your appointment is confirmed:',
     '',
-    '  Service:  ' + data.serviceLabel,
-    '  Date:     ' + formattedDate,
-    '  Time:     ' + timeStr + ' – ' + endTimeStr + ' (NZ time)',
+    '  Service:   ' + data.serviceLabel,
+    '  Date:      ' + formattedDate,
+    '  Time:      ' + timeStr + ' – ' + endTimeStr + ' (NZ time)',
     '  Reference: ' + bookingId,
     '',
     data.message ? 'Your message: ' + data.message : '',
     '',
-    'A calendar invitation has been sent to this email address.',
+    'A Google Calendar invitation has been sent to this email address.',
+    'Please accept the invite in your inbox to add the appointment to your calendar.',
     '',
     'If you need to reschedule, please contact Patricia:',
     '  Phone: 021 991 989',
@@ -335,7 +248,9 @@ function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, 
     '',
     'Message: ' + (data.message || '(none)'),
     '',
-    'View in Google Calendar and the Bookings sheet.'
+    'Booked via ' + siteUrl,
+    '',
+    'View in Google Calendar.'
   ].join('\n');
 
   GmailApp.sendEmail(ownerEmail, ownerSubject, ownerBody, {
@@ -345,37 +260,15 @@ function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, 
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function getOrCreateSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) {
-    setupSheet();
-    sheet = ss.getSheetByName(SHEET_NAME);
-  }
-  return sheet;
-}
-
 function getConfig(key, defaultValue) {
   var value = PropertiesService.getScriptProperties().getProperty(key);
   return value !== null && value !== '' ? value : defaultValue;
 }
 
-function getServicePrice(serviceId) {
-  var prices = {
-    'free-15': 'Free',
-    'session-30': '$80',
-    'session-60': '$120',
-    'session-90': '$160',
-    'session-120': '$195'
-  };
-  return prices[serviceId] || '';
-}
-
 function combineDateTime(dateStr, timeStr, tz) {
   var parts = dateStr.split('-');
   var timeParts = timeStr.split(':');
-  // Build in script timezone
-  var d = new Date(
+  return new Date(
     parseInt(parts[0], 10),
     parseInt(parts[1], 10) - 1,
     parseInt(parts[2], 10),
@@ -383,7 +276,6 @@ function combineDateTime(dateStr, timeStr, tz) {
     parseInt(timeParts[1], 10),
     0
   );
-  return d;
 }
 
 function parseDateInTz(dateStr, tz) {

@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "scrape": "tsx scripts/scrape/index.ts",
+    "optimize-images": "tsx scripts/optimize-images.ts",
+    "prebuild": "tsx scripts/optimize-images.ts",
     "postbuild": "tsx scripts/generate-sitemap.ts"
   },
   "dependencies": {
@@ -24,6 +26,7 @@
     "eslint": "^9",
     "eslint-config-next": "^15.5.0",
     "tsx": "^4.19.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "sharp": "^0.33.5"
   }
 }

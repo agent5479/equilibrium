@@ -36,5 +36,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# scraper cache
-scripts/scrape/.cache/
+# generated image variants (npm run optimize-images / prebuild)
+public/assets/manifest.json
+public/assets/**/*.webp
+public/assets/**/*-opt.jpg
+src/lib/image-manifest.json
+

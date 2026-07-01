@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { RecipeIndexEntry } from "@/lib/types";
-import { assetUrl, routePath } from "@/lib/paths";
+import OptimizedImage from "@/components/OptimizedImage";
+import { routePath } from "@/lib/paths";
 
 const PER_PAGE = 10;
 
@@ -118,7 +119,7 @@ export default function RecipeIndex({ recipes }: { recipes: RecipeIndexEntry[] }
           <article key={recipe.slug} className="recipe-card">
             <Link href={routePath(recipe.path)} className="recipe-card-image">
               {recipe.heroImage && (
-                <img src={assetUrl(recipe.heroImage)} alt={recipe.title} />
+                <OptimizedImage src={recipe.heroImage} alt={recipe.title} />
               )}
             </Link>
             <div className="recipe-card-body">

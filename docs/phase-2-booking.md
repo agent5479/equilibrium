@@ -2,7 +2,7 @@
 
 ## Status: Implemented
 
-The booking system connects the static React site to Patricia's Google account.
+The booking system connects the static React site to Patricia's Google Calendar and Gmail.
 
 ## Components
 
@@ -12,7 +12,7 @@ The booking system connects the static React site to Patricia's Google account.
 | Booking page | `src/app/bookings/` |
 | API client | `src/lib/booking/index.ts` |
 | Google Apps Script | `google-apps-script/Code.gs` |
-| Sheets setup guide | `docs/google-sheets-setup.md` |
+| Setup guide | `docs/google-apps-script-setup.md` |
 
 ## Architecture
 
@@ -21,11 +21,12 @@ React Site (/bookings/)
     → GET  Apps Script ?action=availability&date=&duration=
     → POST Apps Script { action: "book", ... }
         → Check Calendar availability
-        → Create Calendar event (+ guest invite)
-        → Append row to Bookings sheet
+        → Create Calendar event (+ guest invites for client and owner)
         → Email client + Patricia
     → Return bookingId + confirmation
 ```
+
+No Google Sheet is required — bookings live in Google Calendar.
 
 ## GitHub Secret (required for live booking)
 
@@ -41,10 +42,6 @@ Example URL format:
 ```
 https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
 ```
-
-## Google Sheets columns
-
-See [google-sheets-setup.md](./google-sheets-setup.md) for the full column list. Run `setupSheet()` in Apps Script to create headers automatically.
 
 ## Local development
 

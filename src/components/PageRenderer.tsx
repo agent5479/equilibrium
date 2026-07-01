@@ -1,5 +1,6 @@
 import type { ContentBlock } from "@/lib/types";
-import { assetUrl, publicPath, routePath } from "@/lib/paths";
+import { publicPath, routePath } from "@/lib/paths";
+import OptimizedImage from "@/components/OptimizedImage";
 import Link from "next/link";
 
 function Block({ block }: { block: ContentBlock }) {
@@ -34,7 +35,7 @@ function Block({ block }: { block: ContentBlock }) {
     case "image":
       return (
         <div className="content-block">
-          <img src={assetUrl(block.src)} alt={block.alt || ""} />
+          <OptimizedImage src={block.src || ""} alt={block.alt || ""} />
           {block.caption && <p className="image-caption">{block.caption}</p>}
         </div>
       );

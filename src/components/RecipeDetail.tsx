@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { RecipeData } from "@/lib/types";
-import { assetUrl, publicPath, routePath } from "@/lib/paths";
+import OptimizedImage from "@/components/OptimizedImage";
+import { publicPath, routePath } from "@/lib/paths";
 import PageRenderer from "./PageRenderer";
 
 function extractRecipeSections(blocks: RecipeData["blocks"]) {
@@ -67,7 +68,7 @@ export default function RecipeDetail({ recipe }: { recipe: RecipeData }) {
     <article>
       {recipe.heroImage && (
         <div className="recipe-hero">
-          <img src={assetUrl(recipe.heroImage)} alt={recipe.title} />
+          <OptimizedImage src={recipe.heroImage} alt={recipe.title} sizes="100vw" />
         </div>
       )}
 

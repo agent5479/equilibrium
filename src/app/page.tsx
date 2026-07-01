@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPageBySlug } from "@/lib/content";
 import { buildMetadata, localBusinessJsonLd } from "@/lib/metadata";
-import PageRenderer from "@/components/PageRenderer";
+import HomePage from "@/components/HomePage";
 
 export function generateMetadata() {
   const page = getPageBySlug("home");
@@ -14,7 +14,7 @@ export function generateMetadata() {
   });
 }
 
-export default function HomePage() {
+export default function Page() {
   const page = getPageBySlug("home");
   if (!page) notFound();
 
@@ -26,9 +26,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="container">
-        <PageRenderer blocks={page.blocks} />
-      </div>
+      <HomePage />
     </>
   );
 }
