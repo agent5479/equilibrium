@@ -8,6 +8,7 @@ import type {
   SiteManifest,
 } from "./types";
 import { pathToSlug, slugToPath } from "./paths";
+import { enrichRecipeEntry } from "./recipe-meta";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
 
@@ -50,7 +51,15 @@ export function getRecipeCategory(slug: string): RecipeCategoryData | null {
 }
 
 export function getRecipeIndex(): RecipeIndexEntry[] {
-  return readJson<RecipeIndexEntry[]>(path.join(CONTENT_ROOT, "recipes", "index.json")) || [];
+  const index =
+    readJson<RecipeIndexEntry[]>(path.join(CONTENT_ROOT, "recipes", "index.json")) || [];
+
+  return index.map((entry) => {
+    const recipe = getRecipe(entry.slug);
+    if (!recipe) return entry;
+    const meta = enrichRecipeEntry(recipe);
+    return { ...entry, ...meta };
+  });
 }
 
 export function getAllStaticPaths(): string[] {

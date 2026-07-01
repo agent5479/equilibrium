@@ -32,6 +32,8 @@ function isSourceImage(name: string): boolean {
   if (!/\.(jpe?g|png)$/i.test(name)) return false;
   if (/-opt\.jpe?g$/i.test(name)) return false;
   if (/-\d+\.webp$/i.test(name)) return false;
+  if (/^logo(-\d+x\d+)?\.png$/i.test(name)) return false;
+  if (/^favicon\.png$/i.test(name)) return false;
   return true;
 }
 

@@ -7,6 +7,13 @@ import manifestData from "./image-manifest.json";
 
 const manifest = manifestData as Record<string, ImageManifestEntry>;
 
+/** PNG logos and icons — keep originals to preserve transparency */
+const ORIGINAL_ONLY = new Set([
+  "/assets/wp-content/uploads/2023/02/logo.png",
+  "/assets/wp-content/uploads/2023/02/logo-300x240.png",
+  "/assets/wp-content/uploads/2023/02/favicon.png",
+]);
+
 export function resolveOptimizedSrc(src: string): {
   src: string;
   srcSet?: string;
@@ -17,6 +24,10 @@ export function resolveOptimizedSrc(src: string): {
   let key = src;
   if (key.startsWith("/equilibrium")) key = key.slice("/equilibrium".length);
   if (!key.startsWith("/assets")) key = key.startsWith("/") ? key : `/assets${key}`;
+
+  if (ORIGINAL_ONLY.has(key)) {
+    return { src: `/equilibrium${key}` };
+  }
 
   const entry = manifest[key];
   if (!entry) {

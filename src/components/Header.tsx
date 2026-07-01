@@ -22,6 +22,50 @@ function isActive(pathname: string, href?: string): boolean {
   return pathname.startsWith(`/equilibrium${normalized.replace(/\/$/, "")}`);
 }
 
+function DesktopDropdownItem({
+  item,
+  onNavigate,
+}: {
+  item: NavItem;
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+
+  if (item.children?.length) {
+    return (
+      <li className="nav-dropdown-group">
+        <span className="nav-dropdown-label">{item.label}</span>
+        <ul className="nav-dropdown-sublist">
+          {item.children.map((child) => (
+            <DesktopDropdownItem key={child.label} item={child} onNavigate={onNavigate} />
+          ))}
+        </ul>
+      </li>
+    );
+  }
+
+  if (!item.href) {
+    return (
+      <li>
+        <span className="nav-dropdown-label">{item.label}</span>
+      </li>
+    );
+  }
+
+  const active = isActive(pathname, item.href);
+  return (
+    <li>
+      <Link
+        href={routePath(item.href)}
+        className={`nav-link${active ? " nav-link--active" : ""}`}
+        onClick={onNavigate}
+      >
+        {item.label}
+      </Link>
+    </li>
+  );
+}
+
 function NavItemComponent({
   item,
   depth = 0,
@@ -69,16 +113,15 @@ function NavItemComponent({
   }
 
   if (hasChildren && !mobile) {
-    const isMega = item.label === "Services";
     return (
-      <li className={`nav-item nav-item--has-children${isMega ? " nav-item--mega" : ""}`}>
+      <li className="nav-item nav-item--has-children">
         <span className="nav-link nav-link--parent">
           {item.label}
           <span className="nav-chevron">▾</span>
         </span>
-        <ul className={`nav-dropdown${isMega ? " nav-dropdown--mega" : ""}`}>
+        <ul className="nav-dropdown">
           {item.children!.map((child) => (
-            <NavItemComponent key={child.label} item={child} depth={depth + 1} onNavigate={onNavigate} />
+            <DesktopDropdownItem key={child.label} item={child} onNavigate={onNavigate} />
           ))}
         </ul>
       </li>

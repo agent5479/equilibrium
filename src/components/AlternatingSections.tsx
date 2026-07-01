@@ -42,7 +42,7 @@ export default function AlternatingSections({
                 <OptimizedImage
                   src={image}
                   alt={section.imageAlt || section.heading || "Equilibrium"}
-                  sizes="(max-width: 768px) 100vw, 480px"
+                  sizes="(max-width: 768px) 100vw, 320px"
                 />
               </div>
               <div className="zigzag-content">

@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { RecipeIndexEntry } from "@/lib/types";
-import OptimizedImage from "@/components/OptimizedImage";
 import { routePath } from "@/lib/paths";
 
 const PER_PAGE = 10;
@@ -30,7 +29,7 @@ type SortOption =
 
 export default function RecipeIndex({ recipes }: { recipes: RecipeIndexEntry[] }) {
   const [category, setCategory] = useState("");
-  const [sort, setSort] = useState<SortOption>("title-asc");
+  const [sort, setSort] = useState<SortOption>("date-desc");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
@@ -74,7 +73,7 @@ export default function RecipeIndex({ recipes }: { recipes: RecipeIndexEntry[] }
   const categories = Object.keys(CATEGORY_LABELS);
 
   return (
-    <div>
+    <div className="recipe-index">
       <div className="recipe-filters">
         <select
           value={category}
@@ -114,31 +113,24 @@ export default function RecipeIndex({ recipes }: { recipes: RecipeIndexEntry[] }
         />
       </div>
 
-      <div className="recipe-grid">
+      <div className="recipe-list">
         {paged.map((recipe) => (
-          <article key={recipe.slug} className="recipe-card">
-            <Link href={routePath(recipe.path)} className="recipe-card-image">
-              {recipe.heroImage && (
-                <OptimizedImage src={recipe.heroImage} alt={recipe.title} />
-              )}
-            </Link>
-            <div className="recipe-card-body">
-              <h3>
-                <Link href={routePath(recipe.path)}>{recipe.title}</Link>
-              </h3>
-              {recipe.description && <p>{recipe.description}</p>}
-              <div className="recipe-meta">
-                {recipe.prepTime && <span>Prep: {recipe.prepTime}</span>}
-                {recipe.cookTime && <span> · Cook: {recipe.cookTime}</span>}
-                {recipe.yields && <span> · Yields: {recipe.yields}</span>}
-              </div>
-            </div>
+          <article key={recipe.slug} className="recipe-list-item">
+            <h2>
+              <Link href={routePath(recipe.path)}>{recipe.title}</Link>
+            </h2>
+            {recipe.description && <p className="recipe-list-desc">{recipe.description}</p>}
+            <ul className="recipe-list-meta">
+              {recipe.prepTime && <li>Prep: {recipe.prepTime}</li>}
+              <li>Cook: {recipe.cookTime || ""}</li>
+              {recipe.yields && <li>Yields: {recipe.yields}</li>}
+            </ul>
           </article>
         ))}
       </div>
 
       {filtered.length === 0 && (
-        <p>No recipes match your search.</p>
+        <p className="recipe-empty">No recipes match your search.</p>
       )}
 
       {totalPages > 1 && (

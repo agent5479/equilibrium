@@ -50,13 +50,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="zigzag-section">
+      <section className="zigzag-section zigzag-section--intro">
         <div className="container zigzag-inner">
-          <div className="zigzag-image">
+          <div className="zigzag-image zigzag-image--compact">
             <OptimizedImage
               src="/assets/wp-content/uploads/2021/06/Patricia-Smith-photo-1.jpg"
               alt="Patricia Smith"
-              sizes="(max-width: 768px) 100vw, 480px"
+              sizes="(max-width: 768px) 100vw, 320px"
               priority
             />
           </div>

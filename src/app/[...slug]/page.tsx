@@ -156,9 +156,8 @@ export default async function CatchAllPage({ params }: PageProps) {
 
       {pagePath === "/nutrition/recipes/" && (
         <>
-          <PageTitle title={content.title} />
+          <PageTitle title="Recipes – great tasting and full of goodness!" />
           <div className="container content-section">
-            <p>Recipes – grain free, sugar free, natural and full of goodness!</p>
             <RecipeIndex recipes={getRecipeIndex()} />
           </div>
         </>
