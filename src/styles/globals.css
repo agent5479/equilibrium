@@ -846,18 +846,80 @@ h6 {
   border-radius: 3px;
 }
 
+/* Section background (Enfold-style) */
+.bg-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-section__image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-section__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bg-section__content {
+  position: relative;
+  z-index: 2;
+  padding: 60px 0;
+}
+
+.bg-section--light-text .home-section-heading,
+.bg-section--light-text .home-section-sub,
+.bg-section--light-text h4,
+.bg-section--light-text p {
+  color: #fff;
+}
+
+.bg-section--light-text .home-section-heading {
+  color: #fff;
+}
+
 /* Home page */
-.home-hero {
-  background: var(--bg-section);
+.home-section {
+  padding: 0;
+}
+
+.home-section--hero .bg-section__content {
   padding: 48px 0 64px;
-  text-align: center;
+}
+
+.home-section--nutrition .bg-section__content,
+.home-section--yoga .bg-section__content {
+  padding: 70px 0;
+}
+
+.home-section--tfh {
+  background: var(--bg-alt);
+  padding: 70px 0;
 }
 
 .home-hero-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
+}
+
+.home-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 280px) 1fr;
+  gap: 40px;
+  align-items: start;
+  width: 100%;
+}
+
+.home-intro-text h1 {
+  margin-top: 0;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
 }
 
 .home-hero-logo {
@@ -872,24 +934,66 @@ h6 {
 }
 
 .home-tagline {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  margin: 0;
+  font-size: 1.25rem;
+  margin: 0 0 16px;
   color: var(--brand-secondary);
-}
-
-.home-hero-sub {
-  font-size: 1.1rem;
-  color: var(--text-body);
-  max-width: 480px;
-  margin: 0;
+  font-weight: 600;
 }
 
 .home-hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content: center;
   margin-top: 8px;
+}
+
+.home-split {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 380px);
+  gap: 48px;
+  align-items: center;
+}
+
+.home-split--reverse {
+  grid-template-columns: minmax(0, 380px) 1fr;
+}
+
+.home-split-content h4 {
+  color: var(--brand-secondary);
+  font-weight: 600;
+  margin-top: 0;
+}
+
+.home-section-heading {
+  margin-top: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--brand-secondary);
+}
+
+.home-section-sub {
+  font-size: 1.1rem;
+  margin: -8px 0 20px;
+  color: var(--brand-primary);
+  font-weight: 500;
+}
+
+.home-slideshow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.home-slideshow img {
+  width: 100%;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(117, 50, 80, 0.12);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.home-slideshow--tfh,
+.home-slideshow--yoga {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .home-services {
@@ -1217,6 +1321,23 @@ h6 {
 }
 
 @media (max-width: 900px) {
+  .home-intro-grid,
+  .home-split,
+  .home-split--reverse {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .home-split--reverse .home-slideshow {
+    order: -1;
+  }
+
+  .zigzag-image,
+  .zigzag-image--compact {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
   .service-card-grid {
     grid-template-columns: 1fr;
   }
