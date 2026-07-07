@@ -66,7 +66,7 @@ export async function downloadCss(
       if (response.ok) {
         let css = await response.text();
         css = css.replace(/url\((['"]?)(\/wp-content\/[^'")]+)\1\)/g, (_, quote, p) => {
-          return `url(${quote}/equilibrium/assets${p}${quote})`;
+          return `url(${quote}/assets${p}${quote})`;
         });
         combined.push(`/* ${url} */`);
         combined.push(css);
@@ -120,11 +120,11 @@ export function rewriteHtmlAssets(
       }
       const absolute = resolveUrl(value, pageUrl);
       if (absolute.includes("/wp-content/") && assetMap.has(absolute)) {
-        return `${attr}=${quote}/equilibrium${assetMap.get(absolute)}${quote}`;
+        return `${attr}=${quote}${assetMap.get(absolute)}${quote}`;
       }
       if (value.startsWith(BASE_URL)) {
         const internal = value.slice(BASE_URL.length) || "/";
-        return `${attr}=${quote}/equilibrium${internal.endsWith("/") ? internal : internal + "/"}${quote}`;
+        return `${attr}=${quote}${internal.endsWith("/") ? internal : internal + "/"}${quote}`;
       }
       return match;
     }

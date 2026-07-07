@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://agent5479.github.io/equilibrium/sitemap.xml
+Sitemap: https://equilibriumhealth.nz/sitemap.xml

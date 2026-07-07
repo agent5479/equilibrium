@@ -5,10 +5,10 @@ import "@/styles/globals.css";
 import { SITE_NAME } from "@/lib/types";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://agent5479.github.io"),
+  metadataBase: new URL("https://equilibriumhealth.nz"),
   title: SITE_NAME,
   icons: {
-    icon: "/equilibrium/favicon.png",
+    icon: "/favicon.png",
   },
 };
 

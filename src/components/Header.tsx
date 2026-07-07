@@ -18,8 +18,8 @@ function FacebookIcon() {
 function isActive(pathname: string, href?: string): boolean {
   if (!href) return false;
   const normalized = routePath(href);
-  if (normalized === "/") return pathname === "/equilibrium" || pathname === "/equilibrium/";
-  return pathname.startsWith(`/equilibrium${normalized.replace(/\/$/, "")}`);
+  if (normalized === "/") return pathname === "/" || pathname === "";
+  return pathname.startsWith(normalized.replace(/\/$/, ""));
 }
 
 function DesktopDropdownItem({

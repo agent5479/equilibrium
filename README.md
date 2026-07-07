@@ -2,7 +2,7 @@
 
 Static React rebuild of [equilibrium.kiwi.nz](https://www.equilibrium.kiwi.nz/), hosted on GitHub Pages.
 
-**Live site:** https://agent5479.github.io/equilibrium/
+**Live site:** https://equilibriumhealth.nz/
 
 ## Development
 
@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000/equilibrium/
+Open http://localhost:3000/
 
 ## Scrape content from live site
 

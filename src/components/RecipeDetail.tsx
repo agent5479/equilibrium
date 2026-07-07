@@ -129,7 +129,5 @@ function renderBlocksHtml(blocks: RecipeData["blocks"]): string {
 }
 
 function rewriteAssets(html: string): string {
-  return html
-    .replace(/src="\/assets\//g, 'src="/equilibrium/assets/')
-    .replace(/href="\/(?!equilibrium)([^"]*)"/g, (_, p) => `href="${publicPath(`/${p}`)}"`);
+  return html.replace(/href="\/([^"]*)"/g, (_, p) => `href="${publicPath(`/${p}`)}"`);
 }

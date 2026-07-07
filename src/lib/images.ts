@@ -22,16 +22,15 @@ export function resolveOptimizedSrc(src: string): {
   if (!src || src.startsWith("http")) return { src };
 
   let key = src;
-  if (key.startsWith("/equilibrium")) key = key.slice("/equilibrium".length);
   if (!key.startsWith("/assets")) key = key.startsWith("/") ? key : `/assets${key}`;
 
   if (ORIGINAL_ONLY.has(key)) {
-    return { src: `/equilibrium${key}` };
+    return { src: key };
   }
 
   const entry = manifest[key];
   if (!entry) {
-    const publicSrc = key.startsWith("/assets") ? `/equilibrium${key}` : src;
+    const publicSrc = key.startsWith("/assets") ? key : src;
     return { src: publicSrc };
   }
 
@@ -40,15 +39,15 @@ export function resolveOptimizedSrc(src: string): {
     .sort((a, b) => a - b);
 
   if (widths.length === 0) {
-    return { src: entry.jpeg ? `/equilibrium${entry.jpeg}` : `/equilibrium${key}` };
+    return { src: entry.jpeg || key };
   }
 
   const srcSet = widths
-    .map((w) => `/equilibrium${entry.webp[String(w)]} ${w}w`)
+    .map((w) => `${entry.webp[String(w)]} ${w}w`)
     .join(", ");
 
   return {
-    src: `/equilibrium${entry.jpeg || entry.webp[String(widths[widths.length - 1])]}`,
+    src: entry.jpeg || entry.webp[String(widths[widths.length - 1])],
     srcSet,
     type: "image/webp",
   };

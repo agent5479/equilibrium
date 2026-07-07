@@ -21,7 +21,7 @@ export function buildMetadata({
   const desc = description || DEFAULT_DESCRIPTION;
   const url = `${SITE_URL}${path}`;
   const image = assetUrl(ogImage) || DEFAULT_OG_IMAGE;
-  const absoluteImage = image.startsWith("http") ? image : `${SITE_URL.replace(/\/equilibrium$/, "")}${image}`;
+  const absoluteImage = image.startsWith("http") ? image : `${SITE_URL}${image}`;
 
   return {
     title: fullTitle,

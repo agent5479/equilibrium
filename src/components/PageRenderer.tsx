@@ -77,9 +77,7 @@ function Block({ block }: { block: ContentBlock }) {
 }
 
 function rewriteLinks(html: string): string {
-  return html
-    .replace(/src="\/assets\//g, 'src="/equilibrium/assets/')
-    .replace(/href="\/(?!equilibrium)([^"]*)"/g, (_, p) => `href="${publicPath(`/${p}`)}"`);
+  return html.replace(/href="\/([^"]*)"/g, (_, p) => `href="${publicPath(`/${p}`)}"`);
 }
 
 function isSidebarBlock(block: ContentBlock): boolean {

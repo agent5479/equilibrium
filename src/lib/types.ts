@@ -70,8 +70,8 @@ export interface SiteManifest {
   scrapedAt: string;
 }
 
-export const SITE_URL = "https://agent5479.github.io/equilibrium";
+export const SITE_URL = "https://equilibriumhealth.nz";
 export const SITE_NAME = "Equilibrium Kinesiology & Nutrition";
-export const DEFAULT_OG_IMAGE = "/equilibrium/assets/wp-content/uploads/2023/02/logo.png";
+export const DEFAULT_OG_IMAGE = "/assets/wp-content/uploads/2023/02/logo.png";
 export const DEFAULT_DESCRIPTION =
   "Kinesiology, Nutrition, and Yoga with Patricia Smith. Live like you love yourself.";

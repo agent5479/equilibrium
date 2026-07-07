@@ -6,7 +6,7 @@
  * 2. Set Script Properties (Project Settings → Script Properties):
  *    - CALENDAR_ID     = primary
  *    - OWNER_EMAIL     = goldenbayorganicstakaka@gmail.com
- *    - SITE_URL        = https://agent5479.github.io/equilibrium/
+ *    - SITE_URL        = https://equilibriumhealth.nz/
  *    - TIMEZONE        = Pacific/Auckland
  *    - BUSINESS_START  = 09:00
  *    - BUSINESS_END    = 17:00
@@ -147,7 +147,7 @@ function createBooking(data) {
   }
 
   var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
-  var siteUrl = getConfig('SITE_URL', 'https://agent5479.github.io/equilibrium/');
+  var siteUrl = getConfig('SITE_URL', 'https://equilibriumhealth.nz/');
   var duration = parseInt(data.durationMinutes, 10);
   var dateStr = data.preferredDate;
   var timeStr = data.preferredTime;
