@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
+# Prefer indexing the main site; assets are fine to crawl
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
 Sitemap: https://equilibriumhealth.nz/sitemap.xml

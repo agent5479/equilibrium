@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPageBySlug } from "@/lib/content";
-import { buildMetadata, localBusinessJsonLd } from "@/lib/metadata";
+import { buildMetadata } from "@/lib/metadata";
 import HomePage from "@/components/HomePage";
 
 export function generateMetadata() {
@@ -18,15 +18,5 @@ export default function Page() {
   const page = getPageBySlug("home");
   if (!page) notFound();
 
-  const jsonLd = localBusinessJsonLd();
-
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <HomePage />
-    </>
-  );
+  return <HomePage />;
 }

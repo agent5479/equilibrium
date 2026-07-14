@@ -42,3 +42,6 @@ public/assets/**/*.webp
 public/assets/**/*-opt.jpg
 src/lib/image-manifest.json
 
+# generated at build / postbuild
+public/sitemap.xml
+

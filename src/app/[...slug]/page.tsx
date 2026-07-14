@@ -6,7 +6,7 @@ import {
   resolveContentByPath,
 } from "@/lib/content";
 import { slugToPath } from "@/lib/paths";
-import { buildMetadata, localBusinessJsonLd } from "@/lib/metadata";
+import { buildMetadata } from "@/lib/metadata";
 import PageRenderer from "@/components/PageRenderer";
 import RecipeIndex from "@/components/RecipeIndex";
 import RecipeDetail from "@/components/RecipeDetail";
@@ -129,13 +129,6 @@ export default async function CatchAllPage({ params }: PageProps) {
 
   return (
     <>
-      {pagePath === "/contact/" && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd()) }}
-        />
-      )}
-
       {showTitleBar && !hideTitleBar && <PageTitle title={content.title} />}
 
       {pagePath === "/testimonials/" && isPage && (

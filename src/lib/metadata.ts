@@ -10,6 +10,56 @@ interface MetaInput {
   type?: "website" | "article";
 }
 
+/** Fallback SEO blurbs when a page has no scraped meta description. */
+const PAGE_DESCRIPTIONS: Record<string, string> = {
+  "/":
+    "Kinesiology, Nutrition, and Yoga with Patricia Smith in New Zealand. Bring your whole being back into balance — live like you love yourself.",
+  "/patricias-story/":
+    "Meet Patricia Smith — Nutritionist (B.Sc.), Touch for Health Kinesiology practitioner, and Yoga teacher at Equilibrium.",
+  "/about/":
+    "About Patricia's nutrition approach: real food, personalised advice, and kinesiology-guided support for optimal health.",
+  "/contact/":
+    "Contact Patricia Smith at Equilibrium Kinesiology & Nutrition. Book online or get in touch for sessions and courses.",
+  "/bookings/":
+    "Book a free intro or Kinesiology / Nutrition session with Patricia Smith. Real-time calendar availability.",
+  "/testimonials/":
+    "Client testimonials for Patricia Smith's Kinesiology, Nutrition, and Yoga services at Equilibrium.",
+  "/gallery/":
+    "Photo gallery from Equilibrium Kinesiology & Nutrition — Yoga, workshops, and sessions with Patricia Smith.",
+  "/nutrition/":
+    "Nutrition services with Patricia Smith — real food for optimal results, supported by kinesiology muscle testing.",
+  "/nutrition/recipes/":
+    "Grain free, sugar free recipes full of goodness from Equilibrium Kinesiology & Nutrition.",
+  "/nutrition/services-and-fees/":
+    "Nutrition consultation fees and session options with Patricia Smith at Equilibrium.",
+  "/nutrition/tips-on-nutrition/":
+    "Practical nutrition tips from Patricia Smith at Equilibrium Kinesiology & Nutrition.",
+  "/touch-for-health-kinesiology/":
+    "Touch for Health Kinesiology with Patricia Smith — muscle testing to support vibrant health and balance.",
+  "/touch-for-health-kinesiology-course/":
+    "Learn Touch for Health Kinesiology with Patricia Smith. Course levels, dates, and fees.",
+  "/total-wellness-package-8-sessions-much-more/":
+    "Total Wellness Package — an integrated programme of kinesiology, nutrition, and wellness with Patricia Smith.",
+  "/yoga/benefits-of-yoga/":
+    "Benefits of Yoga with Patricia Smith — accessible Hatha-based practice for body, mind and soul.",
+  "/yoga/timetable-and-prices/":
+    "Yoga timetable and prices with Patricia Smith at Equilibrium Kinesiology & Nutrition.",
+  "/yoga/corporate-yoga/":
+    "Corporate Yoga with Patricia Smith — workplace wellbeing sessions for teams.",
+  "/yoga/friendly-dos-for-yoga/":
+    "Friendly do's for Yoga — practical guidance from Patricia Smith at Equilibrium.",
+  "/yoga/yoga-in-schools/":
+    "Yoga in schools with Patricia Smith — accessible practice for young people.",
+  "/visionboard-workshops/":
+    "Vision board workshops with Patricia Smith at Equilibrium Kinesiology & Nutrition.",
+};
+
+export function resolveDescription(path: string, description?: string): string {
+  const trimmed = description?.trim();
+  if (trimmed) return trimmed;
+  return PAGE_DESCRIPTIONS[path] || DEFAULT_DESCRIPTION;
+}
+
 export function buildMetadata({
   title,
   description,
@@ -18,14 +68,38 @@ export function buildMetadata({
   type = "website",
 }: MetaInput): Metadata {
   const fullTitle = title.includes("Equilibrium") ? title : `${title} – ${SITE_NAME}`;
-  const desc = description || DEFAULT_DESCRIPTION;
-  const url = `${SITE_URL}${path}`;
+  const desc = resolveDescription(path, description);
+  const url = path === "/" ? `${SITE_URL}/` : `${SITE_URL}${path.endsWith("/") ? path : `${path}/`}`;
   const image = assetUrl(ogImage) || DEFAULT_OG_IMAGE;
   const absoluteImage = image.startsWith("http") ? image : `${SITE_URL}${image}`;
 
   return {
     title: fullTitle,
     description: desc,
+    keywords: [
+      "kinesiology",
+      "nutrition",
+      "yoga",
+      "Touch for Health",
+      "Patricia Smith",
+      "Equilibrium",
+      "New Zealand",
+      "holistic health",
+    ],
+    authors: [{ name: "Patricia Smith" }],
+    creator: "Patricia Smith",
+    publisher: SITE_NAME,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
     alternates: { canonical: url },
     openGraph: {
       title: fullTitle,
@@ -45,20 +119,63 @@ export function buildMetadata({
   };
 }
 
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: SITE_URL,
+    description: DEFAULT_DESCRIPTION,
+    inLanguage: "en-NZ",
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
+    },
+  };
+}
+
 export function localBusinessJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
+    "@id": `${SITE_URL}/#business`,
     name: SITE_NAME,
     description: DEFAULT_DESCRIPTION,
     url: SITE_URL,
     email: "goldenbayorganicstakaka@gmail.com",
     telephone: "+6421991989",
     image: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
+    logo: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
     address: {
       "@type": "PostalAddress",
       addressCountry: "NZ",
     },
+    areaServed: {
+      "@type": "Country",
+      name: "New Zealand",
+    },
+    priceRange: "$$",
     sameAs: ["https://www.facebook.com/equilibriumnutritionandyoga"],
+    knowsAbout: [
+      "Touch for Health Kinesiology",
+      "Nutrition",
+      "Yoga",
+      "Holistic health",
+    ],
+  };
+}
+
+export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.path === "/" ? `${SITE_URL}/` : `${SITE_URL}${item.path}`,
+    })),
   };
 }
