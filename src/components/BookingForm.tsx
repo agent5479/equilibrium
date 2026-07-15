@@ -69,7 +69,8 @@ export default function BookingForm() {
     const result = await fetchAvailableDates(
       todayIso(),
       maxDateIso(),
-      selectedService.durationMinutes
+      selectedService.durationMinutes,
+      selectedService.windowKind
     );
 
     setAvailableDates(result.dates);
@@ -82,7 +83,7 @@ export default function BookingForm() {
       setFeedback("");
       setDatesMessage(result.message || "");
     }
-  }, [selectedService.durationMinutes]);
+  }, [selectedService.durationMinutes, selectedService.windowKind]);
 
   useEffect(() => {
     loadDates();
@@ -96,7 +97,11 @@ export default function BookingForm() {
     }
     setFormState("loading-slots");
     setTime("");
-    const result = await fetchAvailability(date, selectedService.durationMinutes);
+    const result = await fetchAvailability(
+      date,
+      selectedService.durationMinutes,
+      selectedService.windowKind
+    );
     setSlots(result.slots);
     setFormState("idle");
     if (!result.success && result.message) {
@@ -106,7 +111,7 @@ export default function BookingForm() {
       setFeedback("");
       setSlotMessage(result.message || "");
     }
-  }, [date, selectedService.durationMinutes]);
+  }, [date, selectedService.durationMinutes, selectedService.windowKind]);
 
   useEffect(() => {
     loadSlots();
@@ -130,6 +135,7 @@ export default function BookingForm() {
       serviceId: selectedService.id,
       serviceLabel: selectedService.label,
       durationMinutes: selectedService.durationMinutes,
+      windowKind: selectedService.windowKind,
       preferredDate: date,
       preferredTime: time,
       message: message.trim() || undefined,
@@ -218,7 +224,17 @@ export default function BookingForm() {
       <div className="form-group">
         <label htmlFor="date">Preferred date *</label>
         <p className="booking-time-help">
-          Only dates with open booking windows for this session length are listed.
+          Only dates with open{" "}
+          {selectedService.windowKind === "discovery" ? (
+            <>
+              <strong>Discovery</strong> windows
+            </>
+          ) : (
+            <>
+              <strong>Equilibrium</strong> windows
+            </>
+          )}{" "}
+          for this session type are listed.
         </p>
         <select
           id="date"
@@ -251,9 +267,17 @@ export default function BookingForm() {
       <fieldset className="form-group booking-time-fieldset">
         <legend>Preferred time *</legend>
         <p className="booking-time-help">
-          Times are open 15-minute starts inside windows Patricia has marked on her
-          calendar (title &ldquo;Equilibrium&rdquo;). All times are New Zealand
-          (Pacific/Auckland).
+          {selectedService.windowKind === "discovery" ? (
+            <>
+              Free Discovery calls use calendar blocks titled &ldquo;Discovery&rdquo;.
+            </>
+          ) : (
+            <>
+              Paid sessions use calendar blocks titled &ldquo;Equilibrium&rdquo;.
+            </>
+          )}{" "}
+          Times are 15-minute starts inside those windows that are still free. All times
+          are New Zealand (Pacific/Auckland).
         </p>
 
         {!date && (

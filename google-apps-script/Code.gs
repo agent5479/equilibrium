@@ -1,9 +1,12 @@
 /**
  * Equilibrium Booking API — Google Apps Script (calendar-only)
  *
- * Availability comes from calendar events titled "Equilibrium" (exact match,
- * case-insensitive). Clients pick 15-minute starts that fit inside those
- * windows and do not overlap other calendar events.
+ * Window types (calendar event titles, exact match, case-insensitive):
+ *   - "Equilibrium" — paid Kinesiology / Nutrition sessions
+ *   - "Discovery"   — free Discovery / intro calls only
+ *
+ * Clients pick 15-minute starts inside the matching window type that do not
+ * overlap other calendar events (including bookings and the other window type).
  *
  * SETUP:
  * 1. script.google.com → New project → paste this file
@@ -14,13 +17,13 @@
  *    - SITE_URL             = https://equilibriumhealth.nz/
  *    - TIMEZONE             = Pacific/Auckland
  *    - AVAILABILITY_TITLE   = Equilibrium
+ *    - DISCOVERY_TITLE      = Discovery
  *    - SLOT_INTERVAL        = 15
  * 3. Deploy → Web app → Execute as: Me → Anyone
  * 4. Copy Web App URL → GitHub Secret NEXT_PUBLIC_BOOKING_API_URL
  *
- * Patricia marks open booking blocks on her calendar with the title
- * "Equilibrium". Booked appointments use different titles so they do not
- * count as open windows.
+ * Patricia marks paid open time as "Equilibrium" and free-intro time as
+ * "Discovery". Bookings must never use those titles (they would become windows).
  */
 
 // ─── HTTP handlers ───────────────────────────────────────────────────────────
@@ -28,24 +31,25 @@
 function doGet(e) {
   try {
     var action = (e && e.parameter && e.parameter.action) || '';
+    var windowKind = (e && e.parameter && e.parameter.windowKind) || '';
 
     if (action === 'availability') {
       var date = e.parameter.date;
       var duration = parseInt(e.parameter.duration, 10) || 60;
-      return jsonResponse(getAvailability(date, duration));
+      return jsonResponse(getAvailability(date, duration, windowKind, e.parameter.serviceId));
     }
 
     if (action === 'availableDates') {
       var from = e.parameter.from;
       var to = e.parameter.to;
       var datesDuration = parseInt(e.parameter.duration, 10) || 60;
-      return jsonResponse(getAvailableDates(from, to, datesDuration));
+      return jsonResponse(getAvailableDates(from, to, datesDuration, windowKind, e.parameter.serviceId));
     }
 
     return jsonResponse({
       success: true,
       message: 'Equilibrium Booking API is running.',
-      version: '3.1'
+      version: '3.2'
     });
   } catch (err) {
     return jsonResponse({ success: false, message: String(err) });
@@ -71,7 +75,20 @@ function doPost(e) {
 
 // ─── Availability ────────────────────────────────────────────────────────────
 
-function getAvailability(dateStr, durationMinutes) {
+/**
+ * Resolve calendar window title from windowKind / serviceId.
+ * discovery / free-15 → Discovery; everything else → Equilibrium (paid).
+ */
+function resolveAvailabilityTitle(windowKind, serviceId) {
+  var kind = String(windowKind || '').trim().toLowerCase();
+  var sid = String(serviceId || '').trim().toLowerCase();
+  if (kind === 'discovery' || sid === 'free-15') {
+    return getConfig('DISCOVERY_TITLE', 'Discovery');
+  }
+  return getConfig('AVAILABILITY_TITLE', 'Equilibrium');
+}
+
+function getAvailability(dateStr, durationMinutes, windowKind, serviceId) {
   if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
     return { success: false, date: dateStr, slots: [], message: 'Invalid date.' };
   }
@@ -82,7 +99,7 @@ function getAvailability(dateStr, durationMinutes) {
   if (isNaN(interval) || interval < 1) interval = 15;
 
   var calendarId = getConfig('CALENDAR_ID', 'primary');
-  var titleMatch = getConfig('AVAILABILITY_TITLE', 'Equilibrium');
+  var titleMatch = resolveAvailabilityTitle(windowKind, serviceId);
   var classified = classifyDayEvents(calendarId, dateStr, tz, titleMatch);
 
   if (classified.windows.length === 0) {
@@ -90,7 +107,7 @@ function getAvailability(dateStr, durationMinutes) {
       success: true,
       date: dateStr,
       slots: [],
-      message: 'No booking windows on this day.'
+      message: 'No ' + titleMatch + ' booking windows on this day.'
     };
   }
 
@@ -124,6 +141,7 @@ function getAvailability(dateStr, durationMinutes) {
     success: true,
     date: dateStr,
     slots: slots,
+    windowTitle: titleMatch,
     message: slots.length === 0
       ? 'No times fit this session length within the open windows.'
       : undefined
@@ -132,9 +150,9 @@ function getAvailability(dateStr, durationMinutes) {
 
 /**
  * Return YYYY-MM-DD dates in [fromStr, toStr] that have at least one bookable
- * slot for the given duration (based on Equilibrium windows).
+ * slot for the given duration and window kind (Equilibrium vs Discovery).
  */
-function getAvailableDates(fromStr, toStr, durationMinutes) {
+function getAvailableDates(fromStr, toStr, durationMinutes, windowKind, serviceId) {
   if (!fromStr || !/^\d{4}-\d{2}-\d{2}$/.test(fromStr) ||
       !toStr || !/^\d{4}-\d{2}-\d{2}$/.test(toStr)) {
     return { success: false, dates: [], message: 'Invalid from/to date.' };
@@ -146,8 +164,8 @@ function getAvailableDates(fromStr, toStr, durationMinutes) {
   if (isNaN(interval) || interval < 1) interval = 15;
 
   var calendarId = getConfig('CALENDAR_ID', 'primary');
-  var titleMatch = getConfig('AVAILABILITY_TITLE', 'Equilibrium');
-  var target = String(titleMatch || 'Equilibrium').trim().toLowerCase();
+  var titleMatch = resolveAvailabilityTitle(windowKind, serviceId);
+  var target = String(titleMatch).trim().toLowerCase();
 
   var rangeStart = combineDateTime(fromStr, '00:00', tz);
   var rangeEnd = combineDateTime(toStr, '23:59', tz);
@@ -202,14 +220,20 @@ function getAvailableDates(fromStr, toStr, durationMinutes) {
   return {
     success: true,
     dates: available,
+    windowTitle: titleMatch,
     message: available.length === 0
-      ? 'No dates with booking windows in this period.'
+      ? 'No dates with ' + titleMatch + ' booking windows in this period.'
       : undefined
   };
 }
 
 /**
- * Split the day's events into Equilibrium availability windows vs busy blocks.
+ * Split the day's events into matching availability windows vs busy blocks.
+ *
+ * - Events whose title matches the requested window title (Equilibrium or Discovery)
+ *   = open bookable window for that service type.
+ * - Every other event (the other window type, site bookings, personal appointments)
+ *   = busy and excluded from offered slots.
  */
 function classifyDayEvents(calendarId, dateStr, tz, availabilityTitle) {
   var dayStart = combineDateTime(dateStr, '00:00', tz);
@@ -235,6 +259,10 @@ function classifyDayEvents(calendarId, dateStr, tz, availabilityTitle) {
   return { windows: windows, busy: busy };
 }
 
+/**
+ * Offer starts every intervalMinutes inside [windowStart, windowEnd] that leave
+ * room for durationMinutes and do not overlap any busy period (existing bookings).
+ */
 function slotsInWindow(windowStart, windowEnd, intervalMinutes, durationMinutes, busyPeriods, now, tz) {
   var slots = [];
   var cursor = new Date(windowStart.getTime());
@@ -272,59 +300,75 @@ function createBooking(data) {
     return { success: false, message: 'Please provide a valid email address.' };
   }
 
-  var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
-  var siteUrl = getConfig('SITE_URL', 'https://equilibriumhealth.nz/');
-  var duration = parseInt(data.durationMinutes, 10);
-  var dateStr = data.preferredDate;
-  var timeStr = data.preferredTime;
-
-  var availability = getAvailability(dateStr, duration);
-  if (availability.slots.indexOf(timeStr) === -1) {
-    return { success: false, message: 'That time slot is no longer available. Please choose another.' };
+  var lock = LockService.getScriptLock();
+  var gotLock = lock.tryLock(30000);
+  if (!gotLock) {
+    return {
+      success: false,
+      message: 'The booking system is busy. Please try again in a moment.'
+    };
   }
 
-  var startTime = combineDateTime(dateStr, timeStr, tz);
-  var endTime = new Date(startTime.getTime() + duration * 60000);
-  var bookingId = 'EQ-' + Utilities.formatDate(new Date(), tz, 'yyyyMMdd') + '-' + randomId(4);
-  var calendarId = getConfig('CALENDAR_ID', 'primary');
-  var ownerEmail = getConfig('OWNER_EMAIL', 'patricia@equilibriumhealth.nz');
+  try {
+    var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
+    var siteUrl = getConfig('SITE_URL', 'https://equilibriumhealth.nz/');
+    var duration = parseInt(data.durationMinutes, 10);
+    var dateStr = data.preferredDate;
+    var timeStr = data.preferredTime;
 
-  var calendar = CalendarApp.getCalendarById(calendarId);
-  var eventTitle = data.serviceLabel + ' — ' + data.name;
-  var eventDescription = [
-    'Booking ID: ' + bookingId,
-    'Client: ' + data.name,
-    'Email: ' + data.email,
-    'Phone: ' + (data.phone || 'Not provided'),
-    'Service: ' + data.serviceLabel,
-    'Duration: ' + duration + ' minutes',
-    '',
-    'Message:',
-    data.message || '(none)',
-    '',
-    'Booked via ' + siteUrl
-  ].join('\n');
+    // Re-check under lock so two clients cannot grab the same slot.
+    // Free Discovery intros use "Discovery" windows; paid use "Equilibrium".
+    var availability = getAvailability(dateStr, duration, data.windowKind, data.serviceId);
+    if (availability.slots.indexOf(timeStr) === -1) {
+      return { success: false, message: 'That time slot is no longer available. Please choose another.' };
+    }
 
-  var guests = data.email;
-  if (ownerEmail && ownerEmail !== data.email) {
-    guests = data.email + ',' + ownerEmail;
+    var startTime = combineDateTime(dateStr, timeStr, tz);
+    var endTime = new Date(startTime.getTime() + duration * 60000);
+    var bookingId = 'EQ-' + Utilities.formatDate(new Date(), tz, 'yyyyMMdd') + '-' + randomId(4);
+    var calendarId = getConfig('CALENDAR_ID', 'primary');
+    var ownerEmail = getConfig('OWNER_EMAIL', 'patricia@equilibriumhealth.nz');
+
+    var calendar = CalendarApp.getCalendarById(calendarId);
+    // Must NOT be titled "Equilibrium" or "Discovery" — bookings are busy blocks.
+    var eventTitle = data.serviceLabel + ' — ' + data.name;
+    var eventDescription = [
+      'Booking ID: ' + bookingId,
+      'Client: ' + data.name,
+      'Email: ' + data.email,
+      'Phone: ' + (data.phone || 'Not provided'),
+      'Service: ' + data.serviceLabel,
+      'Duration: ' + duration + ' minutes',
+      '',
+      'Message:',
+      data.message || '(none)',
+      '',
+      'Booked via ' + siteUrl
+    ].join('\n');
+
+    var guests = data.email;
+    if (ownerEmail && ownerEmail !== data.email) {
+      guests = data.email + ',' + ownerEmail;
+    }
+
+    var event = calendar.createEvent(eventTitle, startTime, endTime, {
+      description: eventDescription,
+      location: 'Golden Bay Organics (back office), 47 Commercial St Takaka; private location by arrangement; or online — Equilibrium Kinesiology & Nutrition',
+      guests: guests,
+      sendInvites: true
+    });
+
+    sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail, siteUrl);
+
+    return {
+      success: true,
+      message: 'Your booking is confirmed! Check your email for a calendar invitation to add this to your calendar.',
+      bookingId: bookingId,
+      eventId: event.getId()
+    };
+  } finally {
+    lock.releaseLock();
   }
-
-  var event = calendar.createEvent(eventTitle, startTime, endTime, {
-    description: eventDescription,
-    location: 'Golden Bay Organics (back office), 47 Commercial St Takaka; private location by arrangement; or online — Equilibrium Kinesiology & Nutrition',
-    guests: guests,
-    sendInvites: true
-  });
-
-  sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail, siteUrl);
-
-  return {
-    success: true,
-    message: 'Your booking is confirmed! Check your email for a calendar invitation to add this to your calendar.',
-    bookingId: bookingId,
-    eventId: event.getId()
-  };
 }
 
 function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail, siteUrl) {

@@ -1,40 +1,49 @@
+export type BookingWindowKind = "discovery" | "paid";
+
 export interface BookingService {
   id: string;
   label: string;
   durationMinutes: number;
   price: string;
+  /** Calendar window: Discovery = free intro; Equilibrium = paid sessions */
+  windowKind: BookingWindowKind;
 }
 
 export const BOOKING_SERVICES: BookingService[] = [
   {
     id: "free-15",
-    label: "Free 15-minute online intro session",
+    label: "Free 15-minute Discovery call",
     durationMinutes: 15,
     price: "Free",
+    windowKind: "discovery",
   },
   {
     id: "session-30",
     label: "30 minute Kinesiology / Nutrition session",
     durationMinutes: 30,
     price: "$80",
+    windowKind: "paid",
   },
   {
     id: "session-60",
     label: "60 minute Kinesiology / Nutrition session",
     durationMinutes: 60,
     price: "$120",
+    windowKind: "paid",
   },
   {
     id: "session-90",
     label: "90 minute Kinesiology / Nutrition session",
     durationMinutes: 90,
     price: "$160",
+    windowKind: "paid",
   },
   {
     id: "session-120",
     label: "120 minute Kinesiology / Nutrition session",
     durationMinutes: 120,
     price: "$195",
+    windowKind: "paid",
   },
 ];
 
@@ -45,6 +54,7 @@ export interface BookingRequest {
   serviceId: string;
   serviceLabel: string;
   durationMinutes: number;
+  windowKind: BookingWindowKind;
   preferredDate: string;
   preferredTime: string;
   message?: string;
@@ -62,12 +72,14 @@ export interface AvailabilityResponse {
   date: string;
   slots: string[];
   message?: string;
+  windowTitle?: string;
 }
 
 export interface AvailableDatesResponse {
   success: boolean;
   dates: string[];
   message?: string;
+  windowTitle?: string;
 }
 
 export function getBookingApiUrl(): string {
@@ -84,7 +96,8 @@ function bookingFetchError(status?: number): string {
 export async function fetchAvailableDates(
   from: string,
   to: string,
-  durationMinutes: number
+  durationMinutes: number,
+  windowKind: BookingWindowKind
 ): Promise<AvailableDatesResponse> {
   const apiUrl = getBookingApiUrl();
   if (!apiUrl) {
@@ -100,6 +113,7 @@ export async function fetchAvailableDates(
   url.searchParams.set("from", from);
   url.searchParams.set("to", to);
   url.searchParams.set("duration", String(durationMinutes));
+  url.searchParams.set("windowKind", windowKind);
 
   try {
     const response = await fetch(url.toString());
@@ -123,7 +137,8 @@ export async function fetchAvailableDates(
 
 export async function fetchAvailability(
   date: string,
-  durationMinutes: number
+  durationMinutes: number,
+  windowKind: BookingWindowKind
 ): Promise<AvailabilityResponse> {
   const apiUrl = getBookingApiUrl();
   if (!apiUrl) {
@@ -139,6 +154,7 @@ export async function fetchAvailability(
   url.searchParams.set("action", "availability");
   url.searchParams.set("date", date);
   url.searchParams.set("duration", String(durationMinutes));
+  url.searchParams.set("windowKind", windowKind);
 
   try {
     const response = await fetch(url.toString());

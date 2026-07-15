@@ -15,10 +15,13 @@ Calendar-only booking API. Open slots come from calendar events Patricia titles 
 | `OWNER_EMAIL` | `patricia@equilibriumhealth.nz` | Receives booking notifications |
 | `SITE_URL` | `https://equilibriumhealth.nz/` | Link shown in confirmation emails |
 | `TIMEZONE` | `Pacific/Auckland` | NZ timezone for all times |
-| `AVAILABILITY_TITLE` | `Equilibrium` | Exact calendar event title that marks open booking windows (case-insensitive) |
+| `AVAILABILITY_TITLE` | `Equilibrium` | Exact calendar event title for **paid** session windows |
+| `DISCOVERY_TITLE` | `Discovery` | Exact calendar event title for **free Discovery** call windows |
 | `SLOT_INTERVAL` | `15` | Minutes between offered start times inside each window |
 
-5. On Google Calendar (same account), create blocks titled **Equilibrium** for the times you want to accept bookings.
+5. On Google Calendar (same account):
+   - Create blocks titled **Equilibrium** for paid Kinesiology / Nutrition booking time
+   - Create blocks titled **Discovery** for free Discovery / intro call time
 6. **Deploy → New deployment → Web app**
    - Execute as: **Me** (patricia@equilibriumhealth.nz)
    - Who has access: **Anyone**
@@ -30,12 +33,15 @@ After code changes, create a **New version** deployment so the live URL picks up
 
 ## How availability works
 
-1. Site requests open dates via `GET ?action=availableDates&from=…&to=…&duration=…`
-2. Site requests times for a chosen day via `GET ?action=availability&date=YYYY-MM-DD&duration=60`
-3. Script finds that day's calendar events titled `Equilibrium` (open windows)
-4. Other events (appointments, personal) are busy
-5. Inside each window, start times are offered every `SLOT_INTERVAL` minutes where `start + duration` still fits and does not overlap busy time
-6. Booked appointments are created with titles like `60 minute … — Client name` so they never count as open windows
+1. Site requests open dates via `GET ?action=availableDates&from=…&to=…&duration=…&windowKind=paid|discovery`
+2. Site requests times for a chosen day via `GET ?action=availability&date=…&duration=…&windowKind=…`
+3. Script finds that day's events matching the window title:
+   - `windowKind=paid` (or default) → **Equilibrium**
+   - `windowKind=discovery` (free intro) → **Discovery**
+4. **Other events are busy** — including the *other* window type, site bookings (`Service — Client name`), and personal appointments. Those intervals are **excluded** from offered slots. You do **not** need to edit the window block after a booking.
+5. Inside each matching window, start times are offered every `SLOT_INTERVAL` minutes where `start + duration` still fits and does not overlap busy time
+6. Booked appointments are created with titles like `60 minute … — Client name` so they never count as open windows — **never rename a booking to `Equilibrium` or `Discovery`**
+7. Creating a booking uses a script lock and re-checks the slot so two people cannot double-book the same time
 
 ---
 
@@ -43,8 +49,8 @@ After code changes, create a **New version** deployment so the live URL picks up
 
 1. Site checks calendar availability via `GET ?action=availability&date=…&duration=…`
 2. Client submits the form → `POST` to the Apps Script web app
-3. Script re-checks the slot is still free
-4. Creates a Google Calendar event (client + owner invited by email)
+3. Script acquires a lock, re-checks the slot is still free, then creates the calendar event
+4. Creates a Google Calendar event (client + owner invited by email) — this event blocks that time for future bookers
 5. Sends confirmation email to the client
 6. Sends notification email to Patricia (`OWNER_EMAIL`)
 
