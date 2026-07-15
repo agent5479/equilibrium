@@ -224,17 +224,7 @@ export default function BookingForm() {
       <div className="form-group">
         <label htmlFor="date">Preferred date *</label>
         <p className="booking-time-help">
-          Only dates with open{" "}
-          {selectedService.windowKind === "discovery" ? (
-            <>
-              <strong>Discovery</strong> windows
-            </>
-          ) : (
-            <>
-              <strong>Equilibrium</strong> windows
-            </>
-          )}{" "}
-          for this session type are listed.
+          Only dates when Patricia has openings for this type of session are listed.
         </p>
         <select
           id="date"
@@ -267,17 +257,9 @@ export default function BookingForm() {
       <fieldset className="form-group booking-time-fieldset">
         <legend>Preferred time *</legend>
         <p className="booking-time-help">
-          {selectedService.windowKind === "discovery" ? (
-            <>
-              Free Discovery calls use calendar blocks titled &ldquo;Discovery&rdquo;.
-            </>
-          ) : (
-            <>
-              Paid sessions use calendar blocks titled &ldquo;Equilibrium&rdquo;.
-            </>
-          )}{" "}
-          Times are 15-minute starts inside those windows that are still free. All times
-          are New Zealand (Pacific/Auckland).
+          Choose an available start time. Sessions are offered in 15-minute steps within
+          Patricia&apos;s open hours for this service. All times are New Zealand
+          (Pacific/Auckland).
         </p>
 
         {!date && (
