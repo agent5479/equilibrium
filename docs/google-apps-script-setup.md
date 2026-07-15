@@ -77,7 +77,12 @@ The deploy workflow injects this at build time so the static site can call the A
 | Issue | Fix |
 |-------|-----|
 | "Booking API is not configured" on site | Add `NEXT_PUBLIC_BOOKING_API_URL` GitHub Secret and redeploy |
-| No time slots shown | Create a calendar event titled exactly `Equilibrium` on that day; check it is long enough for the selected session duration; ensure the slot is not in the past or overlapped by another event |
-| Calendar event not created | Re-authorize script; confirm `CALENDAR_ID` is correct and the script runs as patricia@ |
+| No time slots shown | Create a calendar event titled exactly `Equilibrium` on that day on **patricia@’s primary calendar**; check it is long enough for the selected session duration; ensure the slot is not in the past or overlapped by another event |
+| Page stuck on “Loading times…” / API 403 | Redeploy the web app with **Who has access: Anyone**. Open the `/exec` URL in an incognito window — you must see JSON (`version: 3.0`), not “You need access” |
+| Calendar event not created | Re-authorize script; confirm `CALENDAR_ID` is `primary` and the script project + deploy run as patricia@ |
 | Emails not sent | Gmail daily quota; ensure script runs as patricia@equilibriumhealth.nz |
 | CORS errors | POST must use `Content-Type: text/plain` (already configured in the site) |
+
+## Which Google Calendar is used?
+
+Yes — a normal **Google Calendar**. The web app must be created and deployed while logged in as **patricia@equilibriumhealth.nz**, with **Execute as: Me**. Then `CALENDAR_ID=primary` is patricia’s primary calendar (the one that opens by default at [calendar.google.com](https://calendar.google.com) for that account). The `Equilibrium` availability blocks must be on that same calendar, not a different shared calendar unless you set `CALENDAR_ID` to that calendar’s ID.

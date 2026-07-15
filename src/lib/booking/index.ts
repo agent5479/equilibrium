@@ -87,17 +87,31 @@ export async function fetchAvailability(
   url.searchParams.set("date", date);
   url.searchParams.set("duration", String(durationMinutes));
 
-  const response = await fetch(url.toString());
-  if (!response.ok) {
+  try {
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      return {
+        success: false,
+        date,
+        slots: [],
+        message:
+          response.status === 403
+            ? "Booking calendar is not publicly reachable. Check the Apps Script web app is deployed as Anyone."
+            : "Could not load availability.",
+      };
+    }
+
+    const data = (await response.json()) as AvailabilityResponse;
+    return data;
+  } catch {
     return {
       success: false,
       date,
       slots: [],
-      message: "Could not load availability.",
+      message:
+        "Could not reach the booking calendar. If this persists, the Apps Script deploy may still be private (Who has access must be Anyone).",
     };
   }
-
-  return response.json() as Promise<AvailabilityResponse>;
 }
 
 export async function submitBooking(
