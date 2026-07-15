@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   BOOKING_SERVICES,
   fetchAvailability,
+  fetchAvailableDates,
   submitBooking,
   type BookingRequest,
 } from "@/lib/booking";
@@ -11,20 +12,40 @@ import {
 type FormState = "idle" | "loading-slots" | "submitting" | "success" | "error";
 
 function todayIso(): string {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Pacific/Auckland",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
 }
 
 function maxDateIso(): string {
-  const d = new Date();
-  d.setMonth(d.getMonth() + 3);
+  const parts = todayIso().split("-").map(Number);
+  const d = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+  d.setUTCMonth(d.getUTCMonth() + 3);
   return d.toISOString().slice(0, 10);
+}
+
+function formatDateLabel(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.toLocaleDateString("en-NZ", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 export default function BookingForm() {
   const [serviceId, setServiceId] = useState(BOOKING_SERVICES[1].id);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [availableDates, setAvailableDates] = useState<string[]>([]);
+  const [datesLoading, setDatesLoading] = useState(false);
+  const [datesMessage, setDatesMessage] = useState("");
   const [slots, setSlots] = useState<string[]>([]);
   const [slotMessage, setSlotMessage] = useState("");
   const [name, setName] = useState("");
@@ -37,6 +58,35 @@ export default function BookingForm() {
 
   const selectedService =
     BOOKING_SERVICES.find((s) => s.id === serviceId) ?? BOOKING_SERVICES[1];
+
+  const loadDates = useCallback(async () => {
+    setDatesLoading(true);
+    setDate("");
+    setTime("");
+    setSlots([]);
+    setSlotMessage("");
+
+    const result = await fetchAvailableDates(
+      todayIso(),
+      maxDateIso(),
+      selectedService.durationMinutes
+    );
+
+    setAvailableDates(result.dates);
+    setDatesLoading(false);
+
+    if (!result.success && result.message) {
+      setFeedback(result.message);
+      setDatesMessage("");
+    } else {
+      setFeedback("");
+      setDatesMessage(result.message || "");
+    }
+  }, [selectedService.durationMinutes]);
+
+  useEffect(() => {
+    loadDates();
+  }, [loadDates]);
 
   const loadSlots = useCallback(async () => {
     if (!date) {
@@ -100,6 +150,7 @@ export default function BookingForm() {
       setTime("");
       setSlots([]);
       setSlotMessage("");
+      loadDates();
     } else {
       setFormState("error");
       setFeedback(result.message);
@@ -166,15 +217,35 @@ export default function BookingForm() {
 
       <div className="form-group">
         <label htmlFor="date">Preferred date *</label>
-        <input
-          type="date"
+        <p className="booking-time-help">
+          Only dates with open booking windows for this session length are listed.
+        </p>
+        <select
           id="date"
           value={date}
-          min={todayIso()}
-          max={maxDateIso()}
           onChange={(e) => setDate(e.target.value)}
           required
-        />
+          disabled={datesLoading || availableDates.length === 0}
+        >
+          <option value="">
+            {datesLoading
+              ? "Loading available dates…"
+              : availableDates.length === 0
+                ? "No dates available"
+                : "Choose a date"}
+          </option>
+          {availableDates.map((d) => (
+            <option key={d} value={d}>
+              {formatDateLabel(d)}
+            </option>
+          ))}
+        </select>
+        {!datesLoading && availableDates.length === 0 && (
+          <p className="booking-slots-empty" style={{ marginTop: "0.75rem" }}>
+            {datesMessage ||
+              "No bookable dates in the next three months. Call Patricia on 021 991 989."}
+          </p>
+        )}
       </div>
 
       <fieldset className="form-group booking-time-fieldset">
@@ -196,7 +267,7 @@ export default function BookingForm() {
         {date && !slotsLoading && slots.length === 0 && (
           <p className="booking-slots-empty">
             {slotMessage ||
-              "No booking windows on this day. Try another date, or call Patricia on 021 991 989."}
+              "No times left on this day. Try another date, or call Patricia on 021 991 989."}
           </p>
         )}
 

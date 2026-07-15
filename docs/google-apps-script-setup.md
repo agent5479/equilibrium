@@ -30,11 +30,12 @@ After code changes, create a **New version** deployment so the live URL picks up
 
 ## How availability works
 
-1. Site requests `GET ?action=availability&date=YYYY-MM-DD&duration=60`
-2. Script finds that day's calendar events titled `Equilibrium` (open windows)
-3. Other events (appointments, personal) are busy
-4. Inside each window, start times are offered every `SLOT_INTERVAL` minutes where `start + duration` still fits and does not overlap busy time
-5. Booked appointments are created with titles like `60 minute … — Client name` so they never count as open windows
+1. Site requests open dates via `GET ?action=availableDates&from=…&to=…&duration=…`
+2. Site requests times for a chosen day via `GET ?action=availability&date=YYYY-MM-DD&duration=60`
+3. Script finds that day's calendar events titled `Equilibrium` (open windows)
+4. Other events (appointments, personal) are busy
+5. Inside each window, start times are offered every `SLOT_INTERVAL` minutes where `start + duration` still fits and does not overlap busy time
+6. Booked appointments are created with titles like `60 minute … — Client name` so they never count as open windows
 
 ---
 

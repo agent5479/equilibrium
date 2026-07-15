@@ -35,10 +35,17 @@ function doGet(e) {
       return jsonResponse(getAvailability(date, duration));
     }
 
+    if (action === 'availableDates') {
+      var from = e.parameter.from;
+      var to = e.parameter.to;
+      var datesDuration = parseInt(e.parameter.duration, 10) || 60;
+      return jsonResponse(getAvailableDates(from, to, datesDuration));
+    }
+
     return jsonResponse({
       success: true,
       message: 'Equilibrium Booking API is running.',
-      version: '3.0'
+      version: '3.1'
     });
   } catch (err) {
     return jsonResponse({ success: false, message: String(err) });
@@ -119,6 +126,84 @@ function getAvailability(dateStr, durationMinutes) {
     slots: slots,
     message: slots.length === 0
       ? 'No times fit this session length within the open windows.'
+      : undefined
+  };
+}
+
+/**
+ * Return YYYY-MM-DD dates in [fromStr, toStr] that have at least one bookable
+ * slot for the given duration (based on Equilibrium windows).
+ */
+function getAvailableDates(fromStr, toStr, durationMinutes) {
+  if (!fromStr || !/^\d{4}-\d{2}-\d{2}$/.test(fromStr) ||
+      !toStr || !/^\d{4}-\d{2}-\d{2}$/.test(toStr)) {
+    return { success: false, dates: [], message: 'Invalid from/to date.' };
+  }
+
+  durationMinutes = parseInt(durationMinutes, 10) || 60;
+  var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
+  var interval = parseInt(getConfig('SLOT_INTERVAL', '15'), 10);
+  if (isNaN(interval) || interval < 1) interval = 15;
+
+  var calendarId = getConfig('CALENDAR_ID', 'primary');
+  var titleMatch = getConfig('AVAILABILITY_TITLE', 'Equilibrium');
+  var target = String(titleMatch || 'Equilibrium').trim().toLowerCase();
+
+  var rangeStart = combineDateTime(fromStr, '00:00', tz);
+  var rangeEnd = combineDateTime(toStr, '23:59', tz);
+  var events = CalendarApp.getCalendarById(calendarId).getEvents(rangeStart, rangeEnd);
+
+  var windowsByDay = {};
+  var busyByDay = {};
+
+  for (var i = 0; i < events.length; i++) {
+    var ev = events[i];
+    var dayKey = Utilities.formatDate(ev.getStartTime(), tz, 'yyyy-MM-dd');
+    var period = { start: ev.getStartTime(), end: ev.getEndTime() };
+    var title = String(ev.getTitle() || '').trim().toLowerCase();
+
+    if (title === target) {
+      if (!windowsByDay[dayKey]) windowsByDay[dayKey] = [];
+      windowsByDay[dayKey].push(period);
+    } else {
+      if (!busyByDay[dayKey]) busyByDay[dayKey] = [];
+      busyByDay[dayKey].push(period);
+    }
+  }
+
+  var now = new Date();
+  var dates = Object.keys(windowsByDay).sort();
+  var available = [];
+
+  for (var d = 0; d < dates.length; d++) {
+    var day = dates[d];
+    if (day < fromStr || day > toStr) continue;
+
+    var windows = windowsByDay[day];
+    var busy = busyByDay[day] || [];
+    var hasSlot = false;
+
+    for (var w = 0; w < windows.length && !hasSlot; w++) {
+      var windowSlots = slotsInWindow(
+        windows[w].start,
+        windows[w].end,
+        interval,
+        durationMinutes,
+        busy,
+        now,
+        tz
+      );
+      if (windowSlots.length > 0) hasSlot = true;
+    }
+
+    if (hasSlot) available.push(day);
+  }
+
+  return {
+    success: true,
+    dates: available,
+    message: available.length === 0
+      ? 'No dates with booking windows in this period.'
       : undefined
   };
 }

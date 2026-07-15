@@ -64,8 +64,61 @@ export interface AvailabilityResponse {
   message?: string;
 }
 
+export interface AvailableDatesResponse {
+  success: boolean;
+  dates: string[];
+  message?: string;
+}
+
 export function getBookingApiUrl(): string {
   return process.env.NEXT_PUBLIC_BOOKING_API_URL || "";
+}
+
+function bookingFetchError(status?: number): string {
+  if (status === 403) {
+    return "Booking calendar is not publicly reachable. Check the Apps Script web app is deployed as Anyone.";
+  }
+  return "Could not reach the booking calendar. If this persists, the Apps Script deploy may still be private (Who has access must be Anyone).";
+}
+
+export async function fetchAvailableDates(
+  from: string,
+  to: string,
+  durationMinutes: number
+): Promise<AvailableDatesResponse> {
+  const apiUrl = getBookingApiUrl();
+  if (!apiUrl) {
+    return {
+      success: false,
+      dates: [],
+      message: "Booking API is not configured.",
+    };
+  }
+
+  const url = new URL(apiUrl);
+  url.searchParams.set("action", "availableDates");
+  url.searchParams.set("from", from);
+  url.searchParams.set("to", to);
+  url.searchParams.set("duration", String(durationMinutes));
+
+  try {
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      return {
+        success: false,
+        dates: [],
+        message: bookingFetchError(response.status),
+      };
+    }
+
+    return (await response.json()) as AvailableDatesResponse;
+  } catch {
+    return {
+      success: false,
+      dates: [],
+      message: bookingFetchError(),
+    };
+  }
 }
 
 export async function fetchAvailability(
@@ -94,10 +147,7 @@ export async function fetchAvailability(
         success: false,
         date,
         slots: [],
-        message:
-          response.status === 403
-            ? "Booking calendar is not publicly reachable. Check the Apps Script web app is deployed as Anyone."
-            : "Could not load availability.",
+        message: bookingFetchError(response.status),
       };
     }
 
@@ -108,8 +158,7 @@ export async function fetchAvailability(
       success: false,
       date,
       slots: [],
-      message:
-        "Could not reach the booking calendar. If this persists, the Apps Script deploy may still be private (Who has access must be Anyone).",
+      message: bookingFetchError(),
     };
   }
 }
