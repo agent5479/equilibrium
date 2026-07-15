@@ -16,22 +16,20 @@ function isYogaLegacyPath(path: string): boolean {
   return path.startsWith("/yoga/") || path === "/yoga/" || path === "/yogapatricias-yoga-background/";
 }
 
-function YogaLegacyBanner() {
+function YogaLegacyNote() {
   return (
-    <aside className="legacy-banner" aria-label="Historical archive notice">
+    <aside className="legacy-note" aria-label="About this page">
       <div className="container">
-        <p className="legacy-banner__label">Archive — Yoga teaching history</p>
         <p>
-          Patricia taught Yoga from 2009 to 2021. These pages are kept as a legacy portfolio.
-          She no longer offers Yoga classes. Today&apos;s practice is{" "}
-          <strong>Touch for Health Kinesiology and Nutrition</strong>.
-        </p>
-        <p className="legacy-banner__actions">
-          <Link href={routePath("/touch-for-health-kinesiology/")}>Kinesiology</Link>
-          <span aria-hidden="true"> · </span>
+          From Patricia&apos;s Yoga teaching years (2009–2021). She no longer offers Yoga
+          classes — today she practises{" "}
+          <Link href={routePath("/touch-for-health-kinesiology/")}>
+            Touch for Health Kinesiology
+          </Link>{" "}
+          and Nutrition.{" "}
           <Link href={routePath("/bookings/")}>Book a session</Link>
-          <span aria-hidden="true"> · </span>
-          <Link href={routePath("/contact/")}>Contact</Link>
+          {" · "}
+          <Link href={routePath("/yoga/")}>Teaching years overview</Link>
         </p>
       </div>
     </aside>
@@ -41,11 +39,13 @@ function YogaLegacyBanner() {
 export default function ServicePage({ page, slug }: ServicePageProps) {
   const sections = parseSections(page.blocks);
   const heroImage = getHeroImage(slug);
-  const showLegacyBanner = isYogaLegacyPath(page.path);
+  const isYoga = isYogaLegacyPath(page.path);
+  // Quieter title presentation for yoga — skip product-style hero overlays
+  const useQuietTitle = isYoga;
 
   return (
     <>
-      {heroImage && (
+      {heroImage && !useQuietTitle && (
         <section className="page-hero">
           <OptimizedImage
             src={heroImage}
@@ -61,7 +61,7 @@ export default function ServicePage({ page, slug }: ServicePageProps) {
         </section>
       )}
 
-      {!heroImage && (
+      {(!heroImage || useQuietTitle) && (
         <div className="page-title-bar">
           <div className="container">
             <h1>{page.title}</h1>
@@ -69,18 +69,18 @@ export default function ServicePage({ page, slug }: ServicePageProps) {
         </div>
       )}
 
-      {showLegacyBanner && <YogaLegacyBanner />}
+      {isYoga && <YogaLegacyNote />}
 
       {sections.length >= 2 ? (
         <AlternatingSections
           sections={sections}
           pageSlug={slug}
-          showCta={!showLegacyBanner}
+          showCta={!isYoga}
         />
       ) : (
         <div className="container content-section">
           <PageRenderer blocks={page.blocks} filterSidebar />
-          {!showLegacyBanner && (
+          {!isYoga && (
             <section className="cta-band">
               <Link href={routePath("/bookings/")} className="btn-primary">
                 Book a Session

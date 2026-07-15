@@ -1,43 +1,43 @@
 {
   "slug": "yoga",
   "path": "/yoga/",
-  "title": "Yoga Teaching Archive",
-  "metaDescription": "Archive of Patricia Smith's Yoga teaching (2009–2021). She now practices Touch for Health Kinesiology and Nutrition in Golden Bay.",
+  "title": "Yoga teaching years",
+  "metaDescription": "Patricia Smith taught Yoga in Golden Bay from 2009 to 2021. A portrait of that chapter — and how it still informs her Kinesiology and Nutrition practice today.",
   "type": "page",
   "blocks": [
     {
       "type": "heading",
       "level": 3,
-      "text": "A legacy portfolio of Yoga teaching"
+      "text": "A chapter that still shapes the work"
     },
     {
       "type": "paragraph",
-      "html": "From 2009 to 2021 Patricia taught accessible Hatha-based Yoga for physical, mental and emotional wellbeing — community classes, private sessions, corporate and school programmes. She paused teaching to focus fully on Touch for Health Kinesiology and Nutrition."
+      "html": "For more than a decade Patricia taught accessible Hatha-based Yoga for physical, mental and emotional wellbeing — community classes, one-to-one sessions, workplaces and schools. She finished formal Yoga teacher training in 2011 and taught until 2021, when she stepped fully into Touch for Health Kinesiology and Nutrition."
     },
     {
       "type": "paragraph",
-      "html": "These pages remain as a record of that chapter of her practice. They are not an active class timetable or booking offer."
+      "html": "Those years remain part of who she is as a practitioner: listening to bodies, meeting people where they are, and creating a steady, supportive space. She is grateful to the students who came and stayed — that relationship still flows into the sessions she offers now."
+    },
+    {
+      "type": "paragraph",
+      "html": "Yoga classes are no longer on offer. Today Patricia practises <a href=\"/touch-for-health-kinesiology/\">Touch for Health Kinesiology</a> and Nutrition. You can <a href=\"/bookings/\">book a session</a> or <a href=\"/contact/\">get in touch</a>."
     },
     {
       "type": "heading",
       "level": 4,
-      "text": "Explore the archive"
+      "text": "From those years"
     },
     {
       "type": "list",
       "ordered": false,
       "items": [
-        "<a href=\"/yoga/benefits-of-yoga/\">Benefits of Yoga</a>",
-        "<a href=\"/yoga/corporate-yoga/\">Corporate Yoga</a>",
-        "<a href=\"/yoga/yoga-in-schools/\">Yoga in Schools</a>",
-        "<a href=\"/yoga/friendly-dos-for-yoga/\">Friendly Do's for Yoga</a>",
-        "<a href=\"/yoga/timetable-and-prices/\">Former timetable and prices</a>",
-        "<a href=\"/yogapatricias-yoga-background/\">Patricia's Yoga background</a>"
+        "<a href=\"/yoga/benefits-of-yoga/\">What Yoga offered — body, mind and wellbeing</a>",
+        "<a href=\"/yoga/corporate-yoga/\">Teaching in workplaces</a>",
+        "<a href=\"/yoga/yoga-in-schools/\">Teaching in schools</a>",
+        "<a href=\"/yogapatricias-yoga-background/\">Training and background</a>",
+        "<a href=\"/yoga/friendly-dos-for-yoga/\">Class etiquette from her teaching practice</a>",
+        "<a href=\"/yoga/timetable-and-prices/\">Class notes from the teaching years</a> <em>(historical)</em>"
       ]
-    },
-    {
-      "type": "paragraph",
-      "html": "Looking for a session today? See <a href=\"/touch-for-health-kinesiology/\">Touch for Health Kinesiology</a>, <a href=\"/bookings/\">book online</a>, or <a href=\"/contact/\">call Patricia</a>."
     }
   ]
 }

@@ -1,23 +1,18 @@
 {
   "slug": "yoga__timetable-and-prices",
   "path": "/yoga/timetable-and-prices/",
-  "title": "Timetable and Prices",
-  "metaDescription": "Historical Yoga timetable and fees from Patricia Smith's teaching years (archived). Yoga classes are no longer offered.",
+  "title": "Class notes from the teaching years",
+  "metaDescription": "Former Yoga class notes and fees from Patricia Smith's teaching years (2009–2021). Yoga classes are no longer offered.",
   "type": "page",
   "blocks": [
     {
-      "type": "heading",
-      "level": 3,
-      "text": "Historical archive — Yoga classes no longer offered"
-    },
-    {
       "type": "paragraph",
-      "html": "Community and private Yoga sessions ended when Patricia paused teaching in 2021 to focus on Touch for Health Kinesiology and Nutrition. The information below is kept for historical reference only and is not a current offer."
+      "html": "These notes are from when Patricia offered community and private Yoga. Teaching paused in 2021 so she could focus on Touch for Health Kinesiology and Nutrition — they are kept here for context, not as a current offer."
     },
     {
       "type": "heading",
       "level": 3,
-      "text": "Former timetable"
+      "text": "Timetable of that period"
     },
     {
       "type": "html",
@@ -26,7 +21,7 @@
     {
       "type": "heading",
       "level": 3,
-      "text": "Former prices (as published at the time)"
+      "text": "Fees as they stood then"
     },
     {
       "type": "html",
@@ -34,7 +29,7 @@
     },
     {
       "type": "paragraph",
-      "html": "For current Kinesiology and Nutrition sessions, see <a href=\"/nutrition/services-and-fees/\">sessions and cost</a> or <a href=\"/bookings/\">book online</a>."
+      "html": "For today’s Kinesiology and Nutrition sessions, see <a href=\"/nutrition/services-and-fees/\">sessions and cost</a> or <a href=\"/bookings/\">book online</a>."
     }
   ]
 }

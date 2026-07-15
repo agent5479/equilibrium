@@ -1384,33 +1384,30 @@ h6 {
   margin-top: 0;
 }
 
-/* Legacy Yoga archive banner */
-.legacy-banner {
-  background: var(--bg-alt, #f7f0f3);
+/* Quiet home credential link */
+.home-quiet-link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Soft note on Yoga teaching-years pages */
+.legacy-note {
   border-bottom: 1px solid #e5d4db;
-  padding: 18px 0;
+  padding: 12px 0 14px;
   margin-bottom: 0;
+  background: transparent;
 }
 
-.legacy-banner__label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--brand-primary, #a33969);
-  margin: 0 0 6px;
+.legacy-note p {
+  margin: 0;
+  max-width: 44rem;
+  font-size: 0.92rem;
+  color: #5c4a52;
+  line-height: 1.5;
 }
 
-.legacy-banner p {
-  margin: 0 0 8px;
-  max-width: 52rem;
-}
-
-.legacy-banner__actions {
-  margin-bottom: 0 !important;
-}
-
-.legacy-banner__actions a {
+.legacy-note a {
   font-weight: 600;
 }
 

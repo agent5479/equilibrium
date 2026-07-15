@@ -41,19 +41,19 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
   "/total-wellness-package-8-sessions-much-more/":
     "Total Wellness Package — an integrated programme of kinesiology, nutrition, and wellness with Patricia Smith.",
   "/yoga/":
-    "Archive of Patricia Smith's Yoga teaching (2009–2021). She now practices Touch for Health Kinesiology and Nutrition.",
+    "Patricia Smith taught Yoga in Golden Bay from 2009 to 2021. How those years still inform her Kinesiology and Nutrition practice.",
   "/yoga/benefits-of-yoga/":
-    "Archive: benefits of Yoga from Patricia Smith's teaching years (2009–2021).",
+    "From Patricia Smith's Yoga teaching years — accessible practice for body, mind and wellbeing.",
   "/yoga/timetable-and-prices/":
-    "Archive: historical Yoga timetable and prices. Yoga classes are no longer offered.",
+    "Class notes and fees from Patricia Smith's Yoga teaching years. Yoga classes are no longer offered.",
   "/yoga/corporate-yoga/":
-    "Archive: Corporate Yoga offerings from Patricia Smith's teaching years.",
+    "From Patricia Smith's teaching years — Yoga offered in workplace settings.",
   "/yoga/friendly-dos-for-yoga/":
-    "Archive: friendly do's for Yoga from Patricia Smith's teaching years.",
+    "Class etiquette from Patricia Smith's Yoga teaching practice.",
   "/yoga/yoga-in-schools/":
-    "Archive: Yoga in schools from Patricia Smith's teaching years.",
+    "From Patricia Smith's teaching years — Yoga offered in schools.",
   "/yogapatricias-yoga-background/":
-    "Patricia Smith's Yoga teacher training and teaching background (2009–2021).",
+    "Patricia Smith's Yoga teacher training and the years she spent teaching (2009–2021).",
   "/visionboard-workshops/":
     "Vision board workshops with Patricia Smith at Equilibrium Kinesiology & Nutrition.",
 };

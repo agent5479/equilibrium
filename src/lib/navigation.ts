@@ -5,7 +5,13 @@ export interface NavItem {
 }
 
 export const navigation: NavItem[] = [
-  { label: "Patricia's Story", href: "/patricias-story/" },
+  {
+    label: "Patricia's Story",
+    children: [
+      { label: "Her story", href: "/patricias-story/" },
+      { label: "Yoga teaching years", href: "/yoga/" },
+    ],
+  },
   {
     label: "Services",
     children: [
@@ -34,24 +40,6 @@ export const navigation: NavItem[] = [
       {
         label: "Touch For Health Kinesiology Course",
         href: "/touch-for-health-kinesiology-course/",
-      },
-    ],
-  },
-  {
-    label: "Background",
-    children: [
-      {
-        label: "Yoga teaching",
-        href: "/yoga/",
-        children: [
-          { label: "Overview", href: "/yoga/" },
-          { label: "Benefits of Yoga", href: "/yoga/benefits-of-yoga/" },
-          { label: "Corporate Yoga", href: "/yoga/corporate-yoga/" },
-          { label: "Yoga in Schools", href: "/yoga/yoga-in-schools/" },
-          { label: "Friendly Do's for Yoga", href: "/yoga/friendly-dos-for-yoga/" },
-          { label: "Timetable and Prices", href: "/yoga/timetable-and-prices/" },
-          { label: "Patricia's Yoga Background", href: "/yogapatricias-yoga-background/" },
-        ],
       },
     ],
   },

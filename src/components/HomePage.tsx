@@ -21,16 +21,6 @@ const TFH_IMAGES = [
   "/assets/wp-content/uploads/2018/10/tfh1.jpg",
 ];
 
-const YOGA_IMAGES = [
-  "/assets/wp-content/uploads/2018/10/yoga-l-2.jpg",
-  "/assets/wp-content/uploads/2018/10/yoga-l-3.jpg",
-  "/assets/wp-content/uploads/2018/10/yoga-l-4.jpg",
-  "/assets/wp-content/uploads/2018/10/yoga-l-7.jpg",
-  "/assets/wp-content/uploads/2018/10/yoga-l-8.jpg",
-  "/assets/wp-content/uploads/2018/10/yoga-l-9.jpg",
-  "/assets/wp-content/uploads/2018/10/yoga-l-10.jpg",
-];
-
 export default function HomePage() {
   return (
     <>
@@ -77,7 +67,10 @@ export default function HomePage() {
               <p>
                 Patricia is a qualified Nutritionist (B.Sc.) and a registered Touch for Health
                 Kinesiology Practitioner. She also taught Yoga from 2009 to 2021 — that
-                experience still informs her work today.
+                experience still informs her work today.{" "}
+                <Link href={routePath("/yoga/")} className="home-quiet-link">
+                  Yoga teaching years
+                </Link>
               </p>
               <div className="home-hero-actions">
                 <Link href={routePath("/bookings/")} className="btn-primary">
@@ -190,43 +183,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      <SectionBackground
-        image="/assets/wp-content/uploads/2014/07/shutterstock_130781543.jpg"
-        overlayColor="#000000"
-        overlayOpacity={0.5}
-        position="50% 0%"
-        darkText={false}
-        className="home-section home-section--yoga"
-      >
-        <div className="container home-split">
-          <div className="home-split-content">
-            <h2 className="home-section-heading">Yoga teaching (2009–2021)</h2>
-            <p className="home-section-sub">A chapter of the practice — kept here as legacy</p>
-            <h4>
-              Patricia taught accessible Hatha-based Yoga for physical, mental and emotional
-              wellbeing until 2021.
-            </h4>
-            <p>
-              She paused community and private Yoga teaching to focus fully on Touch for Health
-              Kinesiology and Nutrition. The knowledge and years with her students still flow into
-              that work.
-            </p>
-            <p>
-              Explore the archive of that teaching chapter — benefits, background, and more —
-              under Background in the menu.
-            </p>
-            <Link href={routePath("/yoga/")} className="btn-primary">
-              View Yoga teaching archive
-            </Link>
-          </div>
-          <div className="home-slideshow home-slideshow--yoga" aria-label="Yoga photos">
-            {YOGA_IMAGES.slice(0, 4).map((src) => (
-              <OptimizedImage key={src} src={src} alt="" sizes="(max-width: 768px) 100vw, 240px" />
-            ))}
-          </div>
-        </div>
-      </SectionBackground>
     </>
   );
 }
