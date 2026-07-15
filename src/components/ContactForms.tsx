@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { routePath } from "@/lib/paths";
+
 export default function ContactForms() {
   return (
     <div className="contact-grid">
@@ -26,7 +29,9 @@ export default function ContactForms() {
             Submit
           </button>
           <p className="form-notice">
-            Online booking and enquiries will be available soon. Please call or email Patricia directly.
+            Online enquiries form coming soon. Please call{" "}
+            <a href="tel:+6421991989">021 991 989</a>, email Patricia, or{" "}
+            <Link href={routePath("/bookings/")}>book a session online</Link>.
           </p>
         </form>
       </div>

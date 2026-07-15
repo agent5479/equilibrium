@@ -13,25 +13,25 @@ interface MetaInput {
 /** Fallback SEO blurbs when a page has no scraped meta description. */
 const PAGE_DESCRIPTIONS: Record<string, string> = {
   "/":
-    "Kinesiology, Nutrition, and Yoga with Patricia Smith in New Zealand. Bring your whole being back into balance — live like you love yourself.",
+    "Touch for Health Kinesiology and Nutrition with Patricia Smith in Golden Bay, New Zealand. Bring your whole being back into balance — live like you love yourself.",
   "/patricias-story/":
-    "Meet Patricia Smith — Nutritionist (B.Sc.), Touch for Health Kinesiology practitioner, and Yoga teacher at Equilibrium.",
+    "Meet Patricia Smith — Nutritionist (B.Sc.) and Touch for Health Kinesiology practitioner in Golden Bay. Yoga teaching (2009–2021) remains part of her background.",
   "/about/":
     "About Patricia's nutrition approach: real food, personalised advice, and kinesiology-guided support for optimal health.",
   "/contact/":
-    "Contact Patricia Smith at Equilibrium Kinesiology & Nutrition. Book online or get in touch for sessions and courses.",
+    "Contact Patricia Smith at Equilibrium Kinesiology & Nutrition. Phone 021 991 989 — sessions at Golden Bay Organics, Takaka, or by private arrangement.",
   "/bookings/":
-    "Book a free intro or Kinesiology / Nutrition session with Patricia Smith. Real-time calendar availability.",
+    "Book a free intro or Kinesiology / Nutrition session with Patricia Smith. Real-time calendar availability. Or call 021 991 989.",
   "/testimonials/":
-    "Client testimonials for Patricia Smith's Kinesiology, Nutrition, and Yoga services at Equilibrium.",
+    "Client testimonials for Patricia Smith's Kinesiology and Nutrition practice — including reviews from her Yoga teaching years.",
   "/gallery/":
-    "Photo gallery from Equilibrium Kinesiology & Nutrition — Yoga, workshops, and sessions with Patricia Smith.",
+    "Photo gallery from Equilibrium Kinesiology & Nutrition — workshops, sessions, and practice history with Patricia Smith.",
   "/nutrition/":
     "Nutrition services with Patricia Smith — real food for optimal results, supported by kinesiology muscle testing.",
   "/nutrition/recipes/":
     "Grain free, sugar free recipes full of goodness from Equilibrium Kinesiology & Nutrition.",
   "/nutrition/services-and-fees/":
-    "Nutrition consultation fees and session options with Patricia Smith at Equilibrium.",
+    "Nutrition and Kinesiology consultation fees and session options with Patricia Smith at Equilibrium.",
   "/nutrition/tips-on-nutrition/":
     "Practical nutrition tips from Patricia Smith at Equilibrium Kinesiology & Nutrition.",
   "/touch-for-health-kinesiology/":
@@ -40,16 +40,20 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
     "Learn Touch for Health Kinesiology with Patricia Smith. Course levels, dates, and fees.",
   "/total-wellness-package-8-sessions-much-more/":
     "Total Wellness Package — an integrated programme of kinesiology, nutrition, and wellness with Patricia Smith.",
+  "/yoga/":
+    "Archive of Patricia Smith's Yoga teaching (2009–2021). She now practices Touch for Health Kinesiology and Nutrition.",
   "/yoga/benefits-of-yoga/":
-    "Benefits of Yoga with Patricia Smith — accessible Hatha-based practice for body, mind and soul.",
+    "Archive: benefits of Yoga from Patricia Smith's teaching years (2009–2021).",
   "/yoga/timetable-and-prices/":
-    "Yoga timetable and prices with Patricia Smith at Equilibrium Kinesiology & Nutrition.",
+    "Archive: historical Yoga timetable and prices. Yoga classes are no longer offered.",
   "/yoga/corporate-yoga/":
-    "Corporate Yoga with Patricia Smith — workplace wellbeing sessions for teams.",
+    "Archive: Corporate Yoga offerings from Patricia Smith's teaching years.",
   "/yoga/friendly-dos-for-yoga/":
-    "Friendly do's for Yoga — practical guidance from Patricia Smith at Equilibrium.",
+    "Archive: friendly do's for Yoga from Patricia Smith's teaching years.",
   "/yoga/yoga-in-schools/":
-    "Yoga in schools with Patricia Smith — accessible practice for young people.",
+    "Archive: Yoga in schools from Patricia Smith's teaching years.",
+  "/yogapatricias-yoga-background/":
+    "Patricia Smith's Yoga teacher training and teaching background (2009–2021).",
   "/visionboard-workshops/":
     "Vision board workshops with Patricia Smith at Equilibrium Kinesiology & Nutrition.",
 };
@@ -79,10 +83,11 @@ export function buildMetadata({
     keywords: [
       "kinesiology",
       "nutrition",
-      "yoga",
       "Touch for Health",
       "Patricia Smith",
       "Equilibrium",
+      "Golden Bay",
+      "Takaka",
       "New Zealand",
       "holistic health",
     ],
@@ -150,19 +155,28 @@ export function localBusinessJsonLd() {
     logo: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
     address: {
       "@type": "PostalAddress",
+      streetAddress: "47 Commercial Street",
+      addressLocality: "Takaka",
+      addressRegion: "Golden Bay",
       addressCountry: "NZ",
     },
-    areaServed: {
-      "@type": "Country",
-      name: "New Zealand",
-    },
+    areaServed: [
+      {
+        "@type": "Place",
+        name: "Golden Bay",
+      },
+      {
+        "@type": "Country",
+        name: "New Zealand",
+      },
+    ],
     priceRange: "$$",
     sameAs: ["https://www.facebook.com/equilibriumnutritionandyoga"],
     knowsAbout: [
       "Touch for Health Kinesiology",
       "Nutrition",
-      "Yoga",
       "Holistic health",
+      "Yoga teaching (historical)",
     ],
   };
 }

@@ -2,7 +2,7 @@
   "slug": "contact",
   "path": "/contact/",
   "title": "Contact",
-  "metaDescription": "",
+  "metaDescription": "Contact Patricia Smith at Equilibrium Kinesiology & Nutrition. Phone 021 991 989 — sessions at Golden Bay Organics, 47 Commercial Street Takaka, or by private arrangement.",
   "type": "page",
   "blocks": [
     {
@@ -12,11 +12,15 @@
     },
     {
       "type": "paragraph",
-      "html": "Phone: 021 991 989"
+      "html": "Phone: <a href=\"tel:+6421991989\">021 991 989</a> (preferred for bookings by arrangement)"
     },
     {
       "type": "paragraph",
       "html": "Email: <a href=\"mailto:goldenbayorganicstakaka@gmail.com\">goldenbayorganicstakaka@gmail.com</a>"
+    },
+    {
+      "type": "paragraph",
+      "html": "Storefront: Golden Bay Organics, 47 Commercial Street, Takaka — sessions in the shop back office, at a private location by arrangement, or online."
     },
     {
       "type": "heading",

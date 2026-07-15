@@ -18,8 +18,16 @@ export default function BookingsPage() {
       </div>
       <div className="container content-section">
         <p>
-          Choose your service and a preferred date and time. Available slots are loaded
-          from Patricia&apos;s Google Calendar in real time.
+          Prefer to arrange by phone? Call Patricia on{" "}
+          <a href="tel:+6421991989">
+            <strong>021 991 989</strong>
+          </a>
+          . Sessions meet by arrangement — at the Golden Bay Organics back office
+          (47 Commercial Street, Takaka), at a private location, or online.
+        </p>
+        <p>
+          Or choose your service and a preferred date and time below. Available slots
+          are loaded from Patricia&apos;s Google Calendar in real time.
         </p>
         <BookingForm />
       </div>

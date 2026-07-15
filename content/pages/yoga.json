@@ -1,8 +1,43 @@
 {
   "slug": "yoga",
   "path": "/yoga/",
-  "title": "Yoga",
-  "metaDescription": "",
+  "title": "Yoga Teaching Archive",
+  "metaDescription": "Archive of Patricia Smith's Yoga teaching (2009–2021). She now practices Touch for Health Kinesiology and Nutrition in Golden Bay.",
   "type": "page",
-  "blocks": []
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "A legacy portfolio of Yoga teaching"
+    },
+    {
+      "type": "paragraph",
+      "html": "From 2009 to 2021 Patricia taught accessible Hatha-based Yoga for physical, mental and emotional wellbeing — community classes, private sessions, corporate and school programmes. She paused teaching to focus fully on Touch for Health Kinesiology and Nutrition."
+    },
+    {
+      "type": "paragraph",
+      "html": "These pages remain as a record of that chapter of her practice. They are not an active class timetable or booking offer."
+    },
+    {
+      "type": "heading",
+      "level": 4,
+      "text": "Explore the archive"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "<a href=\"/yoga/benefits-of-yoga/\">Benefits of Yoga</a>",
+        "<a href=\"/yoga/corporate-yoga/\">Corporate Yoga</a>",
+        "<a href=\"/yoga/yoga-in-schools/\">Yoga in Schools</a>",
+        "<a href=\"/yoga/friendly-dos-for-yoga/\">Friendly Do's for Yoga</a>",
+        "<a href=\"/yoga/timetable-and-prices/\">Former timetable and prices</a>",
+        "<a href=\"/yogapatricias-yoga-background/\">Patricia's Yoga background</a>"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "html": "Looking for a session today? See <a href=\"/touch-for-health-kinesiology/\">Touch for Health Kinesiology</a>, <a href=\"/bookings/\">book online</a>, or <a href=\"/contact/\">call Patricia</a>."
+    }
+  ]
 }

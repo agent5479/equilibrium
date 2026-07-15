@@ -71,12 +71,13 @@ export default function HomePage() {
                 and with that experience vibrant health and happiness!
               </p>
               <p>
-                Using Touch for Health Kinesiology, Nutrition, and Yoga to help you to
-                find your own true Equilibrium.
+                Using Touch for Health Kinesiology and Nutrition to help you find your own
+                true Equilibrium.
               </p>
               <p>
-                Patricia is a qualified Nutritionist (B.Sc.), a registered Touch for Health
-                Kinesiology Practitioner, and a Yoga Teacher.
+                Patricia is a qualified Nutritionist (B.Sc.) and a registered Touch for Health
+                Kinesiology Practitioner. She also taught Yoga from 2009 to 2021 — that
+                experience still informs her work today.
               </p>
               <div className="home-hero-actions">
                 <Link href={routePath("/bookings/")} className="btn-primary">
@@ -176,6 +177,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="offer-banner">
+        <div className="container">
+          <h2>Free 15-minute online sessions for new clients</h2>
+          <p>
+            A chance to find out if a longer session is right for you — no obligation.
+            Prefer to talk first? Call Patricia on{" "}
+            <a href="tel:+6421991989">021 991 989</a>.
+          </p>
+          <Link href={routePath("/bookings/")} className="btn-primary">
+            Book your free session
+          </Link>
+        </div>
+      </section>
+
       <SectionBackground
         image="/assets/wp-content/uploads/2014/07/shutterstock_130781543.jpg"
         overlayColor="#000000"
@@ -186,23 +201,23 @@ export default function HomePage() {
       >
         <div className="container home-split">
           <div className="home-split-content">
-            <h2 className="home-section-heading">Yoga – no community classes at present</h2>
-            <p className="home-section-sub">For physical, mental &amp; emotional wellbeing</p>
-            <h4>Want to feel good? In your Body, Mind and Soul? Connect to yourself?</h4>
+            <h2 className="home-section-heading">Yoga teaching (2009–2021)</h2>
+            <p className="home-section-sub">A chapter of the practice — kept here as legacy</p>
+            <h4>
+              Patricia taught accessible Hatha-based Yoga for physical, mental and emotional
+              wellbeing until 2021.
+            </h4>
             <p>
-              The style of Yoga I teach is accessible to everyone, no matter what experience,
-              fitness level or body shape. Based on Hatha Yoga, playing with vinyasas and
-              incorporating and mixing it with other styles of Yoga during my sessions.
+              She paused community and private Yoga teaching to focus fully on Touch for Health
+              Kinesiology and Nutrition. The knowledge and years with her students still flow into
+              that work.
             </p>
             <p>
-              In each session I promise you 90 minutes of bliss! You&apos;ll feel stronger, stand
-              taller, breathe deeper and will be fully relaxed at the end of the session. Regular
-              Yoga practice supports your whole being, and has enormous benefits on a physical,
-              mental and emotional level.
+              Explore the archive of that teaching chapter — benefits, background, and more —
+              under Background in the menu.
             </p>
-            <p>Questions or enquiries? Contact me today!</p>
-            <Link href={routePath("/contact/")} className="btn-primary">
-              Contact Patricia
+            <Link href={routePath("/yoga/")} className="btn-primary">
+              View Yoga teaching archive
             </Link>
           </div>
           <div className="home-slideshow home-slideshow--yoga" aria-label="Yoga photos">
@@ -212,18 +227,6 @@ export default function HomePage() {
           </div>
         </div>
       </SectionBackground>
-
-      <section className="offer-banner">
-        <div className="container">
-          <h2>Free 15-minute online sessions for new clients</h2>
-          <p>
-            A chance to find out if a longer session is right for you — no obligation.
-          </p>
-          <Link href={routePath("/bookings/")} className="btn-primary">
-            Book your free session
-          </Link>
-        </div>
-      </section>
     </>
   );
 }

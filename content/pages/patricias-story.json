@@ -2,13 +2,17 @@
   "slug": "patricias-story",
   "path": "/patricias-story/",
   "title": "Patricia’s Story",
-  "metaDescription": "",
+  "metaDescription": "Meet Patricia Smith — Nutritionist (B.Sc.) and Touch for Health Kinesiology practitioner in Golden Bay. Yoga teaching (2009–2021) remains part of her background.",
   "type": "page",
   "blocks": [
     {
       "type": "heading",
       "level": 4,
-      "text": "My name is Patricia Smith, qualified NUTRITIONIST (B.Sc.), TOUCH FOR HEALTH PRACTITIONER, registered KINESIOLOGIST and YOGA TEACHER and also a mother to three beautiful young men."
+      "text": "Today I practise Touch for Health Kinesiology and Nutrition. I’m also a Yoga teacher by training — I taught from 2009 to 2021 — and a mother to three beautiful young men."
+    },
+    {
+      "type": "paragraph",
+      "html": "My name is Patricia Smith, qualified NUTRITIONIST (B.Sc.), TOUCH FOR HEALTH PRACTITIONER, registered KINESIOLOGIST and YOGA TEACHER."
     },
     {
       "type": "paragraph",
@@ -51,7 +55,7 @@
     },
     {
       "type": "paragraph",
-      "html": "I have enjoyed teaching countless Yoga classes until 2021, but have now paused teaching to focus on my Kinesiology."
+      "html": "I have enjoyed teaching countless Yoga classes until 2021, but have now paused teaching to focus on my Kinesiology and Nutrition practice."
     },
     {
       "type": "paragraph",

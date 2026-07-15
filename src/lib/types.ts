@@ -74,5 +74,5 @@ export const SITE_URL = "https://equilibriumhealth.nz";
 export const SITE_NAME = "Equilibrium Kinesiology & Nutrition";
 export const DEFAULT_OG_IMAGE = "/assets/wp-content/uploads/2023/02/logo.png";
 export const DEFAULT_DESCRIPTION =
-  "Kinesiology, Nutrition, and Yoga with Patricia Smith in New Zealand. Bring your whole being back into balance — live like you love yourself.";
+  "Touch for Health Kinesiology and Nutrition with Patricia Smith in Golden Bay, New Zealand. Sessions by phone or online booking — at Golden Bay Organics or by private arrangement.";
 

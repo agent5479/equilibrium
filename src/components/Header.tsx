@@ -34,7 +34,19 @@ function DesktopDropdownItem({
   if (item.children?.length) {
     return (
       <li className="nav-dropdown-group">
-        <span className="nav-dropdown-label">{item.label}</span>
+        {item.href ? (
+          <Link
+            href={routePath(item.href)}
+            className={`nav-dropdown-label nav-dropdown-label--link${
+              isActive(pathname, item.href) ? " nav-link--active" : ""
+            }`}
+            onClick={onNavigate}
+          >
+            {item.label}
+          </Link>
+        ) : (
+          <span className="nav-dropdown-label">{item.label}</span>
+        )}
         <ul className="nav-dropdown-sublist">
           {item.children.map((child) => (
             <DesktopDropdownItem key={child.label} item={child} onNavigate={onNavigate} />

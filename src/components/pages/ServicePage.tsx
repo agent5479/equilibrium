@@ -12,9 +12,36 @@ interface ServicePageProps {
   slug: string;
 }
 
+function isYogaLegacyPath(path: string): boolean {
+  return path.startsWith("/yoga/") || path === "/yoga/" || path === "/yogapatricias-yoga-background/";
+}
+
+function YogaLegacyBanner() {
+  return (
+    <aside className="legacy-banner" aria-label="Historical archive notice">
+      <div className="container">
+        <p className="legacy-banner__label">Archive — Yoga teaching history</p>
+        <p>
+          Patricia taught Yoga from 2009 to 2021. These pages are kept as a legacy portfolio.
+          She no longer offers Yoga classes. Today&apos;s practice is{" "}
+          <strong>Touch for Health Kinesiology and Nutrition</strong>.
+        </p>
+        <p className="legacy-banner__actions">
+          <Link href={routePath("/touch-for-health-kinesiology/")}>Kinesiology</Link>
+          <span aria-hidden="true"> · </span>
+          <Link href={routePath("/bookings/")}>Book a session</Link>
+          <span aria-hidden="true"> · </span>
+          <Link href={routePath("/contact/")}>Contact</Link>
+        </p>
+      </div>
+    </aside>
+  );
+}
+
 export default function ServicePage({ page, slug }: ServicePageProps) {
   const sections = parseSections(page.blocks);
   const heroImage = getHeroImage(slug);
+  const showLegacyBanner = isYogaLegacyPath(page.path);
 
   return (
     <>
@@ -42,16 +69,24 @@ export default function ServicePage({ page, slug }: ServicePageProps) {
         </div>
       )}
 
+      {showLegacyBanner && <YogaLegacyBanner />}
+
       {sections.length >= 2 ? (
-        <AlternatingSections sections={sections} pageSlug={slug} showCta />
+        <AlternatingSections
+          sections={sections}
+          pageSlug={slug}
+          showCta={!showLegacyBanner}
+        />
       ) : (
         <div className="container content-section">
           <PageRenderer blocks={page.blocks} filterSidebar />
-          <section className="cta-band">
-            <Link href={routePath("/bookings/")} className="btn-primary">
-              Book a Session
-            </Link>
-          </section>
+          {!showLegacyBanner && (
+            <section className="cta-band">
+              <Link href={routePath("/bookings/")} className="btn-primary">
+                Book a Session
+              </Link>
+            </section>
+          )}
         </div>
       )}
     </>

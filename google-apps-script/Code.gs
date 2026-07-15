@@ -186,7 +186,7 @@ function createBooking(data) {
 
   var event = calendar.createEvent(eventTitle, startTime, endTime, {
     description: eventDescription,
-    location: 'Online or in person — Equilibrium Kinesiology & Nutrition',
+    location: 'Golden Bay Organics (back office), 47 Commercial St Takaka; private location by arrangement; or online — Equilibrium Kinesiology & Nutrition',
     guests: guests,
     sendInvites: true
   });
@@ -215,6 +215,7 @@ function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, 
     '  Date:      ' + formattedDate,
     '  Time:      ' + timeStr + ' – ' + endTimeStr + ' (NZ time)',
     '  Reference: ' + bookingId,
+    '  Location:  By arrangement — Golden Bay Organics back office (47 Commercial St, Takaka), private venue, or online',
     '',
     data.message ? 'Your message: ' + data.message : '',
     '',

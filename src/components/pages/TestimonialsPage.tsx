@@ -15,6 +15,10 @@ export default function TestimonialsPage({
   return (
     <div className="testimonials-page">
       <div className="container">
+        <p className="testimonials-intro">
+          Includes clients from Patricia&apos;s Yoga teaching years as well as Nutrition and
+          Kinesiology — kept here as a record of the practice and reputation she has built.
+        </p>
         <div className="testimonials-grid">
           {testimonials.map((t) => (
             <article key={t.name} className="testimonial-card">
