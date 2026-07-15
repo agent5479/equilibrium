@@ -149,7 +149,7 @@ export function localBusinessJsonLd() {
     name: SITE_NAME,
     description: DEFAULT_DESCRIPTION,
     url: SITE_URL,
-    email: "goldenbayorganicstakaka@gmail.com",
+    email: "patricia@equilibriumhealth.nz",
     telephone: "+6421991989",
     image: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
     logo: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,

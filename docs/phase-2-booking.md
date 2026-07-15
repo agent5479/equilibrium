@@ -2,7 +2,7 @@
 
 ## Status: Implemented
 
-The booking system connects the static React site to Patricia's Google Calendar and Gmail.
+The booking system connects the static React site to Patricia's Google Calendar and Gmail (`patricia@equilibriumhealth.nz`).
 
 ## Components
 
@@ -19,14 +19,16 @@ The booking system connects the static React site to Patricia's Google Calendar 
 ```
 React Site (/bookings/)
     → GET  Apps Script ?action=availability&date=&duration=
+        → Find calendar events titled "Equilibrium" (open windows)
+        → Offer 15-minute starts that fit duration and avoid busy events
     → POST Apps Script { action: "book", ... }
-        → Check Calendar availability
-        → Create Calendar event (+ guest invites for client and owner)
+        → Re-check slot
+        → Create Calendar event (+ guest invites for client and patricia@)
         → Email client + Patricia
     → Return bookingId + confirmation
 ```
 
-No Google Sheet is required — bookings live in Google Calendar.
+No Google Sheet is required — bookings live in Google Calendar. Patricia marks bookable time by creating events titled **Equilibrium**.
 
 ## GitHub Secret (required for live booking)
 
@@ -51,7 +53,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000/equilibrium/bookings/
+Open http://localhost:3000/bookings/
 
 ## Contact form (future)
 

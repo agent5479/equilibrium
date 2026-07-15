@@ -51,7 +51,7 @@ export default function CoursePage({ page }: { page: PageData }) {
       <section className="cta-band">
         <div className="container">
           <h2>Contact Patricia for the next intake</h2>
-          <p>Phone: 021 991 989 · goldenbayorganicstakaka@gmail.com</p>
+          <p>Phone: 021 991 989 · patricia@equilibriumhealth.nz</p>
           <Link href={routePath("/bookings/")} className="btn-primary">
             Book or Enquire
           </Link>

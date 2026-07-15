@@ -32,8 +32,8 @@ export default function ContactPage() {
             </p>
             <p>
               <strong>Email:</strong>{" "}
-              <a href="mailto:goldenbayorganicstakaka@gmail.com">
-                goldenbayorganicstakaka@gmail.com
+              <a href="mailto:patricia@equilibriumhealth.nz">
+                patricia@equilibriumhealth.nz
               </a>
             </p>
             <p>

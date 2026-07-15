@@ -1,19 +1,26 @@
 /**
  * Equilibrium Booking API — Google Apps Script (calendar-only)
  *
+ * Availability comes from calendar events titled "Equilibrium" (exact match,
+ * case-insensitive). Clients pick 15-minute starts that fit inside those
+ * windows and do not overlap other calendar events.
+ *
  * SETUP:
  * 1. script.google.com → New project → paste this file
+ *    (run as patricia@equilibriumhealth.nz)
  * 2. Set Script Properties (Project Settings → Script Properties):
- *    - CALENDAR_ID     = primary
- *    - OWNER_EMAIL     = goldenbayorganicstakaka@gmail.com
- *    - SITE_URL        = https://equilibriumhealth.nz/
- *    - TIMEZONE        = Pacific/Auckland
- *    - BUSINESS_START  = 09:00
- *    - BUSINESS_END    = 17:00
- *    - SLOT_INTERVAL   = 30
- *    - BOOKING_DAYS    = 1,2,3,4,5
+ *    - CALENDAR_ID          = primary
+ *    - OWNER_EMAIL          = patricia@equilibriumhealth.nz
+ *    - SITE_URL             = https://equilibriumhealth.nz/
+ *    - TIMEZONE             = Pacific/Auckland
+ *    - AVAILABILITY_TITLE   = Equilibrium
+ *    - SLOT_INTERVAL        = 15
  * 3. Deploy → Web app → Execute as: Me → Anyone
  * 4. Copy Web App URL → GitHub Secret NEXT_PUBLIC_BOOKING_API_URL
+ *
+ * Patricia marks open booking blocks on her calendar with the title
+ * "Equilibrium". Booked appointments use different titles so they do not
+ * count as open windows.
  */
 
 // ─── HTTP handlers ───────────────────────────────────────────────────────────
@@ -31,7 +38,7 @@ function doGet(e) {
     return jsonResponse({
       success: true,
       message: 'Equilibrium Booking API is running.',
-      version: '2.0'
+      version: '3.0'
     });
   } catch (err) {
     return jsonResponse({ success: false, message: String(err) });
@@ -62,66 +69,100 @@ function getAvailability(dateStr, durationMinutes) {
     return { success: false, date: dateStr, slots: [], message: 'Invalid date.' };
   }
 
+  durationMinutes = parseInt(durationMinutes, 10) || 60;
   var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
-  var bookingDays = getConfig('BOOKING_DAYS', '1,2,3,4,5').split(',').map(Number);
-  var dayOfWeek = parseDateInTz(dateStr, tz).getDay();
-  var isoDay = dayOfWeek === 0 ? 7 : dayOfWeek;
+  var interval = parseInt(getConfig('SLOT_INTERVAL', '15'), 10);
+  if (isNaN(interval) || interval < 1) interval = 15;
 
-  if (bookingDays.indexOf(isoDay) === -1) {
-    return { success: true, date: dateStr, slots: [], message: 'No bookings on this day.' };
+  var calendarId = getConfig('CALENDAR_ID', 'primary');
+  var titleMatch = getConfig('AVAILABILITY_TITLE', 'Equilibrium');
+  var classified = classifyDayEvents(calendarId, dateStr, tz, titleMatch);
+
+  if (classified.windows.length === 0) {
+    return {
+      success: true,
+      date: dateStr,
+      slots: [],
+      message: 'No booking windows on this day.'
+    };
   }
 
-  var businessStart = getConfig('BUSINESS_START', '09:00');
-  var businessEnd = getConfig('BUSINESS_END', '17:00');
-  var interval = parseInt(getConfig('SLOT_INTERVAL', '30'), 10);
+  var now = new Date();
+  var slots = [];
+  var seen = {};
 
-  var allSlots = generateTimeSlots(businessStart, businessEnd, interval, durationMinutes);
-  var calendarId = getConfig('CALENDAR_ID', 'primary');
-  var busyPeriods = getBusyPeriods(calendarId, dateStr, tz);
+  for (var w = 0; w < classified.windows.length; w++) {
+    var window = classified.windows[w];
+    var windowSlots = slotsInWindow(
+      window.start,
+      window.end,
+      interval,
+      durationMinutes,
+      classified.busy,
+      now,
+      tz
+    );
+    for (var i = 0; i < windowSlots.length; i++) {
+      var slot = windowSlots[i];
+      if (!seen[slot]) {
+        seen[slot] = true;
+        slots.push(slot);
+      }
+    }
+  }
 
-  var available = allSlots.filter(function (slot) {
-    var slotStart = combineDateTime(dateStr, slot, tz);
-    var slotEnd = new Date(slotStart.getTime() + durationMinutes * 60000);
-    return !isOverlapping(slotStart, slotEnd, busyPeriods) && slotStart > new Date();
-  });
+  slots.sort();
 
-  return { success: true, date: dateStr, slots: available };
+  return {
+    success: true,
+    date: dateStr,
+    slots: slots,
+    message: slots.length === 0
+      ? 'No times fit this session length within the open windows.'
+      : undefined
+  };
 }
 
-function generateTimeSlots(startTime, endTime, intervalMinutes, durationMinutes) {
-  var slots = [];
-  var start = parseTimeString(startTime);
-  var end = parseTimeString(endTime);
-  var current = start;
+/**
+ * Split the day's events into Equilibrium availability windows vs busy blocks.
+ */
+function classifyDayEvents(calendarId, dateStr, tz, availabilityTitle) {
+  var dayStart = combineDateTime(dateStr, '00:00', tz);
+  var dayEnd = combineDateTime(dateStr, '23:59', tz);
+  var events = CalendarApp.getCalendarById(calendarId).getEvents(dayStart, dayEnd);
+  var target = String(availabilityTitle || 'Equilibrium').trim().toLowerCase();
 
-  while (current + durationMinutes <= end) {
-    slots.push(formatTimeString(current));
-    current += intervalMinutes;
+  var windows = [];
+  var busy = [];
+
+  for (var i = 0; i < events.length; i++) {
+    var ev = events[i];
+    var period = { start: ev.getStartTime(), end: ev.getEndTime() };
+    var title = String(ev.getTitle() || '').trim().toLowerCase();
+
+    if (title === target) {
+      windows.push(period);
+    } else {
+      busy.push(period);
+    }
+  }
+
+  return { windows: windows, busy: busy };
+}
+
+function slotsInWindow(windowStart, windowEnd, intervalMinutes, durationMinutes, busyPeriods, now, tz) {
+  var slots = [];
+  var cursor = new Date(windowStart.getTime());
+
+  while (cursor.getTime() + durationMinutes * 60000 <= windowEnd.getTime()) {
+    var slotEnd = new Date(cursor.getTime() + durationMinutes * 60000);
+    if (cursor > now && !isOverlapping(cursor, slotEnd, busyPeriods)) {
+      slots.push(Utilities.formatDate(cursor, tz, 'HH:mm'));
+    }
+    cursor = new Date(cursor.getTime() + intervalMinutes * 60000);
   }
 
   return slots;
-}
-
-function parseTimeString(timeStr) {
-  var parts = timeStr.split(':');
-  return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-}
-
-function formatTimeString(totalMinutes) {
-  var h = Math.floor(totalMinutes / 60);
-  var m = totalMinutes % 60;
-  return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
-}
-
-function getBusyPeriods(calendarId, dateStr, tz) {
-  var dayStart = combineDateTime(dateStr, '00:00', tz);
-  var dayEnd = combineDateTime(dateStr, '23:59', tz);
-
-  return CalendarApp.getCalendarById(calendarId)
-    .getEvents(dayStart, dayEnd)
-    .map(function (ev) {
-      return { start: ev.getStartTime(), end: ev.getEndTime() };
-    });
 }
 
 function isOverlapping(start, end, busyPeriods) {
@@ -161,7 +202,7 @@ function createBooking(data) {
   var endTime = new Date(startTime.getTime() + duration * 60000);
   var bookingId = 'EQ-' + Utilities.formatDate(new Date(), tz, 'yyyyMMdd') + '-' + randomId(4);
   var calendarId = getConfig('CALENDAR_ID', 'primary');
-  var ownerEmail = getConfig('OWNER_EMAIL', 'goldenbayorganicstakaka@gmail.com');
+  var ownerEmail = getConfig('OWNER_EMAIL', 'patricia@equilibriumhealth.nz');
 
   var calendar = CalendarApp.getCalendarById(calendarId);
   var eventTitle = data.serviceLabel + ' — ' + data.name;
@@ -224,7 +265,7 @@ function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, 
     '',
     'If you need to reschedule, please contact Patricia:',
     '  Phone: 021 991 989',
-    '  Email: goldenbayorganicstakaka@gmail.com',
+    '  Email: ' + ownerEmail,
     '',
     'Ngā mihi,',
     'Patricia Smith',

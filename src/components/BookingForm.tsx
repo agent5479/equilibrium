@@ -26,6 +26,7 @@ export default function BookingForm() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [slots, setSlots] = useState<string[]>([]);
+  const [slotMessage, setSlotMessage] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,6 +41,7 @@ export default function BookingForm() {
   const loadSlots = useCallback(async () => {
     if (!date) {
       setSlots([]);
+      setSlotMessage("");
       return;
     }
     setFormState("loading-slots");
@@ -49,8 +51,10 @@ export default function BookingForm() {
     setFormState("idle");
     if (!result.success && result.message) {
       setFeedback(result.message);
+      setSlotMessage("");
     } else {
       setFeedback("");
+      setSlotMessage(result.message || "");
     }
   }, [date, selectedService.durationMinutes]);
 
@@ -95,6 +99,7 @@ export default function BookingForm() {
       setDate("");
       setTime("");
       setSlots([]);
+      setSlotMessage("");
     } else {
       setFormState("error");
       setFeedback(result.message);
@@ -131,6 +136,7 @@ export default function BookingForm() {
   }
 
   const apiConfigured = Boolean(process.env.NEXT_PUBLIC_BOOKING_API_URL);
+  const slotsLoading = formState === "loading-slots";
 
   return (
     <form className="booking-form" onSubmit={handleSubmit}>
@@ -158,46 +164,68 @@ export default function BookingForm() {
         </select>
       </div>
 
-      <div className="booking-datetime">
-        <div className="form-group">
-          <label htmlFor="date">Preferred date *</label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            min={todayIso()}
-            max={maxDateIso()}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="time">Preferred time *</label>
-          <select
-            id="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            required
-            disabled={!date || formState === "loading-slots" || slots.length === 0}
-          >
-            <option value="">
-              {formState === "loading-slots"
-                ? "Loading times…"
-                : slots.length === 0
-                  ? date
-                    ? "No times available"
-                    : "Select a date first"
-                  : "Choose a time"}
-            </option>
-            {slots.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="form-group">
+        <label htmlFor="date">Preferred date *</label>
+        <input
+          type="date"
+          id="date"
+          value={date}
+          min={todayIso()}
+          max={maxDateIso()}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
       </div>
+
+      <fieldset className="form-group booking-time-fieldset">
+        <legend>Preferred time *</legend>
+        <p className="booking-time-help">
+          Times are open 15-minute starts inside windows Patricia has marked on her
+          calendar (title &ldquo;Equilibrium&rdquo;). All times are New Zealand
+          (Pacific/Auckland).
+        </p>
+
+        {!date && (
+          <p className="booking-slots-empty">Select a date to see available times.</p>
+        )}
+
+        {date && slotsLoading && (
+          <p className="booking-slots-empty">Loading available times…</p>
+        )}
+
+        {date && !slotsLoading && slots.length === 0 && (
+          <p className="booking-slots-empty">
+            {slotMessage ||
+              "No booking windows on this day. Try another date, or call Patricia on 021 991 989."}
+          </p>
+        )}
+
+        {date && !slotsLoading && slots.length > 0 && (
+          <div
+            className="booking-slot-grid"
+            role="listbox"
+            aria-label="Available times"
+          >
+            {slots.map((slot) => {
+              const selected = time === slot;
+              return (
+                <button
+                  key={slot}
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  className={`booking-slot${selected ? " booking-slot--selected" : ""}`}
+                  onClick={() => setTime(slot)}
+                >
+                  {slot}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <input type="hidden" name="preferredTime" value={time} />
+      </fieldset>
 
       <div className="form-group">
         <label htmlFor="booking-name">Full name *</label>
@@ -259,7 +287,8 @@ export default function BookingForm() {
 
       <p className="form-notice">
         Your booking will be added to Patricia&apos;s calendar and you will receive a
-        confirmation email. All times are New Zealand (Pacific/Auckland).
+        confirmation email at the address you provide. Notifications go to{" "}
+        patricia@equilibriumhealth.nz.
       </p>
     </form>
   );

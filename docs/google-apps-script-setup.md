@@ -1,10 +1,10 @@
 # Google Apps Script setup — Equilibrium Bookings
 
-Calendar-only booking API (no spreadsheet required).
+Calendar-only booking API. Open slots come from calendar events Patricia titles **Equilibrium**.
 
 ## Quick setup
 
-1. Go to [Google Apps Script](https://script.google.com) and create a new **standalone** project (not bound to a Sheet).
+1. Go to [Google Apps Script](https://script.google.com) signed in as **patricia@equilibriumhealth.nz** and create a new **standalone** project (not bound to a Sheet).
 2. Delete any default code and paste the contents of [`google-apps-script/Code.gs`](../google-apps-script/Code.gs).
 3. Save the project (e.g. name it **Equilibrium Booking API**).
 4. Set **Script Properties** (gear icon → Project Settings → Script Properties):
@@ -12,20 +12,29 @@ Calendar-only booking API (no spreadsheet required).
 | Property | Example value | Description |
 |----------|---------------|-------------|
 | `CALENDAR_ID` | `primary` | Google Calendar ID (use `primary` for default calendar) |
-| `OWNER_EMAIL` | `goldenbayorganicstakaka@gmail.com` | Patricia's email — receives booking notifications |
-| `SITE_URL` | `https://agent5479.github.io/equilibrium/` | Link shown in confirmation emails |
+| `OWNER_EMAIL` | `patricia@equilibriumhealth.nz` | Receives booking notifications |
+| `SITE_URL` | `https://equilibriumhealth.nz/` | Link shown in confirmation emails |
 | `TIMEZONE` | `Pacific/Auckland` | NZ timezone for all times |
-| `BUSINESS_START` | `09:00` | First bookable slot start |
-| `BUSINESS_END` | `17:00` | Last slot must end by this time |
-| `SLOT_INTERVAL` | `30` | Minutes between slot start times |
-| `BOOKING_DAYS` | `1,2,3,4,5` | Days open for booking (Mon=1 … Sun=7) |
+| `AVAILABILITY_TITLE` | `Equilibrium` | Exact calendar event title that marks open booking windows (case-insensitive) |
+| `SLOT_INTERVAL` | `15` | Minutes between offered start times inside each window |
 
-5. **Deploy → New deployment → Web app**
-   - Execute as: **Me** (Patricia's account)
+5. On Google Calendar (same account), create blocks titled **Equilibrium** for the times you want to accept bookings.
+6. **Deploy → New deployment → Web app**
+   - Execute as: **Me** (patricia@equilibriumhealth.nz)
    - Who has access: **Anyone**
-6. Copy the **Web App URL** — this goes into GitHub Secrets as `NEXT_PUBLIC_BOOKING_API_URL`.
+7. Copy the **Web App URL** — this goes into GitHub Secrets as `NEXT_PUBLIC_BOOKING_API_URL`.
 
 After code changes, create a **New version** deployment so the live URL picks up updates.
+
+---
+
+## How availability works
+
+1. Site requests `GET ?action=availability&date=YYYY-MM-DD&duration=60`
+2. Script finds that day's calendar events titled `Equilibrium` (open windows)
+3. Other events (appointments, personal) are busy
+4. Inside each window, start times are offered every `SLOT_INTERVAL` minutes where `start + duration` still fits and does not overlap busy time
+5. Booked appointments are created with titles like `60 minute … — Client name` so they never count as open windows
 
 ---
 
@@ -56,9 +65,10 @@ The deploy workflow injects this at build time so the static site can call the A
 
 ## Testing
 
-1. Open the web app URL in a browser — you should see `{"success":true,"message":"Equilibrium Booking API is running."}`
-2. Test availability: append `?action=availability&date=2026-07-15&duration=60`
-3. Submit a test booking from `/equilibrium/bookings/` on the live site
+1. Open the web app URL in a browser — you should see `{"success":true,"message":"Equilibrium Booking API is running.","version":"3.0"}`
+2. Add an `Equilibrium` event on your calendar for a test day
+3. Test availability: append `?action=availability&date=2026-07-15&duration=60`
+4. Submit a test booking from `/bookings/` on the live site
 
 ---
 
@@ -67,8 +77,7 @@ The deploy workflow injects this at build time so the static site can call the A
 | Issue | Fix |
 |-------|-----|
 | "Booking API is not configured" on site | Add `NEXT_PUBLIC_BOOKING_API_URL` GitHub Secret and redeploy |
-| `getSheetByName` error | You are running an old script bound to a Sheet — replace with the calendar-only `Code.gs` |
-| No time slots shown | Check `BOOKING_DAYS`, business hours, and that the date is not in the past |
-| Calendar event not created | Re-authorize script; confirm `CALENDAR_ID` is correct |
-| Emails not sent | Gmail daily quota; ensure script runs as Patricia's account |
+| No time slots shown | Create a calendar event titled exactly `Equilibrium` on that day; check it is long enough for the selected session duration; ensure the slot is not in the past or overlapped by another event |
+| Calendar event not created | Re-authorize script; confirm `CALENDAR_ID` is correct and the script runs as patricia@ |
+| Emails not sent | Gmail daily quota; ensure script runs as patricia@equilibriumhealth.nz |
 | CORS errors | POST must use `Content-Type: text/plain` (already configured in the site) |
