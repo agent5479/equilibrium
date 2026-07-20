@@ -16,17 +16,12 @@ export const navigation: NavItem[] = [
     label: "Services",
     children: [
       {
-        label: "Nutrition",
-        children: [
-          { label: "About", href: "/about/" },
-          { label: "Recipes", href: "/nutrition/recipes/" },
-          { label: "Tips on Nutrition", href: "/nutrition/tips-on-nutrition/" },
-          { label: "Sessions and cost", href: "/nutrition/services-and-fees/" },
-        ],
-      },
-      {
         label: "Touch for Health Kinesiology",
         href: "/touch-for-health-kinesiology/",
+      },
+      {
+        label: "Nutrition",
+        href: "/about/",
       },
     ],
   },

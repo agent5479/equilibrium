@@ -36,10 +36,36 @@ function YogaLegacyNote() {
   );
 }
 
+function NutritionCta() {
+  return (
+    <section className="cta-band">
+      <div className="container">
+        <h2>Sessions and booking</h2>
+        <p>
+          See session lengths and fees, or book a Kinesiology / Nutrition session
+          with Patricia.
+        </p>
+        <div className="home-hero-actions">
+          <Link
+            href={routePath("/nutrition/services-and-fees/")}
+            className="btn-secondary"
+          >
+            Sessions and cost
+          </Link>
+          <Link href={routePath("/bookings/")} className="btn-primary">
+            Book a Session
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function ServicePage({ page, slug }: ServicePageProps) {
   const sections = parseSections(page.blocks);
   const heroImage = getHeroImage(slug);
   const isYoga = isYogaLegacyPath(page.path);
+  const isNutritionAbout = slug === "about" || slug === "nutrition";
   // Quieter title presentation for yoga — skip product-style hero overlays
   const useQuietTitle = isYoga;
 
@@ -75,12 +101,12 @@ export default function ServicePage({ page, slug }: ServicePageProps) {
         <AlternatingSections
           sections={sections}
           pageSlug={slug}
-          showCta={!isYoga}
+          showCta={!isYoga && !isNutritionAbout}
         />
       ) : (
         <div className="container content-section">
           <PageRenderer blocks={page.blocks} filterSidebar />
-          {!isYoga && (
+          {!isYoga && !isNutritionAbout && (
             <section className="cta-band">
               <Link href={routePath("/bookings/")} className="btn-primary">
                 Book a Session
@@ -89,6 +115,8 @@ export default function ServicePage({ page, slug }: ServicePageProps) {
           )}
         </div>
       )}
+
+      {isNutritionAbout && <NutritionCta />}
     </>
   );
 }

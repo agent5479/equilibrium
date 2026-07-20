@@ -40,7 +40,13 @@ const SERVICE_PATHS = new Set([
 function isServicePath(pagePath: string): boolean {
   if (SERVICE_PATHS.has(pagePath)) return true;
   if (pagePath.startsWith("/yoga/")) return true;
-  if (pagePath.startsWith("/nutrition/") && pagePath !== "/nutrition/recipes/") return true;
+  if (
+    pagePath.startsWith("/nutrition/") &&
+    pagePath !== "/nutrition/recipes/" &&
+    pagePath !== "/nutrition/tips-on-nutrition/"
+  ) {
+    return true;
+  }
   return false;
 }
 

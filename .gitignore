@@ -45,3 +45,6 @@ src/lib/image-manifest.json
 # generated at build / postbuild
 public/sitemap.xml
 
+# local scratch (recordings, notes — never commit client/PII media)
+/temp/
+

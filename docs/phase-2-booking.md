@@ -55,6 +55,8 @@ npm run dev
 
 Open http://localhost:3000/bookings/
 
-## Contact form (future)
+## Contact form / newsletter / admin
 
-The contact form on `/contact/` can be wired to the same Apps Script endpoint with `action: "contact"` — not yet implemented.
+- Contact and newsletter forms on `/contact/` → Apps Script `action: "contact"` / `"newsletterSubscribe"`.
+- Client list and bulk email at `/admin/` (password + session token; Clients Google Sheet).
+- Setup: [google-apps-script-setup.md](google-apps-script-setup.md).

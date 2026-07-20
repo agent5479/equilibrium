@@ -28,16 +28,12 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
     "Photo gallery from Equilibrium Kinesiology & Nutrition — workshops, sessions, and practice history with Patricia Smith.",
   "/nutrition/":
     "Nutrition services with Patricia Smith — real food for optimal results, supported by kinesiology muscle testing.",
-  "/nutrition/recipes/":
-    "Grain free, sugar free recipes full of goodness from Equilibrium Kinesiology & Nutrition.",
   "/nutrition/services-and-fees/":
     "Nutrition and Kinesiology consultation fees and session options with Patricia Smith at Equilibrium.",
-  "/nutrition/tips-on-nutrition/":
-    "Practical nutrition tips from Patricia Smith at Equilibrium Kinesiology & Nutrition.",
   "/touch-for-health-kinesiology/":
     "Touch for Health Kinesiology with Patricia Smith — muscle testing to support vibrant health and balance.",
   "/touch-for-health-kinesiology-course/":
-    "Learn Touch for Health Kinesiology with Patricia Smith. Course levels, dates, and fees.",
+    "Learn Touch for Health Kinesiology with Patricia Smith in Golden Bay. Level 1–2 workshops 28–31 August 2026. Intro workshops available.",
   "/total-wellness-package-8-sessions-much-more/":
     "Total Wellness Package — an integrated programme of kinesiology, nutrition, and wellness with Patricia Smith.",
   "/yoga/":

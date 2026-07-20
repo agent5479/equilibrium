@@ -15,18 +15,15 @@ function priorityFor(pagePath: string): string {
     pagePath === "/patricias-story/" ||
     pagePath === "/touch-for-health-kinesiology/" ||
     pagePath === "/nutrition/" ||
-    pagePath === "/nutrition/recipes/"
+    pagePath === "/about/"
   ) {
     return "0.9";
   }
-  if (pagePath.startsWith("/recipes/")) return "0.7";
-  if (pagePath.startsWith("/recipe-category/")) return "0.6";
   return "0.8";
 }
 
 function changeFreqFor(pagePath: string): string {
   if (pagePath === "/" || pagePath === "/bookings/") return "weekly";
-  if (pagePath.startsWith("/recipes/") || pagePath === "/nutrition/recipes/") return "monthly";
   return "monthly";
 }
 

@@ -542,6 +542,16 @@ h6 {
   margin-top: 10px;
 }
 
+.form-notice.success {
+  color: #2d6a4f;
+  font-style: normal;
+}
+
+.form-notice.error {
+  color: #9b2226;
+  font-style: normal;
+}
+
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -552,6 +562,113 @@ h6 {
   .contact-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Admin */
+.admin-login {
+  max-width: 360px;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.admin-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 32px;
+  border: 1px solid #ecdce4;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #f0e4ea;
+  vertical-align: middle;
+}
+
+.admin-table th {
+  background: var(--bg-section);
+  font-weight: 600;
+}
+
+.admin-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--brand-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  font: inherit;
+}
+
+.admin-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #ecdce4;
+}
+
+.admin-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.admin-hint {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.admin-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .admin-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-feedback {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.admin-feedback.error {
+  color: #9b2226;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Recipe index */

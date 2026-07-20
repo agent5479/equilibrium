@@ -4,7 +4,7 @@ import SectionBackground from "@/components/SectionBackground";
 import { routePath } from "@/lib/paths";
 
 const FOOD_SLIDESHOW = [
-  "/assets/wp-content/uploads/2018/10/patricia-nutrition.jpg",
+  "/assets/wp-content/uploads/2021/06/Patricia-Smith-photo-1.jpg",
   "/assets/wp-content/uploads/2014/07/Ruby-Kraut-520x375.jpg",
   "/assets/wp-content/uploads/2016/03/nut-and-seed-cracker-710x375.jpg",
   "/assets/wp-content/uploads/2014/07/lunch-710x375.jpg",
@@ -118,11 +118,15 @@ export default function HomePage() {
               at and work towards your goals in health and wellbeing, incorporating all the aspects
               that play a part in how you can achieve long lasting health.
             </p>
-            <Link href={routePath("/nutrition/recipes/")} className="btn-primary">
-              Browse Recipes
+            <Link href={routePath("/about/")} className="btn-primary">
+              Nutrition with Patricia
+            </Link>
+            {" "}
+            <Link href={routePath("/nutrition/services-and-fees/")} className="btn-secondary">
+              Sessions and cost
             </Link>
           </div>
-          <div className="home-slideshow" aria-label="Recipe photos">
+          <div className="home-slideshow" aria-label="Food and nutrition photos">
             {FOOD_SLIDESHOW.slice(0, 4).map((src) => (
               <OptimizedImage
                 key={src}

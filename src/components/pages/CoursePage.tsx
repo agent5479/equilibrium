@@ -31,26 +31,33 @@ export default function CoursePage({ page }: { page: PageData }) {
       />
 
       <section className="pricing-cards container">
-        <div className="price-card">
-          <h3>Per weekend</h3>
-          <p className="price-amount">$495</p>
-          <p>Per level (2 full days)</p>
-        </div>
         <div className="price-card price-card--featured">
-          <h3>All four levels</h3>
-          <p className="price-amount">$1,790</p>
-          <p>Pre-pay all four levels — includes book, workbook &amp; certification</p>
+          <h3>Per weekend</h3>
+          <p className="price-amount">$330</p>
+          <p>
+            Per level (2 full days) — plus TFH workbook; final certification
+            after Level 4
+          </p>
         </div>
         <div className="price-card">
           <h3>TFH Intro workshop</h3>
           <p className="price-amount">$25</p>
-          <p>2 hour introduction</p>
+          <p>Koha-based · 2 hour introduction</p>
         </div>
       </section>
 
       <section className="cta-band">
         <div className="container">
-          <h2>Contact Patricia for the next intake</h2>
+          <h2>Upcoming workshops — Golden Bay</h2>
+          <p>
+            <strong>Level 1:</strong> 28–29 August 2026
+            <br />
+            <strong>Level 2:</strong> 30–31 August 2026
+          </p>
+          <p>
+            Intro workshop: Saturday 25 July 2026, 1:30–3:30pm at Bay Yoga
+            ($25, koha-based).
+          </p>
           <p>Phone: 021 991 989 · patricia@equilibriumhealth.nz</p>
           <Link href={routePath("/bookings/")} className="btn-primary">
             Book or Enquire

@@ -1,29 +1,34 @@
 /**
- * Equilibrium Booking API — Google Apps Script (calendar-only)
+ * Equilibrium API — Google Apps Script
+ * Booking (calendar) + client list + admin email + contact/newsletter
  *
  * Window types (calendar event titles, exact match, case-insensitive):
  *   - "Equilibrium" — paid Kinesiology / Nutrition sessions
  *   - "Discovery"   — free Discovery / intro calls only
  *
- * Clients pick 15-minute starts inside the matching window type that do not
- * overlap other calendar events (including bookings and the other window type).
- *
  * SETUP:
  * 1. script.google.com → New project → paste this file
  *    (run as patricia@equilibriumhealth.nz)
  * 2. Set Script Properties (Project Settings → Script Properties):
- *    - CALENDAR_ID          = primary
- *    - OWNER_EMAIL          = patricia@equilibriumhealth.nz
- *    - SITE_URL             = https://equilibriumhealth.nz/
- *    - TIMEZONE             = Pacific/Auckland
- *    - AVAILABILITY_TITLE   = Equilibrium
- *    - DISCOVERY_TITLE      = Discovery
- *    - SLOT_INTERVAL        = 15
- * 3. Deploy → Web app → Execute as: Me → Anyone
- * 4. Copy Web App URL → GitHub Secret NEXT_PUBLIC_BOOKING_API_URL
+ *    - CALENDAR_ID            = primary
+ *    - OWNER_EMAIL            = patricia@equilibriumhealth.nz
+ *    - SITE_URL               = https://equilibriumhealth.nz/
+ *    - TIMEZONE               = Pacific/Auckland
+ *    - AVAILABILITY_TITLE     = Equilibrium
+ *    - DISCOVERY_TITLE        = Discovery
+ *    - SLOT_INTERVAL          = 15
+ *    - ADMIN_PASSWORD         = (same value as GitHub secret ADMIN_PASSWORD)
+ *    - ADMIN_SESSION_SECRET   = (long random string)
+ *    - CLIENTS_SHEET_ID       = (from setupClientsSheet, or your spreadsheet id)
+ * 3. Run setupClientsSheet() once → paste returned id into CLIENTS_SHEET_ID
+ * 4. Deploy → Web app → Execute as: Me → Anyone
+ * 5. Copy Web App URL → GitHub Secret NEXT_PUBLIC_BOOKING_API_URL
  *
  * Patricia marks paid open time as "Equilibrium" and free-intro time as
  * "Discovery". Bookings must never use those titles (they would become windows).
+ *
+ * Never put ADMIN_PASSWORD in NEXT_PUBLIC_* — it must only live in Script
+ * Properties (and optionally GitHub Secrets as an ops vault, not in the build).
  */
 
 // ─── HTTP handlers ───────────────────────────────────────────────────────────
@@ -48,8 +53,8 @@ function doGet(e) {
 
     return jsonResponse({
       success: true,
-      message: 'Equilibrium Booking API is running.',
-      version: '3.2'
+      message: 'Equilibrium API is running.',
+      version: '4.0'
     });
   } catch (err) {
     return jsonResponse({ success: false, message: String(err) });
@@ -65,6 +70,24 @@ function doPost(e) {
 
     if (body.action === 'book') {
       return jsonResponse(createBooking(body));
+    }
+    if (body.action === 'newsletterSubscribe') {
+      return jsonResponse(newsletterSubscribe(body));
+    }
+    if (body.action === 'contact') {
+      return jsonResponse(submitContact(body));
+    }
+    if (body.action === 'adminLogin') {
+      return jsonResponse(adminLogin(body));
+    }
+    if (body.action === 'adminListClients') {
+      return jsonResponse(adminListClients(body));
+    }
+    if (body.action === 'adminUpsertClient') {
+      return jsonResponse(adminUpsertClient(body));
+    }
+    if (body.action === 'adminSendEmail') {
+      return jsonResponse(adminSendEmail(body));
     }
 
     return jsonResponse({ success: false, message: 'Unknown action.' });
@@ -360,6 +383,21 @@ function createBooking(data) {
 
     sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, ownerEmail, siteUrl);
 
+    try {
+      var nameParts = splitName(data.name);
+      upsertClientRow({
+        email: data.email,
+        firstName: nameParts.firstName,
+        lastName: nameParts.lastName,
+        phone: data.phone || '',
+        source: 'booking',
+        subscribed: 'yes'
+      });
+    } catch (sheetErr) {
+      // Booking succeeded; client sheet is best-effort.
+      Logger.log('Client upsert after booking failed: ' + sheetErr);
+    }
+
     return {
       success: true,
       message: 'Your booking is confirmed! Check your email for a calendar invitation to add this to your calendar.',
@@ -427,6 +465,455 @@ function sendConfirmationEmails(data, bookingId, dateStr, timeStr, endTime, tz, 
   GmailApp.sendEmail(ownerEmail, ownerSubject, ownerBody, {
     name: 'Equilibrium Booking System'
   });
+}
+
+// ─── Clients sheet ───────────────────────────────────────────────────────────
+
+var CLIENT_HEADERS = [
+  'id',
+  'email',
+  'firstName',
+  'lastName',
+  'phone',
+  'source',
+  'subscribed',
+  'createdAt',
+  'updatedAt'
+];
+
+/**
+ * Run once from the Apps Script editor. Creates a Clients spreadsheet and
+ * stores its id in CLIENTS_SHEET_ID. Returns the spreadsheet id.
+ */
+function setupClientsSheet() {
+  var existing = getConfig('CLIENTS_SHEET_ID', '');
+  if (existing) {
+    var sheet = getClientsSheet_();
+    ensureClientHeaders_(sheet);
+    return existing;
+  }
+
+  var ss = SpreadsheetApp.create('Equilibrium Clients');
+  var sheet = ss.getSheets()[0];
+  sheet.setName('Clients');
+  sheet.getRange(1, 1, 1, CLIENT_HEADERS.length).setValues([CLIENT_HEADERS]);
+  sheet.setFrozenRows(1);
+
+  PropertiesService.getScriptProperties().setProperty('CLIENTS_SHEET_ID', ss.getId());
+  Logger.log('CLIENTS_SHEET_ID=' + ss.getId());
+  return ss.getId();
+}
+
+function getClientsSheet_() {
+  var id = getConfig('CLIENTS_SHEET_ID', '');
+  if (!id) {
+    throw new Error('CLIENTS_SHEET_ID is not set. Run setupClientsSheet() once.');
+  }
+  var ss = SpreadsheetApp.openById(id);
+  var sheet = ss.getSheetByName('Clients') || ss.getSheets()[0];
+  ensureClientHeaders_(sheet);
+  return sheet;
+}
+
+function ensureClientHeaders_(sheet) {
+  var lastCol = Math.max(sheet.getLastColumn(), CLIENT_HEADERS.length);
+  var headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  var needsWrite = false;
+  for (var i = 0; i < CLIENT_HEADERS.length; i++) {
+    if (String(headers[i] || '') !== CLIENT_HEADERS[i]) {
+      needsWrite = true;
+      break;
+    }
+  }
+  if (needsWrite) {
+    sheet.getRange(1, 1, 1, CLIENT_HEADERS.length).setValues([CLIENT_HEADERS]);
+    sheet.setFrozenRows(1);
+  }
+}
+
+function readAllClients_() {
+  var sheet = getClientsSheet_();
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+
+  var values = sheet.getRange(2, 1, lastRow, CLIENT_HEADERS.length).getValues();
+  var clients = [];
+  for (var i = 0; i < values.length; i++) {
+    var row = values[i];
+    var email = String(row[1] || '').trim();
+    if (!email) continue;
+    clients.push({
+      id: String(row[0] || ''),
+      email: email,
+      firstName: String(row[2] || ''),
+      lastName: String(row[3] || ''),
+      phone: String(row[4] || ''),
+      source: String(row[5] || ''),
+      subscribed: String(row[6] || 'yes').toLowerCase() === 'yes' ? 'yes' : 'no',
+      createdAt: String(row[7] || ''),
+      updatedAt: String(row[8] || ''),
+      rowIndex: i + 2
+    });
+  }
+  return clients;
+}
+
+function findClientByEmail_(email) {
+  var normalized = String(email || '').trim().toLowerCase();
+  if (!normalized) return null;
+  var clients = readAllClients_();
+  for (var i = 0; i < clients.length; i++) {
+    if (clients[i].email.toLowerCase() === normalized) return clients[i];
+  }
+  return null;
+}
+
+function upsertClientRow(data) {
+  var email = String(data.email || '').trim();
+  if (!isValidEmail(email)) {
+    return { success: false, message: 'Please provide a valid email address.' };
+  }
+
+  var tz = getConfig('TIMEZONE', 'Pacific/Auckland');
+  var now = Utilities.formatDate(new Date(), tz, "yyyy-MM-dd'T'HH:mm:ss");
+  var sheet = getClientsSheet_();
+  var existing = findClientByEmail_(email);
+
+  var firstName = String(data.firstName != null ? data.firstName : (existing ? existing.firstName : '')).trim();
+  var lastName = String(data.lastName != null ? data.lastName : (existing ? existing.lastName : '')).trim();
+  var phone = String(data.phone != null ? data.phone : (existing ? existing.phone : '')).trim();
+  var source = String(data.source || (existing ? existing.source : 'manual')).trim() || 'manual';
+  var subscribed = String(
+    data.subscribed != null
+      ? data.subscribed
+      : (existing ? existing.subscribed : 'yes')
+  ).toLowerCase() === 'no' ? 'no' : 'yes';
+
+  if (existing) {
+    // Keep original source unless explicitly updating from admin with a source.
+    if (!data.source) source = existing.source || source;
+    sheet.getRange(existing.rowIndex, 1, 1, CLIENT_HEADERS.length).setValues([[
+      existing.id,
+      email,
+      firstName,
+      lastName,
+      phone,
+      source,
+      subscribed,
+      existing.createdAt || now,
+      now
+    ]]);
+    return {
+      success: true,
+      message: 'Client updated.',
+      client: {
+        id: existing.id,
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        source: source,
+        subscribed: subscribed,
+        createdAt: existing.createdAt || now,
+        updatedAt: now
+      }
+    };
+  }
+
+  var id = 'CL-' + Utilities.formatDate(new Date(), tz, 'yyyyMMdd') + '-' + randomId(4);
+  sheet.appendRow([id, email, firstName, lastName, phone, source, subscribed, now, now]);
+  return {
+    success: true,
+    message: 'Client added.',
+    client: {
+      id: id,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      source: source,
+      subscribed: subscribed,
+      createdAt: now,
+      updatedAt: now
+    }
+  };
+}
+
+function splitName(fullName) {
+  var parts = String(fullName || '').trim().split(/\s+/);
+  if (parts.length === 0 || (parts.length === 1 && !parts[0])) {
+    return { firstName: '', lastName: '' };
+  }
+  if (parts.length === 1) return { firstName: parts[0], lastName: '' };
+  return { firstName: parts[0], lastName: parts.slice(1).join(' ') };
+}
+
+// ─── Public contact / newsletter ─────────────────────────────────────────────
+
+function newsletterSubscribe(data) {
+  var email = String(data.email || '').trim();
+  if (!isValidEmail(email)) {
+    return { success: false, message: 'Please provide a valid email address.' };
+  }
+
+  var result = upsertClientRow({
+    email: email,
+    firstName: data.firstName || '',
+    lastName: data.lastName || '',
+    phone: data.phone || '',
+    source: 'newsletter',
+    subscribed: 'yes'
+  });
+
+  if (!result.success) return result;
+
+  try {
+    var ownerEmail = getConfig('OWNER_EMAIL', 'patricia@equilibriumhealth.nz');
+    GmailApp.sendEmail(
+      ownerEmail,
+      'Newsletter signup: ' + email,
+      [
+        'New newsletter subscriber:',
+        '',
+        '  Email: ' + email,
+        '  Name:  ' + ([data.firstName, data.lastName].filter(Boolean).join(' ') || '(none)'),
+        '  Phone: ' + (data.phone || 'Not provided')
+      ].join('\n'),
+      { name: 'Equilibrium Website' }
+    );
+  } catch (notifyErr) {
+    Logger.log('Newsletter owner notify failed: ' + notifyErr);
+  }
+
+  return {
+    success: true,
+    message: 'Thanks for subscribing! You are on the list.'
+  };
+}
+
+function submitContact(data) {
+  var name = String(data.name || '').trim();
+  var email = String(data.email || '').trim();
+  var subject = String(data.subject || '').trim();
+  var message = String(data.message || '').trim();
+
+  if (!name) return { success: false, message: 'Please provide your name.' };
+  if (!isValidEmail(email)) {
+    return { success: false, message: 'Please provide a valid email address.' };
+  }
+  if (!message) return { success: false, message: 'Please enter a message.' };
+
+  var nameParts = splitName(name);
+  try {
+    upsertClientRow({
+      email: email,
+      firstName: nameParts.firstName,
+      lastName: nameParts.lastName,
+      source: 'contact',
+      subscribed: 'yes'
+    });
+  } catch (sheetErr) {
+    Logger.log('Contact client upsert failed: ' + sheetErr);
+  }
+
+  var ownerEmail = getConfig('OWNER_EMAIL', 'patricia@equilibriumhealth.nz');
+  var siteUrl = getConfig('SITE_URL', 'https://equilibriumhealth.nz/');
+  var mailSubject = subject
+    ? 'Website enquiry: ' + subject
+    : 'Website enquiry from ' + name;
+
+  GmailApp.sendEmail(
+    ownerEmail,
+    mailSubject,
+    [
+      'New enquiry from the website:',
+      '',
+      '  Name:    ' + name,
+      '  Email:   ' + email,
+      '  Subject: ' + (subject || '(none)'),
+      '',
+      'Message:',
+      message,
+      '',
+      'Sent via ' + siteUrl
+    ].join('\n'),
+    {
+      name: 'Equilibrium Website',
+      replyTo: email
+    }
+  );
+
+  return {
+    success: true,
+    message: 'Thank you — your message has been sent. Patricia will be in touch soon.'
+  };
+}
+
+// ─── Admin auth + actions ────────────────────────────────────────────────────
+
+var ADMIN_TOKEN_TTL_MS = 12 * 60 * 60 * 1000;
+
+function adminLogin(data) {
+  var password = String(data.password || '');
+  var expected = getConfig('ADMIN_PASSWORD', '');
+  var sessionSecret = getConfig('ADMIN_SESSION_SECRET', '');
+
+  if (!expected || !sessionSecret) {
+    return {
+      success: false,
+      message: 'Admin login is not configured. Set ADMIN_PASSWORD and ADMIN_SESSION_SECRET Script Properties.'
+    };
+  }
+
+  if (!secureStringEqual_(password, expected)) {
+    return { success: false, message: 'Incorrect password.' };
+  }
+
+  var expiresAt = Date.now() + ADMIN_TOKEN_TTL_MS;
+  var token = createAdminToken_(expiresAt, sessionSecret);
+  return {
+    success: true,
+    message: 'Logged in.',
+    token: token,
+    expiresAt: expiresAt
+  };
+}
+
+function requireAdmin_(token) {
+  var sessionSecret = getConfig('ADMIN_SESSION_SECRET', '');
+  if (!sessionSecret) {
+    return { ok: false, message: 'Admin session is not configured.' };
+  }
+  if (!verifyAdminToken_(token, sessionSecret)) {
+    return { ok: false, message: 'Session expired or invalid. Please log in again.' };
+  }
+  return { ok: true };
+}
+
+function createAdminToken_(expiresAt, secret) {
+  var payload = String(expiresAt);
+  var sig = bytesToHex_(Utilities.computeHmacSha256Signature(payload, secret));
+  return payload + '.' + sig;
+}
+
+function verifyAdminToken_(token, secret) {
+  if (!token || typeof token !== 'string') return false;
+  var parts = String(token).split('.');
+  if (parts.length !== 2) return false;
+  var expiresAt = parseInt(parts[0], 10);
+  if (isNaN(expiresAt) || Date.now() > expiresAt) return false;
+  var expected = bytesToHex_(Utilities.computeHmacSha256Signature(parts[0], secret));
+  return secureStringEqual_(parts[1], expected);
+}
+
+function adminListClients(data) {
+  var auth = requireAdmin_(data.token);
+  if (!auth.ok) return { success: false, message: auth.message };
+
+  try {
+    var clients = readAllClients_().map(function (c) {
+      return {
+        id: c.id,
+        email: c.email,
+        firstName: c.firstName,
+        lastName: c.lastName,
+        phone: c.phone,
+        source: c.source,
+        subscribed: c.subscribed,
+        createdAt: c.createdAt,
+        updatedAt: c.updatedAt
+      };
+    });
+    return { success: true, clients: clients };
+  } catch (err) {
+    return { success: false, message: String(err) };
+  }
+}
+
+function adminUpsertClient(data) {
+  var auth = requireAdmin_(data.token);
+  if (!auth.ok) return { success: false, message: auth.message };
+
+  try {
+    return upsertClientRow({
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone,
+      source: data.source || 'manual',
+      subscribed: data.subscribed
+    });
+  } catch (err) {
+    return { success: false, message: String(err) };
+  }
+}
+
+function adminSendEmail(data) {
+  var auth = requireAdmin_(data.token);
+  if (!auth.ok) return { success: false, message: auth.message };
+
+  var subject = String(data.subject || '').trim();
+  var body = String(data.body || '').trim();
+  var emails = data.emails;
+
+  if (!subject) return { success: false, message: 'Subject is required.' };
+  if (!body) return { success: false, message: 'Message body is required.' };
+  if (!emails || !emails.length) {
+    return { success: false, message: 'Select at least one recipient.' };
+  }
+
+  var sent = 0;
+  var failed = [];
+
+  for (var i = 0; i < emails.length; i++) {
+    var to = String(emails[i] || '').trim();
+    if (!isValidEmail(to)) {
+      failed.push(to || '(empty)');
+      continue;
+    }
+    try {
+      GmailApp.sendEmail(to, subject, body, {
+        name: 'Equilibrium Kinesiology & Nutrition'
+      });
+      sent++;
+    } catch (sendErr) {
+      failed.push(to);
+      Logger.log('Send failed for ' + to + ': ' + sendErr);
+    }
+  }
+
+  return {
+    success: failed.length === 0,
+    message: failed.length === 0
+      ? 'Sent ' + sent + ' email' + (sent === 1 ? '' : 's') + '.'
+      : 'Sent ' + sent + ', failed ' + failed.length + '.',
+    sent: sent,
+    failed: failed
+  };
+}
+
+function secureStringEqual_(a, b) {
+  var left = String(a || '');
+  var right = String(b || '');
+  var max = Math.max(left.length, right.length);
+  var diff = left.length ^ right.length;
+  for (var i = 0; i < max; i++) {
+    var lc = i < left.length ? left.charCodeAt(i) : 0;
+    var rc = i < right.length ? right.charCodeAt(i) : 0;
+    diff |= lc ^ rc;
+  }
+  return diff === 0;
+}
+
+function bytesToHex_(bytes) {
+  var out = '';
+  for (var i = 0; i < bytes.length; i++) {
+    var b = bytes[i];
+    if (b < 0) b += 256;
+    var hex = b.toString(16);
+    out += hex.length === 1 ? '0' + hex : hex;
+  }
+  return out;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
