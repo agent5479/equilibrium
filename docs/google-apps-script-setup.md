@@ -118,7 +118,7 @@ The deploy workflow injects `NEXT_PUBLIC_BOOKING_API_URL` at build time so the s
 
 ## Testing
 
-1. Open the web app URL in a browser — you should see `{"success":true,"message":"Equilibrium API is running.","version":"4.0"}`
+1. Open the web app URL in a browser — you should see `{"success":true,"message":"Equilibrium API is running.","version":"4.1"}`
 2. Add an `Equilibrium` event on your calendar for a test day
 3. Test availability: append `?action=availability&date=2026-07-15&duration=60`
 4. Submit a test booking from `/bookings/` on the live site
@@ -136,7 +136,7 @@ The deploy workflow injects `NEXT_PUBLIC_BOOKING_API_URL` at build time so the s
 | Admin login "not configured" | Set `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET` Script Properties |
 | Incorrect password | Password is checked only in Apps Script — update Script Property (and GitHub secret to match) |
 | No time slots shown | Create a calendar event titled exactly `Equilibrium` on that day on **patricia@’s primary calendar**; check it is long enough for the selected session duration; ensure the slot is not in the past or overlapped by another event |
-| Page stuck on “Loading times…” / API 403 | Redeploy the web app with **Who has access: Anyone**. Open the `/exec` URL in an incognito window — you must see JSON (`version: 4.0`), not “You need access” |
+| Page stuck on “Loading times…” / API 403 | Redeploy the web app with **Who has access: Anyone**. Open the `/exec` URL in an incognito window — you must see JSON (`version: 4.1`), not “You need access” |
 | Calendar event not created | Re-authorize script; confirm `CALENDAR_ID` is `primary` and the script project + deploy run as patricia@ |
 | Emails not sent | Gmail daily quota; ensure script runs as patricia@equilibriumhealth.nz |
 | CORS errors | POST must use `Content-Type: text/plain` (already configured in the site) |
@@ -145,8 +145,35 @@ The deploy workflow injects `NEXT_PUBLIC_BOOKING_API_URL` at build time so the s
 
 Yes — a normal **Google Calendar**. The web app must be created and deployed while logged in as **patricia@equilibriumhealth.nz**, with **Execute as: Me**. Then `CALENDAR_ID=primary` is patricia’s primary calendar (the one that opens by default at [calendar.google.com](https://calendar.google.com) for that account). The `Equilibrium` availability blocks must be on that same calendar, not a different shared calendar unless you set `CALENDAR_ID` to that calendar’s ID.
 
+## Client data privacy (GitHub vs Google)
+
+The GitHub repo and GitHub Pages site are **public**. Client PII must never live there.
+
+| Data | Where it lives | Safe? |
+|------|----------------|-------|
+| Names, emails, phones, subscribe flags | **Google Sheet** “Equilibrium Clients” (Patricia’s Drive) | Yes — keep sheet **Restricted** (only patricia@) |
+| Admin password / session secret / sheet id | Apps Script **Script Properties** (+ `ADMIN_PASSWORD` in GitHub Secrets as ops vault only) | Yes — never `NEXT_PUBLIC_*` |
+| Booking / newsletter / contact traffic | Apps Script + Gmail + Calendar | Yes — Google account only |
+| Static site `/admin/` UI | Public HTML/JS on GitHub Pages | UI only — **no** client rows in the repo or build |
+| `google-apps-script/Code.gs` | Public in GitHub | Code only — no client rows |
+
+**Do not:**
+
+- Commit spreadsheets, CSV exports, or client lists to the repo
+- Put `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`, or `CLIENTS_SHEET_ID` in `.env` files that get committed or in `NEXT_PUBLIC_*`
+- Share the Clients sheet as “Anyone with the link”
+- Paste client emails into GitHub Issues / PR descriptions
+
+**Sheet sharing:** After `setupClientsSheet()`, open the spreadsheet → Share → ensure access is **Restricted** to patricia@ (and any trusted collaborator you choose). The script reads it as the owner; the public site never opens the sheet directly.
+
+**Admin API:** The web app is “Anyone” so the public site can book/subscribe. Listing clients and sending mail still require a valid session token from `adminLogin`. Failed logins are throttled (lockout after repeated failures).
+
+---
+
 ## Security notes
 
 - Apps Script access is **Anyone** (required for the public site). Admin actions require password + session token.
 - Gmail has daily send limits — fine for a small practice list.
-- `/admin/` is `noindex` and is not added to the sitemap; still treat the URL as private.
+- `/admin/` is `noindex`, listed in `robots.txt` as `Disallow`, and is not in the sitemap — still treat the password as the real protection.
+- Change password = update Script Property + GitHub secret.
+- Redeploy Apps Script after pulling Code.gs updates (new version).

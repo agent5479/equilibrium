@@ -54,7 +54,7 @@ function doGet(e) {
     return jsonResponse({
       success: true,
       message: 'Equilibrium API is running.',
-      version: '4.0'
+      version: '4.1'
     });
   } catch (err) {
     return jsonResponse({ success: false, message: String(err) });
@@ -482,8 +482,10 @@ var CLIENT_HEADERS = [
 ];
 
 /**
- * Run once from the Apps Script editor. Creates a Clients spreadsheet and
- * stores its id in CLIENTS_SHEET_ID. Returns the spreadsheet id.
+ * Run once from the Apps Script editor. Creates a private Clients spreadsheet
+ * (visible only to the script owner unless you share it) and stores its id in
+ * CLIENTS_SHEET_ID. Do NOT share this sheet publicly or commit its id/data to GitHub.
+ * Returns the spreadsheet id.
  */
 function setupClientsSheet() {
   var existing = getConfig('CLIENTS_SHEET_ID', '');
@@ -500,7 +502,8 @@ function setupClientsSheet() {
   sheet.setFrozenRows(1);
 
   PropertiesService.getScriptProperties().setProperty('CLIENTS_SHEET_ID', ss.getId());
-  Logger.log('CLIENTS_SHEET_ID=' + ss.getId());
+  // Log id only — never log client rows.
+  Logger.log('CLIENTS_SHEET_ID set (keep Restricted; do not put in GitHub)');
   return ss.getId();
 }
 
@@ -754,6 +757,11 @@ function submitContact(data) {
 var ADMIN_TOKEN_TTL_MS = 12 * 60 * 60 * 1000;
 
 function adminLogin(data) {
+  var throttle = checkAdminLoginThrottle_();
+  if (throttle.blocked) {
+    return { success: false, message: throttle.message };
+  }
+
   var password = String(data.password || '');
   var expected = getConfig('ADMIN_PASSWORD', '');
   var sessionSecret = getConfig('ADMIN_SESSION_SECRET', '');
@@ -766,9 +774,13 @@ function adminLogin(data) {
   }
 
   if (!secureStringEqual_(password, expected)) {
+    recordAdminLoginFail_();
+    // Slow brute-force attempts (Apps Script web app is public).
+    Utilities.sleep(400);
     return { success: false, message: 'Incorrect password.' };
   }
 
+  clearAdminLoginFails_();
   var expiresAt = Date.now() + ADMIN_TOKEN_TTL_MS;
   var token = createAdminToken_(expiresAt, sessionSecret);
   return {
@@ -777,6 +789,28 @@ function adminLogin(data) {
     token: token,
     expiresAt: expiresAt
   };
+}
+
+function checkAdminLoginThrottle_() {
+  var cache = CacheService.getScriptCache();
+  var fails = parseInt(cache.get('admin_login_fails') || '0', 10);
+  if (fails >= 8) {
+    return {
+      blocked: true,
+      message: 'Too many failed sign-in attempts. Try again in about 15 minutes.'
+    };
+  }
+  return { blocked: false };
+}
+
+function recordAdminLoginFail_() {
+  var cache = CacheService.getScriptCache();
+  var fails = parseInt(cache.get('admin_login_fails') || '0', 10) + 1;
+  cache.put('admin_login_fails', String(fails), 900);
+}
+
+function clearAdminLoginFails_() {
+  CacheService.getScriptCache().remove('admin_login_fails');
 }
 
 function requireAdmin_(token) {

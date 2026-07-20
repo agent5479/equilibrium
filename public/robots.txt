@@ -1,9 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 # Prefer indexing the main site; assets are fine to crawl
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
 
 User-agent: Googlebot-Image
 Allow: /

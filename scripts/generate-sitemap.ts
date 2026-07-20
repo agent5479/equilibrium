@@ -60,9 +60,11 @@ ${urls.join("\n")}
   // Ensure robots.txt is present in out (copied from public, but reaffirm sitemap URL)
   const robots = `User-agent: *
 Allow: /
+Disallow: /admin/
 
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
 
 User-agent: Googlebot-Image
 Allow: /
@@ -70,6 +72,7 @@ Allow: /
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
   fs.writeFileSync(path.join(OUT_DIR, "robots.txt"), robots, "utf-8");
+  fs.writeFileSync(path.join(PUBLIC_DIR, "robots.txt"), robots, "utf-8");
 
   console.log(`Generated sitemap.xml with ${paths.length} URLs`);
 }
