@@ -72,7 +72,28 @@ export interface SiteManifest {
 
 export const SITE_URL = "https://equilibriumhealth.nz";
 export const SITE_NAME = "Equilibrium Kinesiology & Nutrition";
+export const SITE_OWNER = "Patricia Smith";
+export const SITE_LOCALITY = "Takaka";
+export const SITE_REGION = "Golden Bay";
+export const SITE_COUNTRY = "New Zealand";
+export const SITE_COUNTRY_CODE = "NZ";
 export const DEFAULT_OG_IMAGE = "/assets/wp-content/uploads/2023/02/logo.png";
 export const DEFAULT_DESCRIPTION =
-  "Touch for Health Kinesiology and Nutrition with Patricia Smith in Golden Bay, New Zealand. Sessions by phone or online booking — at Golden Bay Organics or by private arrangement.";
+  "Touch for Health Kinesiology and Nutrition with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand (NZ). Sessions by phone or online booking — at Golden Bay Organics or by private arrangement.";
+
+/** Shared SEO keywords for meta tags, manifest, and discovery pages. */
+export const SITE_KEYWORDS = [
+  "Patricia Smith",
+  "Equilibrium",
+  "Equilibrium Kinesiology & Nutrition",
+  "Takaka",
+  "Golden Bay",
+  "New Zealand",
+  "NZ",
+  "kinesiology",
+  "nutrition",
+  "Touch for Health",
+  "holistic health",
+  "Golden Bay Organics",
+] as const;
 

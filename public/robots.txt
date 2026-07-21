@@ -1,8 +1,10 @@
+# Equilibrium Kinesiology & Nutrition — https://equilibriumhealth.nz/
+# Patricia Smith · Takaka · Golden Bay · New Zealand (NZ)
+
 User-agent: *
 Allow: /
 Disallow: /admin/
 
-# Prefer indexing the main site; assets are fine to crawl
 User-agent: Googlebot
 Allow: /
 Disallow: /admin/
@@ -10,4 +12,8 @@ Disallow: /admin/
 User-agent: Googlebot-Image
 Allow: /
 
+# Discovery
+# Practitioner: Patricia Smith
+# Practice: Equilibrium Kinesiology & Nutrition
+# Location: Takaka, Golden Bay, New Zealand
 Sitemap: https://equilibriumhealth.nz/sitemap.xml

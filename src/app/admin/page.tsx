@@ -3,7 +3,7 @@ import { SITE_NAME } from "@/lib/types";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Admin – ${SITE_NAME}`,
+  title: { absolute: `Admin – ${SITE_NAME}` },
   description: "Client list and email for Equilibrium Kinesiology & Nutrition.",
   robots: {
     index: false,

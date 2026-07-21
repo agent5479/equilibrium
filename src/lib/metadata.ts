@@ -1,6 +1,25 @@
 import type { Metadata } from "next";
-import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE, DEFAULT_DESCRIPTION } from "./types";
+import {
+  SITE_NAME,
+  SITE_URL,
+  SITE_OWNER,
+  SITE_LOCALITY,
+  SITE_REGION,
+  SITE_COUNTRY,
+  SITE_COUNTRY_CODE,
+  SITE_KEYWORDS,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_DESCRIPTION,
+} from "./types";
 import { assetUrl } from "./paths";
+
+/** Takaka / Golden Bay Organics approximate coordinates for geo meta. */
+export const SITE_GEO = {
+  latitude: "-40.8587",
+  longitude: "172.8060",
+  placename: `${SITE_LOCALITY}, ${SITE_REGION}, ${SITE_COUNTRY}`,
+  region: `NZ-${SITE_LOCALITY}`,
+} as const;
 
 interface MetaInput {
   title: string;
@@ -13,45 +32,47 @@ interface MetaInput {
 /** Fallback SEO blurbs when a page has no scraped meta description. */
 const PAGE_DESCRIPTIONS: Record<string, string> = {
   "/":
-    "Touch for Health Kinesiology and Nutrition with Patricia Smith in Golden Bay, New Zealand. Bring your whole being back into balance — live like you love yourself.",
+    "Touch for Health Kinesiology and Nutrition with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand. Bring your whole being back into balance — live like you love yourself.",
   "/patricias-story/":
-    "Meet Patricia Smith — Nutritionist (B.Sc.) and Touch for Health Kinesiology practitioner in Golden Bay. Yoga teaching (2009–2021) remains part of her background.",
+    "Meet Patricia Smith — Nutritionist (B.Sc.) and Touch for Health Kinesiology practitioner at Equilibrium in Takaka, Golden Bay, NZ. Yoga teaching (2009–2021) remains part of her background.",
   "/about/":
-    "About Patricia's nutrition approach: real food, personalised advice, and kinesiology-guided support for optimal health.",
+    "About Patricia Smith's nutrition approach at Equilibrium in Takaka, Golden Bay, New Zealand: real food, personalised advice, and kinesiology-guided support.",
   "/contact/":
-    "Contact Patricia Smith at Equilibrium Kinesiology & Nutrition. Phone 021 991 989 — sessions at Golden Bay Organics, Takaka, or by private arrangement.",
+    "Contact Patricia Smith at Equilibrium Kinesiology & Nutrition in Takaka, Golden Bay, NZ. Phone 021 991 989 — sessions at Golden Bay Organics or by private arrangement.",
   "/bookings/":
-    "Book a free intro or Kinesiology / Nutrition session with Patricia Smith. Real-time calendar availability. Or call 021 991 989.",
+    "Book a free intro or Kinesiology / Nutrition session with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand. Or call 021 991 989.",
   "/testimonials/":
-    "Client testimonials for Patricia Smith's Kinesiology and Nutrition practice — including reviews from her Yoga teaching years.",
+    "Client testimonials for Patricia Smith's Equilibrium practice in Takaka, Golden Bay, NZ — including reviews from her Yoga teaching years.",
   "/gallery/":
-    "Photo gallery from Equilibrium Kinesiology & Nutrition — workshops, sessions, and practice history with Patricia Smith.",
+    "Photo gallery from Equilibrium Kinesiology & Nutrition with Patricia Smith in Takaka, Golden Bay, New Zealand.",
   "/nutrition/":
-    "Nutrition services with Patricia Smith — real food for optimal results, supported by kinesiology muscle testing.",
+    "Nutrition services with Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ — real food for optimal results, supported by kinesiology muscle testing.",
   "/nutrition/services-and-fees/":
-    "Nutrition and Kinesiology consultation fees and session options with Patricia Smith at Equilibrium.",
+    "Nutrition and Kinesiology consultation fees with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand.",
   "/touch-for-health-kinesiology/":
-    "Touch for Health Kinesiology with Patricia Smith — muscle testing to support vibrant health and balance.",
+    "Touch for Health Kinesiology with Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ — muscle testing to support vibrant health and balance.",
   "/touch-for-health-kinesiology-course/":
-    "Learn Touch for Health Kinesiology with Patricia Smith in Golden Bay. Level 1–2 workshops 28–31 August 2026. Intro workshops available.",
+    "Learn Touch for Health Kinesiology with Patricia Smith in Takaka, Golden Bay, New Zealand. Level 1–2 workshops 28–31 August 2026.",
   "/total-wellness-package-8-sessions-much-more/":
-    "Total Wellness Package — an integrated programme of kinesiology, nutrition, and wellness with Patricia Smith.",
+    "Total Wellness Package with Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ — kinesiology, nutrition, and wellness.",
   "/yoga/":
-    "Patricia Smith taught Yoga in Golden Bay from 2009 to 2021. How those years still inform her Kinesiology and Nutrition practice.",
+    "Patricia Smith taught Yoga in Golden Bay, New Zealand from 2009 to 2021. How those years still inform her Equilibrium practice in Takaka.",
   "/yoga/benefits-of-yoga/":
-    "From Patricia Smith's Yoga teaching years — accessible practice for body, mind and wellbeing.",
+    "From Patricia Smith's Yoga teaching years in Golden Bay, NZ — accessible practice for body, mind and wellbeing.",
   "/yoga/timetable-and-prices/":
-    "Class notes and fees from Patricia Smith's Yoga teaching years. Yoga classes are no longer offered.",
+    "Class notes and fees from Patricia Smith's Yoga teaching years in Golden Bay, New Zealand. Yoga classes are no longer offered.",
   "/yoga/corporate-yoga/":
-    "From Patricia Smith's teaching years — Yoga offered in workplace settings.",
+    "From Patricia Smith's teaching years in Golden Bay, NZ — Yoga offered in workplace settings.",
   "/yoga/friendly-dos-for-yoga/":
-    "Class etiquette from Patricia Smith's Yoga teaching practice.",
+    "Class etiquette from Patricia Smith's Yoga teaching practice in Golden Bay, New Zealand.",
   "/yoga/yoga-in-schools/":
-    "From Patricia Smith's teaching years — Yoga offered in schools.",
+    "From Patricia Smith's teaching years in Golden Bay, NZ — Yoga offered in schools.",
   "/yogapatricias-yoga-background/":
-    "Patricia Smith's Yoga teacher training and the years she spent teaching (2009–2021).",
+    "Patricia Smith's Yoga teacher training and the years she spent teaching in Golden Bay, New Zealand (2009–2021).",
   "/visionboard-workshops/":
-    "Vision board workshops with Patricia Smith at Equilibrium Kinesiology & Nutrition.",
+    "Vision board workshops with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand.",
+  "/local/":
+    "Patricia Smith practises Touch for Health Kinesiology and Nutrition at Equilibrium in Takaka, Golden Bay, New Zealand (NZ).",
 };
 
 export function resolveDescription(path: string, description?: string): string {
@@ -74,22 +95,18 @@ export function buildMetadata({
   const absoluteImage = image.startsWith("http") ? image : `${SITE_URL}${image}`;
 
   return {
-    title: fullTitle,
+    title: { absolute: fullTitle },
     description: desc,
-    keywords: [
-      "kinesiology",
-      "nutrition",
-      "Touch for Health",
-      "Patricia Smith",
-      "Equilibrium",
-      "Golden Bay",
-      "Takaka",
-      "New Zealand",
-      "holistic health",
-    ],
-    authors: [{ name: "Patricia Smith" }],
-    creator: "Patricia Smith",
+    keywords: [...SITE_KEYWORDS],
+    authors: [{ name: SITE_OWNER, url: `${SITE_URL}/patricias-story/` }],
+    creator: SITE_OWNER,
     publisher: SITE_NAME,
+    other: {
+      "geo.region": SITE_COUNTRY_CODE,
+      "geo.placename": SITE_GEO.placename,
+      "geo.position": `${SITE_GEO.latitude};${SITE_GEO.longitude}`,
+      ICBM: `${SITE_GEO.latitude}, ${SITE_GEO.longitude}`,
+    },
     robots: {
       index: true,
       follow: true,
@@ -125,9 +142,11 @@ export function websiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE_NAME,
+    alternateName: ["Equilibrium", "Equilibrium Takaka", "Patricia Smith Equilibrium"],
     url: SITE_URL,
     description: DEFAULT_DESCRIPTION,
     inLanguage: "en-NZ",
+    keywords: SITE_KEYWORDS.join(", "),
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
@@ -137,33 +156,76 @@ export function websiteJsonLd() {
   };
 }
 
+export function personJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${SITE_URL}/#patricia-smith`,
+    name: SITE_OWNER,
+    jobTitle: "Nutritionist and Touch for Health Kinesiology Practitioner",
+    url: `${SITE_URL}/patricias-story/`,
+    image: `${SITE_URL}/assets/wp-content/uploads/2021/06/Patricia-Smith-photo-1.jpg`,
+    email: "patricia@equilibriumhealth.nz",
+    telephone: "+6421991989",
+    worksFor: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: SITE_LOCALITY,
+      addressRegion: SITE_REGION,
+      addressCountry: SITE_COUNTRY_CODE,
+    },
+    knowsAbout: [
+      "Touch for Health Kinesiology",
+      "Nutrition",
+      "Holistic health",
+      "Yoga teaching (historical)",
+    ],
+  };
+}
+
 export function localBusinessJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
     "@id": `${SITE_URL}/#business`,
     name: SITE_NAME,
+    alternateName: "Equilibrium",
     description: DEFAULT_DESCRIPTION,
     url: SITE_URL,
     email: "patricia@equilibriumhealth.nz",
     telephone: "+6421991989",
     image: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
     logo: `${SITE_URL}/assets/wp-content/uploads/2023/02/logo.png`,
+    founder: { "@id": `${SITE_URL}/#patricia-smith` },
+    employee: { "@id": `${SITE_URL}/#patricia-smith` },
     address: {
       "@type": "PostalAddress",
       streetAddress: "47 Commercial Street",
-      addressLocality: "Takaka",
-      addressRegion: "Golden Bay",
-      addressCountry: "NZ",
+      addressLocality: SITE_LOCALITY,
+      addressRegion: SITE_REGION,
+      addressCountry: SITE_COUNTRY_CODE,
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SITE_GEO.latitude,
+      longitude: SITE_GEO.longitude,
     },
     areaServed: [
       {
+        "@type": "City",
+        name: SITE_LOCALITY,
+      },
+      {
         "@type": "Place",
-        name: "Golden Bay",
+        name: SITE_REGION,
       },
       {
         "@type": "Country",
-        name: "New Zealand",
+        name: SITE_COUNTRY,
       },
     ],
     priceRange: "$$",
@@ -173,7 +235,12 @@ export function localBusinessJsonLd() {
       "Nutrition",
       "Holistic health",
       "Yoga teaching (historical)",
+      SITE_OWNER,
+      SITE_LOCALITY,
+      SITE_REGION,
+      SITE_COUNTRY,
     ],
+    keywords: SITE_KEYWORDS.join(", "),
   };
 }
 

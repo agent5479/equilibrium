@@ -477,6 +477,17 @@ h6 {
   font-size: 14px;
 }
 
+.site-footer .footer-local-link {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.site-footer .footer-local-link a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .socket-footer {
   background: var(--brand-socket);
   color: rgba(255, 255, 255, 0.7);

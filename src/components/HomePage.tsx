@@ -65,9 +65,9 @@ export default function HomePage() {
                 true Equilibrium.
               </p>
               <p>
-                Patricia is a qualified Nutritionist (B.Sc.) and a registered Touch for Health
-                Kinesiology Practitioner. She also taught Yoga from 2009 to 2021 — that
-                experience still informs her work today.{" "}
+                Patricia Smith is a qualified Nutritionist (B.Sc.) and a registered Touch for Health
+                Kinesiology Practitioner at Equilibrium in Takaka, Golden Bay, New Zealand. She also
+                taught Yoga from 2009 to 2021 — that experience still informs her work today.{" "}
                 <Link href={routePath("/yoga/")} className="home-quiet-link">
                   Yoga teaching years
                 </Link>

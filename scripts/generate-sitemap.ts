@@ -15,7 +15,8 @@ function priorityFor(pagePath: string): string {
     pagePath === "/patricias-story/" ||
     pagePath === "/touch-for-health-kinesiology/" ||
     pagePath === "/nutrition/" ||
-    pagePath === "/about/"
+    pagePath === "/about/" ||
+    pagePath === "/local/"
   ) {
     return "0.9";
   }
@@ -58,7 +59,10 @@ ${urls.join("\n")}
   fs.writeFileSync(path.join(PUBLIC_DIR, "sitemap.xml"), xml, "utf-8");
 
   // Ensure robots.txt is present in out (copied from public, but reaffirm sitemap URL)
-  const robots = `User-agent: *
+  const robots = `# Equilibrium Kinesiology & Nutrition — ${SITE_URL}/
+# Patricia Smith · Takaka · Golden Bay · New Zealand (NZ)
+
+User-agent: *
 Allow: /
 Disallow: /admin/
 
@@ -69,6 +73,10 @@ Disallow: /admin/
 User-agent: Googlebot-Image
 Allow: /
 
+# Discovery
+# Practitioner: Patricia Smith
+# Practice: Equilibrium Kinesiology & Nutrition
+# Location: Takaka, Golden Bay, New Zealand
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
   fs.writeFileSync(path.join(OUT_DIR, "robots.txt"), robots, "utf-8");

@@ -1,0 +1,14 @@
+/* TEAM */
+Practitioner: Patricia Smith
+Practice: Equilibrium Kinesiology & Nutrition
+Location: Takaka, Golden Bay, New Zealand (NZ)
+Site: https://equilibriumhealth.nz/
+Contact: patricia@equilibriumhealth.nz
+Phone: +64 21 991 989
+Local page: https://equilibriumhealth.nz/local/
+
+/* SITE */
+Standards: HTML5, CSS3
+Software: Next.js (static export), GitHub Pages
+Language: en-NZ
+Last update: 2026

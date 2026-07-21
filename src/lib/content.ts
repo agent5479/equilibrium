@@ -80,6 +80,7 @@ export function getAllStaticPaths(): string[] {
     paths.push(`/recipe-category/${slug}/`);
   }
   paths.push("/bookings/");
+  paths.push("/local/");
   return paths;
 }
 

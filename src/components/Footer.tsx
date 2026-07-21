@@ -15,11 +15,17 @@ export default function Footer() {
     <>
       <footer className="site-footer">
         <div className="container">
-          <p>© Copyright - Equilibrium Kinesiology &amp; Nutrition. All rights reserved.</p>
+          <p>
+            © Copyright — Equilibrium Kinesiology &amp; Nutrition. Patricia Smith —
+            Takaka, Golden Bay, New Zealand (NZ). All rights reserved.
+          </p>
+          <p className="footer-local-link">
+            <a href="/local/">Patricia Smith · Equilibrium · Takaka, Golden Bay, NZ</a>
+          </p>
         </div>
       </footer>
       <div className="socket-footer">
-        Equilibrium Kinesiology &amp; Nutrition
+        Equilibrium Kinesiology &amp; Nutrition — Takaka, Golden Bay, NZ
       </div>
       <button
         className={`scroll-top${showScroll ? " visible" : ""}`}
