@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { routePath } from "@/lib/paths";
 
 export default function Footer() {
   const [showScroll, setShowScroll] = useState(false);
@@ -20,7 +22,9 @@ export default function Footer() {
             Takaka, Golden Bay, New Zealand (NZ). All rights reserved.
           </p>
           <p className="footer-local-link">
-            <a href="/local/">Patricia Smith · Equilibrium · Takaka, Golden Bay, NZ</a>
+            <Link href={routePath("/local/")}>
+              Patricia Smith · Equilibrium · Takaka, Golden Bay, NZ
+            </Link>
           </p>
         </div>
       </footer>
