@@ -7,6 +7,7 @@ import {
   fetchAvailableDates,
   submitBooking,
   type BookingRequest,
+  type BookingService,
 } from "@/lib/booking";
 
 type FormState = "idle" | "loading-slots" | "submitting" | "success" | "error";
@@ -37,6 +38,37 @@ function formatDateLabel(iso: string): string {
     year: "numeric",
     timeZone: "UTC",
   });
+}
+
+function formatDateChip(iso: string): { weekday: string; day: string; month: string } {
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return {
+    weekday: date.toLocaleDateString("en-NZ", {
+      weekday: "short",
+      timeZone: "UTC",
+    }),
+    day: date.toLocaleDateString("en-NZ", {
+      day: "numeric",
+      timeZone: "UTC",
+    }),
+    month: date.toLocaleDateString("en-NZ", {
+      month: "short",
+      timeZone: "UTC",
+    }),
+  };
+}
+
+function serviceTitle(service: BookingService): string {
+  if (service.windowKind === "discovery") return "Discovery call";
+  return `${service.durationMinutes} minutes`;
+}
+
+function serviceSubtitle(service: BookingService): string {
+  if (service.windowKind === "discovery") {
+    return "Free intro — find out if a longer session is right for you";
+  }
+  return "Kinesiology / Nutrition session";
 }
 
 export default function BookingForm() {
@@ -165,7 +197,8 @@ export default function BookingForm() {
 
   if (formState === "success") {
     return (
-      <div className="booking-success">
+      <div className="booking-success" role="status">
+        <p className="booking-success-eyebrow">All set</p>
         <h2>Booking request received</h2>
         <p>{feedback}</p>
         {bookingId && (
@@ -174,8 +207,8 @@ export default function BookingForm() {
           </p>
         )}
         <p>
-          Patricia will confirm your appointment by email. If you need to change your
-          booking, please contact her directly.
+          Patricia will confirm your appointment by email. If you need to change
+          your booking, please contact her directly.
         </p>
         <button
           type="button"
@@ -199,174 +232,258 @@ export default function BookingForm() {
     <form className="booking-form" onSubmit={handleSubmit}>
       {!apiConfigured && (
         <div className="booking-alert">
-          Booking API URL is not configured. Add <code>NEXT_PUBLIC_BOOKING_API_URL</code>{" "}
-          to your environment (or GitHub Secret) with your deployed Google Apps Script
-          web app URL.
+          Booking API URL is not configured. Add{" "}
+          <code>NEXT_PUBLIC_BOOKING_API_URL</code> to your environment (or GitHub
+          Secret) with your deployed Google Apps Script web app URL.
         </div>
       )}
 
-      <div className="form-group">
-        <label htmlFor="service">Service *</label>
-        <select
-          id="service"
-          value={serviceId}
-          onChange={(e) => setServiceId(e.target.value)}
-          required
-        >
-          {BOOKING_SERVICES.map((service) => (
-            <option key={service.id} value={service.id}>
-              {service.label} — {service.price}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="date">Preferred date *</label>
-        <p className="booking-time-help">
-          Only dates when Patricia has openings for this type of session are listed.
-        </p>
-        <select
-          id="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          disabled={datesLoading || availableDates.length === 0}
-        >
-          <option value="">
-            {datesLoading
-              ? "Loading available dates…"
-              : availableDates.length === 0
-                ? "No dates available"
-                : "Choose a date"}
-          </option>
-          {availableDates.map((d) => (
-            <option key={d} value={d}>
-              {formatDateLabel(d)}
-            </option>
-          ))}
-        </select>
-        {!datesLoading && availableDates.length === 0 && (
-          <p className="booking-slots-empty" style={{ marginTop: "0.75rem" }}>
-            {datesMessage ||
-              "No bookable dates in the next three months. Call Patricia on 021 991 989."}
-          </p>
-        )}
-      </div>
-
-      <fieldset className="form-group booking-time-fieldset">
-        <legend>Preferred time *</legend>
-        <p className="booking-time-help">
-          Choose an available start time. Sessions are offered in 15-minute steps within
-          Patricia&apos;s open hours for this service. All times are New Zealand
-          (Pacific/Auckland).
-        </p>
-
-        {!date && (
-          <p className="booking-slots-empty">Select a date to see available times.</p>
-        )}
-
-        {date && slotsLoading && (
-          <p className="booking-slots-empty">Loading available times…</p>
-        )}
-
-        {date && !slotsLoading && slots.length === 0 && (
-          <p className="booking-slots-empty">
-            {slotMessage ||
-              "No times left on this day. Try another date, or call Patricia on 021 991 989."}
-          </p>
-        )}
-
-        {date && !slotsLoading && slots.length > 0 && (
-          <div
-            className="booking-slot-grid"
-            role="listbox"
-            aria-label="Available times"
-          >
-            {slots.map((slot) => {
-              const selected = time === slot;
-              return (
-                <button
-                  key={slot}
-                  type="button"
-                  role="option"
-                  aria-selected={selected}
-                  className={`booking-slot${selected ? " booking-slot--selected" : ""}`}
-                  onClick={() => setTime(slot)}
-                >
-                  {slot}
-                </button>
-              );
-            })}
+      <section className="booking-section" aria-labelledby="booking-step-service">
+        <header className="booking-section-header">
+          <span className="booking-step-num" aria-hidden="true">
+            1
+          </span>
+          <div>
+            <h2 id="booking-step-service">Service</h2>
+            <p className="booking-time-help">
+              Pick the session length that suits you.
+            </p>
           </div>
-        )}
+        </header>
 
-        <input type="hidden" name="preferredTime" value={time} />
-      </fieldset>
+        <div
+          className="booking-service-grid"
+          role="radiogroup"
+          aria-labelledby="booking-step-service"
+        >
+          {BOOKING_SERVICES.map((service) => {
+            const selected = serviceId === service.id;
+            const featured = service.windowKind === "discovery";
+            return (
+              <button
+                key={service.id}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                className={[
+                  "booking-service",
+                  selected ? "booking-service--selected" : "",
+                  featured ? "booking-service--featured" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                onClick={() => setServiceId(service.id)}
+              >
+                <span className="booking-service-top">
+                  <span className="booking-service-title">
+                    {serviceTitle(service)}
+                  </span>
+                  <span className="booking-service-price">{service.price}</span>
+                </span>
+                <span className="booking-service-sub">
+                  {serviceSubtitle(service)}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
 
-      <div className="form-group">
-        <label htmlFor="booking-name">Full name *</label>
-        <input
-          type="text"
-          id="booking-name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          autoComplete="name"
-        />
-      </div>
+      <section className="booking-section" aria-labelledby="booking-step-when">
+        <header className="booking-section-header">
+          <span className="booking-step-num" aria-hidden="true">
+            2
+          </span>
+          <div>
+            <h2 id="booking-step-when">Date &amp; time</h2>
+            <p className="booking-time-help">
+              Only openings for this session type are shown. Times are New Zealand
+              (Pacific/Auckland).
+            </p>
+          </div>
+        </header>
 
-      <div className="form-group">
-        <label htmlFor="booking-email">Email *</label>
-        <input
-          type="email"
-          id="booking-email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
-        />
-      </div>
+        <div className="booking-when">
+          <div className="booking-when-block">
+            <h3 className="booking-subheading">Preferred date</h3>
 
-      <div className="form-group">
-        <label htmlFor="booking-phone">Phone</label>
-        <input
-          type="tel"
-          id="booking-phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          autoComplete="tel"
-          placeholder="021 991 989"
-        />
-      </div>
+            {datesLoading && (
+              <p className="booking-slots-empty">Loading available dates…</p>
+            )}
 
-      <div className="form-group">
-        <label htmlFor="booking-message">Message (optional)</label>
-        <textarea
-          id="booking-message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Anything Patricia should know before your session?"
-        />
-      </div>
+            {!datesLoading && availableDates.length === 0 && (
+              <p className="booking-slots-empty">
+                {datesMessage ||
+                  "No bookable dates in the next three months. Call Patricia on 021 991 989."}
+              </p>
+            )}
+
+            {!datesLoading && availableDates.length > 0 && (
+              <div
+                className="booking-date-grid"
+                role="listbox"
+                aria-label="Available dates"
+              >
+                {availableDates.map((d) => {
+                  const selected = date === d;
+                  const chip = formatDateChip(d);
+                  return (
+                    <button
+                      key={d}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      aria-label={formatDateLabel(d)}
+                      className={`booking-date${selected ? " booking-date--selected" : ""}`}
+                      onClick={() => setDate(d)}
+                    >
+                      <span className="booking-date-weekday">{chip.weekday}</span>
+                      <span className="booking-date-day">{chip.day}</span>
+                      <span className="booking-date-month">{chip.month}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <fieldset className="booking-time-fieldset booking-when-block">
+            <legend className="booking-subheading">Preferred time</legend>
+
+            {!date && (
+              <p className="booking-slots-empty">
+                Select a date to see available times.
+              </p>
+            )}
+
+            {date && slotsLoading && (
+              <div className="booking-slot-grid booking-slot-grid--loading" aria-busy="true">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <span key={i} className="booking-slot-skeleton" />
+                ))}
+              </div>
+            )}
+
+            {date && !slotsLoading && slots.length === 0 && (
+              <p className="booking-slots-empty">
+                {slotMessage ||
+                  "No times left on this day. Try another date, or call Patricia on 021 991 989."}
+              </p>
+            )}
+
+            {date && !slotsLoading && slots.length > 0 && (
+              <div
+                className="booking-slot-grid"
+                role="listbox"
+                aria-label="Available times"
+              >
+                {slots.map((slot) => {
+                  const selected = time === slot;
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      className={`booking-slot${selected ? " booking-slot--selected" : ""}`}
+                      onClick={() => setTime(slot)}
+                    >
+                      {slot}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            <input type="hidden" name="preferredTime" value={time} />
+            <input type="hidden" name="preferredDate" value={date} />
+          </fieldset>
+        </div>
+      </section>
+
+      <section className="booking-section" aria-labelledby="booking-step-details">
+        <header className="booking-section-header">
+          <span className="booking-step-num" aria-hidden="true">
+            3
+          </span>
+          <div>
+            <h2 id="booking-step-details">Your details</h2>
+            <p className="booking-time-help">
+              So Patricia can confirm your appointment.
+            </p>
+          </div>
+        </header>
+
+        <div className="booking-details-grid">
+          <div className="form-group">
+            <label htmlFor="booking-name">Full name *</label>
+            <input
+              type="text"
+              id="booking-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="booking-email">Email *</label>
+            <input
+              type="email"
+              id="booking-email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+            />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="booking-phone">Phone</label>
+          <input
+            type="tel"
+            id="booking-phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            autoComplete="tel"
+            placeholder="021 000 0000"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="booking-message">Message (optional)</label>
+          <textarea
+            id="booking-message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Anything Patricia should know before your session?"
+          />
+        </div>
+      </section>
 
       {feedback && formState === "error" && (
-        <div className="booking-alert booking-alert-error">{feedback}</div>
+        <div className="booking-alert booking-alert-error" role="alert">
+          {feedback}
+        </div>
       )}
 
-      <button
-        type="submit"
-        className="btn-primary"
-        disabled={formState === "submitting" || !apiConfigured}
-      >
-        {formState === "submitting" ? "Submitting…" : "Request booking"}
-      </button>
+      <div className="booking-submit">
+        <button
+          type="submit"
+          className="btn-primary booking-submit-btn"
+          disabled={formState === "submitting" || !apiConfigured}
+        >
+          {formState === "submitting" ? "Submitting…" : "Request booking"}
+        </button>
 
-      <p className="form-notice">
-        Your booking will be added to Patricia&apos;s calendar and you will receive a
-        confirmation email at the address you provide. Notifications go to{" "}
-        patricia@equilibriumhealth.nz.
-      </p>
+        <p className="form-notice booking-notice">
+          Your booking will be added to Patricia&apos;s calendar and you will
+          receive a confirmation email. Notifications go to{" "}
+          patricia@equilibriumhealth.nz.
+        </p>
+      </div>
     </form>
   );
 }
