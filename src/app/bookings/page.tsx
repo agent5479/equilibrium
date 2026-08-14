@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata = buildMetadata({
   title: "Book a Session",
   description:
-    "Book a Kinesiology or Nutrition session with Patricia Smith at Equilibrium Kinesiology & Nutrition.",
+    "Book a free intro or Kinesiology / Nutrition session with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand. Or call 021 991 989.",
   path: "/bookings/",
 });
 

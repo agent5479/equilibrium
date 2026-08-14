@@ -32,7 +32,7 @@ interface MetaInput {
 /** Fallback SEO blurbs when a page has no scraped meta description. */
 const PAGE_DESCRIPTIONS: Record<string, string> = {
   "/":
-    "Touch for Health Kinesiology and Nutrition with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand. Bring your whole being back into balance — live like you love yourself.",
+    "Touch for Health Kinesiology and Nutrition with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand (NZ). Book by phone or online — sessions at Golden Bay Organics or by private arrangement.",
   "/patricias-story/":
     "Meet Patricia Smith — Nutritionist (B.Sc.) and Touch for Health Kinesiology practitioner at Equilibrium in Takaka, Golden Bay, NZ. Yoga teaching (2009–2021) remains part of her background.",
   "/about/":
@@ -81,6 +81,22 @@ export function resolveDescription(path: string, description?: string): string {
   return PAGE_DESCRIPTIONS[path] || DEFAULT_DESCRIPTION;
 }
 
+/** Build a search-optimised document title with brand + local cues when missing. */
+export function formatPageTitle(title: string): string {
+  const hasBrand = /Equilibrium/i.test(title);
+  const hasPerson = /Patricia Smith/i.test(title);
+  const hasLocation = /Takaka|Golden Bay|\bNew Zealand\b|\bNZ\b/i.test(title);
+
+  let full = title.trim();
+  if (!hasBrand) full = `${full} – ${SITE_NAME}`;
+  if (full === SITE_NAME || (hasBrand && !hasPerson && !hasLocation)) {
+    full = `${SITE_NAME} — ${SITE_OWNER} | ${SITE_LOCALITY}, ${SITE_REGION}, NZ`;
+  } else if (!hasLocation) {
+    full = `${full} | ${SITE_LOCALITY}, NZ`;
+  }
+  return full;
+}
+
 export function buildMetadata({
   title,
   description,
@@ -88,7 +104,7 @@ export function buildMetadata({
   ogImage,
   type = "website",
 }: MetaInput): Metadata {
-  const fullTitle = title.includes("Equilibrium") ? title : `${title} – ${SITE_NAME}`;
+  const fullTitle = formatPageTitle(title);
   const desc = resolveDescription(path, description);
   const url = path === "/" ? `${SITE_URL}/` : `${SITE_URL}${path.endsWith("/") ? path : `${path}/`}`;
   const image = assetUrl(ogImage) || DEFAULT_OG_IMAGE;

@@ -58,25 +58,33 @@ ${urls.join("\n")}
   // Also keep a public copy for local preview / consistency
   fs.writeFileSync(path.join(PUBLIC_DIR, "sitemap.xml"), xml, "utf-8");
 
-  // Ensure robots.txt is present in out (copied from public, but reaffirm sitemap URL)
+  // Keep robots.txt in sync with public (sitemap URL + crawl rules)
   const robots = `# Equilibrium Kinesiology & Nutrition — ${SITE_URL}/
-# Patricia Smith · Takaka · Golden Bay · New Zealand (NZ)
+# Patricia Smith · Touch for Health Kinesiology & Nutrition
+# Takaka · Golden Bay · New Zealand (NZ)
+#
+# Primary search terms: Patricia Smith, Equilibrium, kinesiology Takaka,
+# nutritionist Golden Bay, Touch for Health, NZ
+# Discovery: /humans.txt · /local/ · /sitemap.xml
 
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /admin
 
 User-agent: Googlebot
 Allow: /
 Disallow: /admin/
+Disallow: /admin
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /admin
 
 User-agent: Googlebot-Image
 Allow: /
 
-# Discovery
-# Practitioner: Patricia Smith
-# Practice: Equilibrium Kinesiology & Nutrition
-# Location: Takaka, Golden Bay, New Zealand
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
   fs.writeFileSync(path.join(OUT_DIR, "robots.txt"), robots, "utf-8");
