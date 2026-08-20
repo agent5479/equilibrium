@@ -4,12 +4,24 @@ import AlternatingSections from "@/components/AlternatingSections";
 import OptimizedImage from "@/components/OptimizedImage";
 import Link from "next/link";
 import { routePath } from "@/lib/paths";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd, practiceServiceJsonLd } from "@/lib/metadata";
 
 export default function CoursePage({ page }: { page: PageData }) {
   const sections = parseSections(page.blocks);
+  const serviceLd = practiceServiceJsonLd(page.path);
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: page.title, path: page.path },
+          ]),
+          ...(serviceLd ? [serviceLd] : []),
+        ]}
+      />
       <section className="page-hero">
         <OptimizedImage
           src="/assets/wp-content/uploads/2021/09/IMG_2615r.jpg"

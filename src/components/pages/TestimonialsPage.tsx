@@ -1,4 +1,6 @@
 import type { TestimonialEntry } from "@/lib/types";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd, reviewsJsonLd } from "@/lib/metadata";
 
 function quoteParagraphs(quote: string): string[] {
   return quote
@@ -14,6 +16,15 @@ export default function TestimonialsPage({
 }) {
   return (
     <div className="testimonials-page">
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Testimonials", path: "/testimonials/" },
+          ]),
+          reviewsJsonLd(testimonials),
+        ]}
+      />
       <div className="container">
         <p className="testimonials-intro">
           Includes clients from Patricia&apos;s Yoga teaching years as well as Nutrition and

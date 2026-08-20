@@ -23,6 +23,26 @@ export const navigation: NavItem[] = [
         label: "Nutrition",
         href: "/about/",
       },
+      {
+        label: "Who this helps",
+        href: "/support/",
+      },
+      {
+        label: "Food intolerances",
+        href: "/support/food-intolerances/",
+      },
+      {
+        label: "Adrenal fatigue",
+        href: "/support/adrenal-fatigue/",
+      },
+      {
+        label: "Migraines and energy",
+        href: "/support/migraines-and-energy/",
+      },
+      {
+        label: "Metabolic balance",
+        href: "/support/metabolic-balance/",
+      },
     ],
   },
   {

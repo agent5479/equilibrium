@@ -16,15 +16,31 @@ function priorityFor(pagePath: string): string {
     pagePath === "/touch-for-health-kinesiology/" ||
     pagePath === "/nutrition/" ||
     pagePath === "/about/" ||
-    pagePath === "/local/"
+    pagePath === "/local/" ||
+    pagePath === "/support/" ||
+    pagePath.startsWith("/support/")
   ) {
     return "0.9";
+  }
+  if (
+    pagePath === "/yoga/" ||
+    pagePath.startsWith("/yoga/") ||
+    pagePath === "/yogapatricias-yoga-background/"
+  ) {
+    return "0.3";
   }
   return "0.8";
 }
 
 function changeFreqFor(pagePath: string): string {
   if (pagePath === "/" || pagePath === "/bookings/") return "weekly";
+  if (
+    pagePath === "/yoga/" ||
+    pagePath.startsWith("/yoga/") ||
+    pagePath === "/yogapatricias-yoga-background/"
+  ) {
+    return "yearly";
+  }
   return "monthly";
 }
 

@@ -16,11 +16,13 @@ Equilibrium is Patricia Smith’s kinesiology and nutrition practice serving Tak
 
 Public crawl signals include:
 
-- Meta title, description, keywords, Open Graph, and JSON-LD (Person + local business) targeting Patricia Smith, Equilibrium, kinesiology/nutrition in Takaka & Golden Bay, NZ
+- Meta title, description, keywords, Open Graph, and JSON-LD (Person, local business with offers, Service, Recipe, Breadcrumb, Review) targeting Patricia Smith, Equilibrium, kinesiology/nutrition in Takaka & Golden Bay, NZ
+- Outcome / support pages under `/support/` (food intolerances, adrenal fatigue, migraines and energy, metabolic balance)
 - [`public/robots.txt`](public/robots.txt) (allows major crawlers; blocks `/admin`; points to sitemap)
-- Generated `sitemap.xml` (includes `/local/` and `/bookings/`)
+- Generated `sitemap.xml` (includes `/local/`, `/bookings/`, `/support/`, recipes)
 - [`public/humans.txt`](public/humans.txt) and [`public/site.webmanifest`](public/site.webmanifest)
 - [`public/BingSiteAuth.xml`](public/BingSiteAuth.xml) for Bing Webmaster verification
+- Off-site follow-ups: [`docs/seo-offsite-checklist.md`](docs/seo-offsite-checklist.md)
 
 ## Development
 

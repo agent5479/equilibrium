@@ -9,6 +9,10 @@ import {
   SITE_COUNTRY_CODE,
 } from "@/lib/types";
 import { routePath } from "@/lib/paths";
+import { SUPPORT_TOPICS } from "@/components/WhoThisHelps";
+import { BOOKING_SERVICES } from "@/lib/booking";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
   title: `${SITE_OWNER} — ${SITE_NAME} | ${SITE_LOCALITY}, ${SITE_REGION}, ${SITE_COUNTRY_CODE}`,
@@ -23,6 +27,12 @@ export const metadata = buildMetadata({
 export default function LocalPracticePage() {
   return (
     <article className="container" style={{ padding: "2.5rem 1.25rem 4rem", maxWidth: 720 }}>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Local practice", path: "/local/" },
+        ])}
+      />
       <h1>
         {SITE_OWNER} — {SITE_NAME}
       </h1>
@@ -50,6 +60,9 @@ export default function LocalPracticePage() {
           <strong>Location:</strong> {SITE_LOCALITY}, {SITE_REGION}, {SITE_COUNTRY} / NZ
         </li>
         <li>
+          <strong>Address:</strong> Golden Bay Organics, 47 Commercial Street, {SITE_LOCALITY}
+        </li>
+        <li>
           <strong>Phone:</strong> <a href="tel:+6421991989">021 991 989</a>
         </li>
         <li>
@@ -57,6 +70,56 @@ export default function LocalPracticePage() {
           <a href="mailto:patricia@equilibriumhealth.nz">patricia@equilibriumhealth.nz</a>
         </li>
       </ul>
+
+      <h2>Active services</h2>
+      <ul>
+        <li>
+          <Link href={routePath("/touch-for-health-kinesiology/")}>
+            Touch for Health Kinesiology
+          </Link>
+        </li>
+        <li>
+          <Link href={routePath("/about/")}>Nutrition</Link>
+        </li>
+        <li>
+          <Link href={routePath("/total-wellness-package-8-sessions-much-more/")}>
+            Total Wellness Package
+          </Link>
+        </li>
+        <li>
+          <Link href={routePath("/touch-for-health-kinesiology-course/")}>
+            Touch for Health Kinesiology Course
+          </Link>
+        </li>
+        <li>
+          <Link href={routePath("/nutrition/services-and-fees/")}>Sessions and cost</Link>
+        </li>
+      </ul>
+
+      <h2>Session options</h2>
+      <ul>
+        {BOOKING_SERVICES.map((service) => (
+          <li key={service.id}>
+            {service.label} — {service.price}
+          </li>
+        ))}
+      </ul>
+      <p>
+        <Link href={routePath("/bookings/")}>Book online</Link>
+      </p>
+
+      <h2>Who this helps</h2>
+      <ul>
+        {SUPPORT_TOPICS.map((topic) => (
+          <li key={topic.href}>
+            <Link href={routePath(topic.href)}>{topic.title}</Link> — {topic.blurb}
+          </li>
+        ))}
+      </ul>
+      <p>
+        <Link href={routePath("/support/")}>All support topics</Link>
+      </p>
+
       <p>
         <Link href={routePath("/patricias-story/")}>Patricia&apos;s story</Link>
         {" · "}

@@ -1,0 +1,36 @@
+{
+  "slug": "support",
+  "path": "/support/",
+  "title": "Who this helps",
+  "metaDescription": "How Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ supports food intolerances, adrenal fatigue, migraines, and metabolic balance with kinesiology and nutrition.",
+  "type": "page",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "html": "At Equilibrium in Takaka, Golden Bay, New Zealand, Patricia Smith combines Touch for Health Kinesiology and Nutrition. Clients often arrive with a specific question — not a generic wellness browse. These pages describe how she works with the concerns people actually bring."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Support topics"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "<a href=\"/support/food-intolerances/\">Food intolerances</a> — muscle testing to identify intolerances and suitable supplements",
+        "<a href=\"/support/adrenal-fatigue/\">Adrenal fatigue</a> — kinesiology and nutrition when energy and stress feel stuck",
+        "<a href=\"/support/migraines-and-energy/\">Migraines and energy</a> — practical nutrition pathways for migraines and low energy",
+        "<a href=\"/support/metabolic-balance/\">Metabolic balance</a> — food-led support for metabolic and post-menopause balance"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "html": "Sessions are available at Golden Bay Organics (47 Commercial Street, Takaka) or by private arrangement, including online. Start with a free 15-minute Discovery call, or book a session at <a href=\"/bookings/\">/bookings/</a>. Phone 021 991 989."
+    },
+    {
+      "type": "paragraph",
+      "html": "Learn more about <a href=\"/touch-for-health-kinesiology/\">Touch for Health Kinesiology</a> and <a href=\"/about/\">Patricia’s nutrition approach</a>."
+    }
+  ]
+}

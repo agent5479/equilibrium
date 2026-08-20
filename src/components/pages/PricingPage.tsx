@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { routePath } from "@/lib/paths";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd, practiceServiceJsonLd } from "@/lib/metadata";
 
 const PRICES = [
   { duration: "30 minutes", price: "$80" },
@@ -9,8 +11,21 @@ const PRICES = [
 ];
 
 export default function PricingPage() {
+  const path = "/nutrition/services-and-fees/";
+  const serviceLd = practiceServiceJsonLd(path);
+
   return (
     <div className="container content-section">
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Nutrition", path: "/nutrition/" },
+            { name: "Sessions and cost", path },
+          ]),
+          ...(serviceLd ? [serviceLd] : []),
+        ]}
+      />
       <p>
         Prices are for individual sessions and are the same for Nutritional and
         Kinesiology consultations. Both modalities can be combined as needed in

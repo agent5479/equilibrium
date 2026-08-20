@@ -3,6 +3,8 @@ import type { RecipeData } from "@/lib/types";
 import OptimizedImage from "@/components/OptimizedImage";
 import { publicPath, routePath } from "@/lib/paths";
 import PageRenderer from "./PageRenderer";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd, recipeJsonLd } from "@/lib/metadata";
 
 function extractRecipeSections(blocks: RecipeData["blocks"]) {
   let inIngredients = false;
@@ -64,8 +66,19 @@ export default function RecipeDetail({ recipe }: { recipe: RecipeData }) {
   const ingredients = recipe.ingredients || renderBlocksHtml(ingredientBlocks);
   const directions = recipe.directions || renderBlocksHtml(directionBlocks);
 
+  const path = recipe.path.endsWith("/") ? recipe.path : `${recipe.path}/`;
+  const ld = [
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Recipes", path: "/nutrition/recipes/" },
+      { name: recipe.title, path },
+    ]),
+    recipeJsonLd(recipe),
+  ];
+
   return (
     <article>
+      <JsonLd data={ld} />
       {recipe.heroImage && (
         <div className="recipe-hero">
           <OptimizedImage src={recipe.heroImage} alt={recipe.title} sizes="100vw" />

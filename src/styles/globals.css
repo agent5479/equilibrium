@@ -1975,6 +1975,26 @@ h6 {
   font-weight: 600;
 }
 
+.who-this-helps {
+  margin: 2rem 0 1rem;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid #e5d4db;
+}
+
+.who-this-helps h2 {
+  margin-top: 0;
+}
+
+.who-this-helps-list {
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+}
+
+.who-this-helps-list li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
 /* Contact layout */
 .contact-layout {
   display: grid;

@@ -16,6 +16,7 @@ import {
   personJsonLd,
   SITE_GEO,
 } from "@/lib/metadata";
+import { getTestimonials } from "@/lib/content";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -91,7 +92,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const siteLd = websiteJsonLd();
-  const businessLd = localBusinessJsonLd();
+  const businessLd = localBusinessJsonLd(getTestimonials());
   const personLd = personJsonLd();
 
   return (

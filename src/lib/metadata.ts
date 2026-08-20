@@ -10,8 +10,12 @@ import {
   SITE_KEYWORDS,
   DEFAULT_OG_IMAGE,
   DEFAULT_DESCRIPTION,
+  type RecipeData,
+  type TestimonialEntry,
 } from "./types";
 import { assetUrl } from "./paths";
+import { BOOKING_SERVICES } from "./booking";
+import { enrichRecipeEntry } from "./recipe-meta";
 
 /** Takaka / Golden Bay Organics approximate coordinates for geo meta. */
 export const SITE_GEO = {
@@ -56,23 +60,33 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
   "/total-wellness-package-8-sessions-much-more/":
     "Total Wellness Package with Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ — kinesiology, nutrition, and wellness.",
   "/yoga/":
-    "Patricia Smith taught Yoga in Golden Bay, New Zealand from 2009 to 2021. How those years still inform her Equilibrium practice in Takaka.",
+    "Historical overview: Patricia Smith taught Yoga in Golden Bay, New Zealand from 2009 to 2021. Classes are no longer offered — her Equilibrium practice in Takaka is kinesiology and nutrition.",
   "/yoga/benefits-of-yoga/":
-    "From Patricia Smith's Yoga teaching years in Golden Bay, NZ — accessible practice for body, mind and wellbeing.",
+    "Historical notes from Patricia Smith's Yoga teaching years (2009–2021) in Golden Bay, NZ. Yoga classes are no longer offered.",
   "/yoga/timetable-and-prices/":
-    "Class notes and fees from Patricia Smith's Yoga teaching years in Golden Bay, New Zealand. Yoga classes are no longer offered.",
+    "Archived class notes and fees from Patricia Smith's Yoga teaching years in Golden Bay, New Zealand. Yoga classes ended in 2021 and are no longer offered.",
   "/yoga/corporate-yoga/":
-    "From Patricia Smith's teaching years in Golden Bay, NZ — Yoga offered in workplace settings.",
+    "Historical notes: Yoga in workplace settings from Patricia Smith's teaching years in Golden Bay, NZ (2009–2021). Classes are no longer offered.",
   "/yoga/friendly-dos-for-yoga/":
-    "Class etiquette from Patricia Smith's Yoga teaching practice in Golden Bay, New Zealand.",
+    "Historical class etiquette from Patricia Smith's Yoga teaching practice in Golden Bay, New Zealand (2009–2021).",
   "/yoga/yoga-in-schools/":
-    "From Patricia Smith's teaching years in Golden Bay, NZ — Yoga offered in schools.",
+    "Historical notes: Yoga in schools from Patricia Smith's teaching years in Golden Bay, NZ (2009–2021). Classes are no longer offered.",
   "/yogapatricias-yoga-background/":
-    "Patricia Smith's Yoga teacher training and the years she spent teaching in Golden Bay, New Zealand (2009–2021).",
+    "Patricia Smith's Yoga teacher training and the years she spent teaching in Golden Bay, New Zealand (2009–2021). Historical background — classes are no longer offered.",
   "/visionboard-workshops/":
     "Vision board workshops with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand.",
   "/local/":
     "Patricia Smith practises Touch for Health Kinesiology and Nutrition at Equilibrium in Takaka, Golden Bay, New Zealand (NZ).",
+  "/support/":
+    "How Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ supports food intolerances, adrenal fatigue, migraines, and metabolic balance with kinesiology and nutrition.",
+  "/support/food-intolerances/":
+    "Food intolerances and supplement matching with Touch for Health muscle testing — Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ.",
+  "/support/adrenal-fatigue/":
+    "Adrenal fatigue support with Touch for Health Kinesiology and Nutrition — Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ.",
+  "/support/migraines-and-energy/":
+    "Migraines and low energy support through nutrition and kinesiology — Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ.",
+  "/support/metabolic-balance/":
+    "Metabolic balance, post-menopause nutrition, and inflammation support — Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ.",
 };
 
 export function resolveDescription(path: string, description?: string): string {
@@ -153,6 +167,54 @@ export function buildMetadata({
   };
 }
 
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function parsePriceToNumber(price: string): number | undefined {
+  if (/free/i.test(price)) return 0;
+  const match = price.replace(/,/g, "").match(/(\d+(?:\.\d+)?)/);
+  return match ? Number(match[1]) : undefined;
+}
+
+function areaServedNodes() {
+  return [
+    { "@type": "City", name: SITE_LOCALITY },
+    { "@type": "Place", name: SITE_REGION },
+    { "@type": "Country", name: SITE_COUNTRY },
+  ];
+}
+
+/** Offers for Discovery call + paid sessions from booking config. */
+export function bookingOfferNodes() {
+  return BOOKING_SERVICES.map((service) => {
+    const amount = parsePriceToNumber(service.price);
+    return {
+      "@type": "Offer",
+      "@id": `${SITE_URL}/#offer-${service.id}`,
+      name: service.label,
+      url: `${SITE_URL}/bookings/`,
+      priceCurrency: "NZD",
+      ...(amount !== undefined ? { price: String(amount) } : {}),
+      availability: "https://schema.org/InStock",
+      areaServed: areaServedNodes(),
+      seller: { "@id": `${SITE_URL}/#business` },
+    };
+  });
+}
+
+const PACKAGE_OFFER = {
+  "@type": "Offer",
+  "@id": `${SITE_URL}/#offer-total-wellness`,
+  name: "Total Wellness Package",
+  url: `${SITE_URL}/total-wellness-package-8-sessions-much-more/`,
+  price: "975",
+  priceCurrency: "NZD",
+  availability: "https://schema.org/InStock",
+  areaServed: areaServedNodes(),
+  seller: { "@id": `${SITE_URL}/#business` },
+};
+
 export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
@@ -198,12 +260,37 @@ export function personJsonLd() {
       "Touch for Health Kinesiology",
       "Nutrition",
       "Holistic health",
+      "Food intolerances",
+      "Adrenal fatigue support",
       "Yoga teaching (historical)",
     ],
   };
 }
 
-export function localBusinessJsonLd() {
+export function reviewNodes(testimonials: TestimonialEntry[]) {
+  return testimonials.map((t, index) => ({
+    "@type": "Review",
+    "@id": `${SITE_URL}/testimonials/#review-${index + 1}`,
+    author: {
+      "@type": "Person",
+      name: t.name,
+    },
+    reviewBody: stripHtml(t.quote).slice(0, 5000),
+    itemReviewed: { "@id": `${SITE_URL}/#business` },
+  }));
+}
+
+export function reviewsJsonLd(testimonials: TestimonialEntry[]) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": reviewNodes(testimonials),
+  };
+}
+
+export function localBusinessJsonLd(testimonials?: TestimonialEntry[]) {
+  const offers = [...bookingOfferNodes(), PACKAGE_OFFER];
+  const reviews = testimonials ? reviewNodes(testimonials) : [];
+
   return {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
@@ -230,26 +317,28 @@ export function localBusinessJsonLd() {
       latitude: SITE_GEO.latitude,
       longitude: SITE_GEO.longitude,
     },
-    areaServed: [
-      {
-        "@type": "City",
-        name: SITE_LOCALITY,
-      },
-      {
-        "@type": "Place",
-        name: SITE_REGION,
-      },
-      {
-        "@type": "Country",
-        name: SITE_COUNTRY,
-      },
-    ],
+    areaServed: areaServedNodes(),
     priceRange: "$$",
     sameAs: ["https://www.facebook.com/equilibriumnutritionandyoga"],
+    makesOffer: offers,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Kinesiology and Nutrition sessions",
+      itemListElement: offers.map((offer, position) => ({
+        "@type": "OfferCatalog",
+        position: position + 1,
+        itemOffered: offer,
+      })),
+    },
+    ...(reviews.length > 0 ? { review: reviews } : {}),
     knowsAbout: [
       "Touch for Health Kinesiology",
       "Nutrition",
       "Holistic health",
+      "Food intolerances",
+      "Adrenal fatigue",
+      "Migraines and energy",
+      "Metabolic balance",
       "Yoga teaching (historical)",
       SITE_OWNER,
       SITE_LOCALITY,
@@ -268,7 +357,232 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: item.path === "/" ? `${SITE_URL}/` : `${SITE_URL}${item.path}`,
+      item: item.path === "/" ? `${SITE_URL}/` : `${SITE_URL}${item.path.endsWith("/") ? item.path : `${item.path}/`}`,
     })),
+  };
+}
+
+export interface ServiceJsonLdInput {
+  name: string;
+  description: string;
+  path: string;
+  /** Schema.org service type id fragment, e.g. kinesiology */
+  id: string;
+  offers?: ReturnType<typeof bookingOfferNodes>;
+}
+
+export function serviceJsonLd({
+  name,
+  description,
+  path,
+  id,
+  offers,
+}: ServiceJsonLdInput) {
+  const url = `${SITE_URL}${path.endsWith("/") ? path : `${path}/`}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_URL}/#service-${id}`,
+    name,
+    description,
+    url,
+    provider: { "@id": `${SITE_URL}/#business` },
+    areaServed: areaServedNodes(),
+    ...(offers && offers.length > 0 ? { offers } : {}),
+  };
+}
+
+/** Named services for key practice pages. */
+export function practiceServiceJsonLd(pagePath: string) {
+  const offers = bookingOfferNodes();
+  if (pagePath === "/touch-for-health-kinesiology/") {
+    return serviceJsonLd({
+      id: "kinesiology",
+      name: "Touch for Health Kinesiology",
+      description: resolveDescription(pagePath),
+      path: pagePath,
+      offers,
+    });
+  }
+  if (pagePath === "/about/" || pagePath === "/nutrition/") {
+    return serviceJsonLd({
+      id: "nutrition",
+      name: "Nutrition consultation",
+      description: resolveDescription(pagePath),
+      path: pagePath,
+      offers,
+    });
+  }
+  if (pagePath === "/total-wellness-package-8-sessions-much-more/") {
+    return serviceJsonLd({
+      id: "total-wellness",
+      name: "Total Wellness Package",
+      description: resolveDescription(pagePath),
+      path: pagePath,
+      offers: [PACKAGE_OFFER],
+    });
+  }
+  if (pagePath === "/touch-for-health-kinesiology-course/") {
+    return serviceJsonLd({
+      id: "tfh-course",
+      name: "Touch for Health Kinesiology Course",
+      description: resolveDescription(pagePath),
+      path: pagePath,
+    });
+  }
+  if (pagePath === "/nutrition/services-and-fees/") {
+    return serviceJsonLd({
+      id: "sessions",
+      name: "Kinesiology and Nutrition sessions",
+      description: resolveDescription(pagePath),
+      path: pagePath,
+      offers: [...offers, PACKAGE_OFFER],
+    });
+  }
+  if (pagePath.startsWith("/support/") && pagePath !== "/support/") {
+    const titles: Record<string, string> = {
+      "/support/food-intolerances/": "Food intolerances support",
+      "/support/adrenal-fatigue/": "Adrenal fatigue support",
+      "/support/migraines-and-energy/": "Migraines and energy support",
+      "/support/metabolic-balance/": "Metabolic balance support",
+    };
+    return serviceJsonLd({
+      id: pagePath.replace(/^\/support\/|\/$/g, "").replace(/\//g, "-"),
+      name: titles[pagePath] || "Support",
+      description: resolveDescription(pagePath),
+      path: pagePath,
+      offers,
+    });
+  }
+  return null;
+}
+
+function htmlListItems(html: string): string[] {
+  const items: string[] = [];
+  const liMatches = html.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi);
+  for (const match of liMatches) {
+    const text = stripHtml(match[1]);
+    if (text) items.push(text);
+  }
+  if (items.length > 0) return items;
+
+  const amountName = html.matchAll(
+    /<span class="amount">([\s\S]*?)<\/span>\s*<span class="name">([\s\S]*?)<\/span>/gi
+  );
+  for (const match of amountName) {
+    const text = `${stripHtml(match[1])} ${stripHtml(match[2])}`.trim();
+    if (text) items.push(text);
+  }
+  if (items.length > 0) return items;
+
+  return stripHtml(html)
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function recipeIngredientsFromData(recipe: RecipeData): string[] {
+  if (recipe.ingredients?.trim()) {
+    return htmlListItems(recipe.ingredients);
+  }
+  const items: string[] = [];
+  let inIngredients = false;
+  for (const block of recipe.blocks) {
+    if (block.type === "heading" && block.text) {
+      const t = block.text.toLowerCase();
+      if (t === "ingredients") {
+        inIngredients = true;
+        continue;
+      }
+      if (t === "directions" || t === "instructions") break;
+    }
+    if (!inIngredients) continue;
+    if (block.type === "paragraph" && block.html) {
+      const text = stripHtml(block.html);
+      if (text) items.push(text);
+    }
+    if (block.type === "list" && block.items) {
+      items.push(...block.items.map((i) => stripHtml(i)).filter(Boolean));
+    }
+  }
+  return items;
+}
+
+function recipeInstructionsFromData(recipe: RecipeData): object[] {
+  const steps: string[] = [];
+  if (recipe.directions?.trim()) {
+    steps.push(...htmlListItems(recipe.directions));
+  } else {
+    let inDirections = false;
+    for (const block of recipe.blocks) {
+      if (block.type === "heading" && block.text) {
+        const t = block.text.toLowerCase();
+        if (t === "directions" || t === "instructions") {
+          inDirections = true;
+          continue;
+        }
+        if (inDirections && (t.includes("archives") || t.includes("available"))) break;
+      }
+      if (!inDirections) continue;
+      if (block.type === "paragraph" && block.html) {
+        const text = stripHtml(block.html);
+        if (text && !text.toLowerCase().includes("no blog posts")) steps.push(text);
+      }
+      if (block.type === "list" && block.items) {
+        steps.push(...block.items.map((i) => stripHtml(i)).filter(Boolean));
+      }
+    }
+  }
+  return steps.map((text, index) => ({
+    "@type": "HowToStep",
+    position: index + 1,
+    text,
+  }));
+}
+
+function toIsoDuration(label?: string): string | undefined {
+  if (!label) return undefined;
+  const hours = label.match(/(\d+)\s*h/i);
+  const mins = label.match(/(\d+)\s*m/i);
+  if (!hours && !mins) {
+    const bare = label.match(/^(\d+)\s*min/i);
+    if (bare) return `PT${bare[1]}M`;
+    return undefined;
+  }
+  let out = "PT";
+  if (hours) out += `${hours[1]}H`;
+  if (mins) out += `${mins[1]}M`;
+  return out === "PT" ? undefined : out;
+}
+
+export function recipeJsonLd(recipe: RecipeData) {
+  const meta = enrichRecipeEntry(recipe);
+  const imagePath = recipe.heroImage || recipe.ogImage || DEFAULT_OG_IMAGE;
+  const absoluteImage = imagePath.startsWith("http")
+    ? imagePath
+    : `${SITE_URL}${imagePath.startsWith("/") ? imagePath : `/${imagePath}`}`;
+  const ingredients = recipeIngredientsFromData(recipe);
+  const instructions = recipeInstructionsFromData(recipe);
+  const path = recipe.path.endsWith("/") ? recipe.path : `${recipe.path}/`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "@id": `${SITE_URL}${path}#recipe`,
+    name: recipe.title,
+    description: meta.description || resolveDescription(path, recipe.metaDescription),
+    image: [absoluteImage],
+    author: {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#patricia-smith`,
+      name: SITE_OWNER,
+    },
+    datePublished: meta.date,
+    prepTime: toIsoDuration(meta.prepTime),
+    cookTime: toIsoDuration(meta.cookTime),
+    recipeYield: meta.yields,
+    recipeIngredient: ingredients.length > 0 ? ingredients : undefined,
+    recipeInstructions: instructions.length > 0 ? instructions : undefined,
+    keywords: recipe.categoryNames.join(", ") || undefined,
   };
 }
