@@ -53,6 +53,10 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
     "Nutrition services with Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ — real food for optimal results, supported by kinesiology muscle testing.",
   "/nutrition/services-and-fees/":
     "Nutrition and Kinesiology consultation fees with Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand.",
+  "/nutrition/recipes/":
+    "Healthy recipes from Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand — real-food ideas from her nutrition practice.",
+  "/nutrition/tips-on-nutrition/":
+    "Nutrition tips from Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand — practical real-food guidance.",
   "/touch-for-health-kinesiology/":
     "Touch for Health Kinesiology with Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ — muscle testing to support vibrant health and balance.",
   "/touch-for-health-kinesiology-course/":
@@ -88,6 +92,36 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
   "/support/metabolic-balance/":
     "Metabolic balance, post-menopause nutrition, and inflammation support — Patricia Smith at Equilibrium in Takaka, Golden Bay, NZ.",
 };
+
+/** Build a locality-aware description for recipe or category pages when scraped meta is empty. */
+export function descriptionForContent(
+  pagePath: string,
+  content: {
+    type: string;
+    title: string;
+    metaDescription?: string;
+    description?: string;
+  }
+): string {
+  const fromMeta = content.metaDescription?.trim();
+  if (fromMeta) return fromMeta;
+
+  if (content.type === "recipe") {
+    const body = content.description?.trim();
+    const base = body
+      ? body.length > 140
+        ? `${body.slice(0, 137).trim()}…`
+        : body
+      : `${content.title} — a recipe from Patricia Smith at Equilibrium.`;
+    return `${base} Recipe by Patricia Smith, Equilibrium, Takaka, Golden Bay, NZ.`;
+  }
+
+  if (content.type === "recipe-category") {
+    return `${content.title} recipes from Patricia Smith at Equilibrium in Takaka, Golden Bay, New Zealand.`;
+  }
+
+  return resolveDescription(pagePath, undefined);
+}
 
 export function resolveDescription(path: string, description?: string): string {
   const trimmed = description?.trim();

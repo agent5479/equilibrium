@@ -6,7 +6,7 @@ import {
   resolveContentByPath,
 } from "@/lib/content";
 import { slugToPath } from "@/lib/paths";
-import { buildMetadata } from "@/lib/metadata";
+import { buildMetadata, descriptionForContent } from "@/lib/metadata";
 import PageRenderer from "@/components/PageRenderer";
 import RecipeIndex from "@/components/RecipeIndex";
 import RecipeDetail from "@/components/RecipeDetail";
@@ -19,6 +19,7 @@ import CoursePage from "@/components/pages/CoursePage";
 import ContactPage from "@/components/pages/ContactPage";
 import PricingPage from "@/components/pages/PricingPage";
 import type { PageData, RecipeData, RecipeCategoryData } from "@/lib/types";
+import { enrichRecipeEntry } from "@/lib/recipe-meta";
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
@@ -82,9 +83,27 @@ export async function generateMetadata({ params }: PageProps) {
   const content = resolveContentByPath(pagePath);
   if (!content) return {};
 
+  let descriptionSource: {
+    type: string;
+    title: string;
+    metaDescription?: string;
+    description?: string;
+  } = content;
+
+  if (content.type === "recipe") {
+    const recipe = content as RecipeData;
+    const enriched = enrichRecipeEntry(recipe);
+    descriptionSource = {
+      type: "recipe",
+      title: recipe.title,
+      metaDescription: recipe.metaDescription,
+      description: recipe.description || enriched.description,
+    };
+  }
+
   return buildMetadata({
     title: content.title,
-    description: content.metaDescription,
+    description: descriptionForContent(pagePath, descriptionSource),
     path: pagePath,
     ogImage: content.ogImage,
     type: content.type === "recipe" ? "article" : "website",
